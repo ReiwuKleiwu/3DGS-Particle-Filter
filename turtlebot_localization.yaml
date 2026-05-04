@@ -1,0 +1,58 @@
+renderer:
+  base_url: http://127.0.0.1:8000
+  wait_timeout_seconds: 30.0
+  request_timeout_seconds: 30.0
+  poll_interval_seconds: 0.5
+  score_batch_size: 16
+
+ros:
+  image_topic: /oakd/rgb/preview/image_raw
+  camera_info_topic: /oakd/rgb/preview/camera_info
+  odometry_topic: /odom
+  map_frame: map
+  base_frame: base_link
+  tf_lookup_mode: auto
+  tf_timeout_seconds: 0.5
+  require_odometry: true
+
+runtime:
+  observation_ready_timeout_seconds: 10.0
+  spin_timeout_seconds: 0.05
+
+particle_filter:
+  particle_count: 256
+  resample_threshold_ratio: 0.5
+
+initial_pose_prior:
+  mean:
+    x: -2.685
+    y: -2.003
+    yaw: -0.020
+  sigma_x: 0.5
+  sigma_y: 0.5
+  sigma_yaw: 0.5
+
+motion_noise:
+  x_meters: 0.02
+  y_meters: 0.02
+  yaw_radians: 0.017453292519943295
+
+measurement:
+  metric_name: hybrid
+  temperature: 0.02
+  packed: false
+  radius_clip: 3.0
+  hybrid_ssim_weight: 0.50
+  hybrid_l1_weight: 0.25
+  hybrid_gradient_weight: 0.25
+
+visualization:
+  enabled: true
+  publish_url: http://127.0.0.1:8090/api/publish-latest
+  request_timeout_seconds: 0.25
+  observation_jpeg_quality: 80
+
+control:
+  enabled: true
+  poll_url: http://127.0.0.1:8090/api/reset-particle-filter/next
+  request_timeout_seconds: 0.05
