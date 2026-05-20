@@ -406,6 +406,9 @@ function MapView({ snapshot, mapMetadata, mapImage, layers, particleStyle, estim
       if (layers.robots && snapshot?.ground_truth_pose) {
         drawRobotMarker(context, worldToScreen, snapshot.ground_truth_pose, 'rgba(80,220,160,0.95)', '#0c0d10', 'GT');
       }
+      if (layers.robots && snapshot?.amcl_pose) {
+        drawRobotMarker(context, worldToScreen, snapshot.amcl_pose, 'rgba(255,79,216,0.22)', 'rgba(255,79,216,1)', 'AMCL');
+      }
       if (layers.robots && snapshot?.estimated_pose) {
         drawRobotMarker(context, worldToScreen, snapshot.estimated_pose, 'rgba(255,180,60,0.18)', 'rgba(255,180,60,1)', 'EST');
       }

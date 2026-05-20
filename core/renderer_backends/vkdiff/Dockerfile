@@ -20,10 +20,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     vulkan-tools \
     && rm -rf /var/lib/apt/lists/*
 
-COPY core/rendering/requirements.txt /tmp/renderer-requirements.txt
+COPY pyproject.toml /app/pyproject.toml
+COPY core /app/core
 
 RUN python -m pip install --upgrade pip setuptools wheel \
-    && python -m pip install -r /tmp/renderer-requirements.txt
+    && python -m pip install .[rendering]
 
 RUN cat > /usr/local/bin/glslc <<'EOF' && chmod +x /usr/local/bin/glslc
 #!/usr/bin/env python3

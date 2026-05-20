@@ -1,14 +1,18 @@
 renderer:
+  backend: vkdiff
+  # backend: gsplat
   base_url: http://127.0.0.1:8000
   wait_timeout_seconds: 30.0
   request_timeout_seconds: 30.0
   poll_interval_seconds: 0.5
   score_batch_size: 16
+  include_best_render_preview: true
 
 ros:
   image_topic: /oakd/rgb/preview/image_raw
   camera_info_topic: /oakd/rgb/preview/camera_info
   odometry_topic: /odom
+  amcl_pose_topic: /amcl_pose
   map_frame: map
   base_frame: base_link
   tf_lookup_mode: auto
@@ -18,33 +22,37 @@ ros:
 runtime:
   observation_ready_timeout_seconds: 10.0
   spin_timeout_seconds: 0.05
+  random_seed: 42
 
 particle_filter:
   particle_count: 256
-  resample_threshold_ratio: 0.5
+  resample_threshold_ratio: 0.4980265853932951
 
 initial_pose_prior:
   mean:
     x: -2.685
     y: -2.003
     yaw: -0.020
-  sigma_x: 0.5
-  sigma_y: 0.5
-  sigma_yaw: 0.5
+  sigma_x: 0.5189956229836866
+  sigma_y: 0.4033021036665101
+  sigma_yaw: 0.5269711152318212
 
 motion_noise:
-  x_meters: 0.02
-  y_meters: 0.02
-  yaw_radians: 0.017453292519943295
+  x_meters: 0.03715267516347767
+  y_meters: 0.03215772063751061
+  yaw_radians: 0.06844335442874377
 
 measurement:
-  metric_name: hybrid
-  temperature: 0.02
+  metric_name: lpips
+  temperature: 0.0146428187424423
   packed: false
   radius_clip: 3.0
   hybrid_ssim_weight: 0.50
   hybrid_l1_weight: 0.25
   hybrid_gradient_weight: 0.25
+  lpips_top_k: 8
+  lpips_weight: 0.25
+  lpips_net: alex
 
 visualization:
   enabled: true

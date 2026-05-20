@@ -1,4 +1,4 @@
-const POLL_INTERVAL_MS = 300;
+const POLL_INTERVAL_MS = 50;
 const MAX_PATH_POINTS = 600;
 const MAX_ERROR_POINTS = 1200;
 const DEFAULT_LAYERS = {
@@ -73,20 +73,10 @@ function deriveConvergence(covariance) {
   return Math.max(0, Math.min(1, 1 - covariance.spread / 2.5));
 }
 
-function deriveUpdateRateHz(errorHistory) {
-  if (!errorHistory || errorHistory.length < 2) return null;
-  const tail = errorHistory.slice(-15);
-  let totalDelta = 0;
-  let samples = 0;
-  for (let index = 1; index < tail.length; index += 1) {
-    const delta = tail[index].t - tail[index - 1].t;
-    if (delta > 0) {
-      totalDelta += delta;
-      samples += 1;
-    }
-  }
-  if (samples === 0) return null;
-  return 1 / (totalDelta / samples);
+function deriveUpdateRateHz(snapshot) {
+  const renderAndScoreMs = snapshot?.metrics?.render_and_score_milliseconds;
+  if (renderAndScoreMs === null || renderAndScoreMs === undefined || renderAndScoreMs <= 0) return null;
+  return 1000 / renderAndScoreMs;
 }
 
 function appendCapped(history, point, maxLength) {
@@ -243,10 +233,12 @@ function App() {
   const particleCount = snapshot ? snapshot.particles.length : 0;
   const covariance = React.useMemo(() => computeParticleCovariance(snapshot?.particles || []), [snapshot]);
   const poseError = React.useMemo(() => computePoseError(snapshot?.estimated_pose, snapshot?.ground_truth_pose), [snapshot]);
-  const updateRateHz = React.useMemo(() => deriveUpdateRateHz(errorHistory), [errorHistory]);
+  const updateRateHz = React.useMemo(() => deriveUpdateRateHz(snapshot), [snapshot]);
   const convergence = React.useMemo(() => deriveConvergence(covariance), [covariance]);
   const bestPose = React.useMemo(() => {
     if (!snapshot) return null;
+    const bestParticlePose = snapshot.metrics?.best_particle_pose;
+    if (bestParticlePose) return bestParticlePose;
     const bestParticle = snapshot.particles?.[snapshot.metrics.best_particle_index];
     return bestParticle ? { x: bestParticle.x, y: bestParticle.y, yaw: bestParticle.yaw } : snapshot.estimated_pose;
   }, [snapshot]);
@@ -487,6 +479,7 @@ function App() {
           <div className="rail-section">
             <h3>Legend</h3>
             <div className="legend-row"><span className="dot gt"></span>Ground truth pose</div>
+            <div className="legend-row"><span className="dot" style={{ background: 'rgba(255,79,216,1)' }}></span>AMCL pose</div>
             <div className="legend-row"><span className="dot est"></span>PF estimate</div>
             <div className="legend-row"><span className="dot" style={{ background: 'oklch(0.78 0.14 200)' }}></span>Particle (high w)</div>
             <div className="legend-row"><span className="dot" style={{ background: 'oklch(0.5 0.08 230)' }}></span>Particle (low w)</div>

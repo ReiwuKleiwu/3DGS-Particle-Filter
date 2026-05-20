@@ -1,1 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.Python
+.venv/
+venv/
+env/
+
+# Test and tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Frontend / JS tooling
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# IDE / editor
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Native / CMake build artifacts
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.dylib
+*.exe
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Project-specific generated data and bulky assets
 splat.ply
+core/renders/
+core/replay_tuning/artifacts/results/
+core/replay_tuning/artifacts/datasets/*/images/
+core/replay_tuning/artifacts/datasets/*/raw_capture.json
+frontend/uploads/
+frontend_new/uploads/
+
+# Common large ML / robotics artifacts
+*.bag
+*.ckpt
+*.log
+*.npy
+*.npz
+*.onnx
+*.pt
+*.pth

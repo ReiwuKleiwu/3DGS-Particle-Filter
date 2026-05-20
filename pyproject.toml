@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "3dgsnav-core"
+version = "0.1.0"
+description = "Backend, rendering, and replay-tuning code for 3DGSNav."
+requires-python = ">=3.11"
+dependencies = [
+  "numpy==2.3.3",
+  "pillow==11.3.0",
+  "PyYAML==6.0.2",
+]
+
+[project.optional-dependencies]
+# ROS runtime packages such as rclpy, tf2_ros, nav_msgs, sensor_msgs, and Nav2
+# remain external system dependencies and are not installed from PyPI here.
+backend = []
+tuning = [
+  "matplotlib==3.10.6",
+]
+rendering = [
+  "fastapi==0.116.1",
+  "uvicorn[standard]==0.35.0",
+  "plyfile==1.1.2",
+  "pytorch-msssim==1.0.0",
+  "lpips==0.1.4",
+  "onnx==1.17.0",
+]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ["core*"]

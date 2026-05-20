@@ -1,0 +1,6620 @@
+{
+  "ply_path": "/home/nick/PycharmProjects/3DGSNav/splat.ply",
+  "camera_info": {
+    "width": 320,
+    "height": 240,
+    "k": [
+      221.76500407999384,
+      0.0,
+      160.0,
+      0.0,
+      221.76500407999382,
+      120.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "initial_prior": {
+    "x": -2.450183202634523,
+    "y": -2.0973092714217185,
+    "yaw": 0.15982046267278102,
+    "sigma_x": 0.5,
+    "sigma_y": 0.5,
+    "sigma_yaw_deg": 30.0
+  },
+  "frames": [
+    {
+      "image_path": "images/frame_000000.png",
+      "pose": {
+        "x": -2.450183202634523,
+        "y": -2.0973092714217185,
+        "yaw": 0.15982046267278102
+      },
+      "odom_pose": {
+        "x": -0.18697118016128703,
+        "y": 1.2002228996042097,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.680260723134681,
+        "qw": 0.7329702235154446,
+        "yaw": -1.4962365672962548,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 997,
+          "nanosec": 612000000
+        }
+      },
+      "image_stamp": {
+        "sec": 997,
+        "nanosec": 590000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 997,
+          "nanosec": 354000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000001.png",
+      "pose": {
+        "x": -2.450183202634523,
+        "y": -2.0973092714217185,
+        "yaw": 0.15982046267278102
+      },
+      "odom_pose": {
+        "x": -0.18697118016128703,
+        "y": 1.2002228996042097,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.680260723134681,
+        "qw": 0.7329702235154446,
+        "yaw": -1.4962365672962548,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 997,
+          "nanosec": 612000000
+        }
+      },
+      "image_stamp": {
+        "sec": 997,
+        "nanosec": 590000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 997,
+          "nanosec": 354000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000002.png",
+      "pose": {
+        "x": -2.447303386333055,
+        "y": -2.096851344264903,
+        "yaw": 0.15530023574794727
+      },
+      "odom_pose": {
+        "x": -0.18676015421068726,
+        "y": 1.197314548308489,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.6819155801705175,
+        "qw": 0.7314308863595429,
+        "yaw": -1.5007567942210884,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 998,
+          "nanosec": 80000000
+        }
+      },
+      "image_stamp": {
+        "sec": 998,
+        "nanosec": 85000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 998,
+          "nanosec": 80000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000003.png",
+      "pose": {
+        "x": -2.43369181025016,
+        "y": -2.0948423418331394,
+        "yaw": 0.13841391449259996
+      },
+      "odom_pose": {
+        "x": -0.18591757646406878,
+        "y": 1.183581334665201,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.6880667895587732,
+        "qw": 0.7256473613996559,
+        "yaw": -1.517643115476436,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 998,
+          "nanosec": 192000000
+        }
+      },
+      "image_stamp": {
+        "sec": 998,
+        "nanosec": 184000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 998,
+          "nanosec": 192000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000004.png",
+      "pose": {
+        "x": -2.40869268788529,
+        "y": -2.091677949639621,
+        "yaw": 0.11428738283821215
+      },
+      "odom_pose": {
+        "x": -0.18489354021077992,
+        "y": 1.1584035498794008,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.6967701903162451,
+        "qw": 0.7172944317967787,
+        "yaw": -1.5417696471308235,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 998,
+          "nanosec": 305000000
+        }
+      },
+      "image_stamp": {
+        "sec": 998,
+        "nanosec": 283000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 998,
+          "nanosec": 305000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000005.png",
+      "pose": {
+        "x": -2.375314544979406,
+        "y": -2.0884023503937663,
+        "yaw": 0.08124000198907949
+      },
+      "odom_pose": {
+        "x": -0.18447223681854222,
+        "y": 1.1248677111733725,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7085268838766577,
+        "qw": 0.7056838207186227,
+        "yaw": -1.5748170279799563,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 998,
+          "nanosec": 434000000
+        }
+      },
+      "image_stamp": {
+        "sec": 998,
+        "nanosec": 415000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 998,
+          "nanosec": 434000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000006.png",
+      "pose": {
+        "x": -2.346000211590934,
+        "y": -2.0864557905820433,
+        "yaw": 0.05038402022877937
+      },
+      "odom_pose": {
+        "x": -0.18502908151199157,
+        "y": 1.0954940978257015,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7193294143881245,
+        "qw": 0.6946691252647104,
+        "yaw": -1.6056730097402563,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 998,
+          "nanosec": 547000000
+        }
+      },
+      "image_stamp": {
+        "sec": 998,
+        "nanosec": 547000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 998,
+          "nanosec": 547000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000007.png",
+      "pose": {
+        "x": -2.312477806954843,
+        "y": -2.0854447632226845,
+        "yaw": 0.009370268623404551
+      },
+      "odom_pose": {
+        "x": -0.18687640892586546,
+        "y": 1.0620073665678862,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7334226642352161,
+        "qw": 0.6797729000086113,
+        "yaw": -1.6466867613456315,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 998,
+          "nanosec": 676000000
+        }
+      },
+      "image_stamp": {
+        "sec": 998,
+        "nanosec": 646000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 998,
+          "nanosec": 676000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000008.png",
+      "pose": {
+        "x": -2.2831004088505535,
+        "y": -2.0856984715990317,
+        "yaw": -0.02482207852533198
+      },
+      "odom_pose": {
+        "x": -0.1896308997796676,
+        "y": 1.0327582867968155,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7449364341458686,
+        "qw": 0.6671354503262722,
+        "yaw": -1.6808791084943675,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 998,
+          "nanosec": 789000000
+        }
+      },
+      "image_stamp": {
+        "sec": 998,
+        "nanosec": 778000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 998,
+          "nanosec": 789000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000009.png",
+      "pose": {
+        "x": -2.2537412084032256,
+        "y": -2.0867869093188554,
+        "yaw": -0.04764475832022421
+      },
+      "odom_pose": {
+        "x": -0.19321553816299045,
+        "y": 1.003598421995395,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7525006765118246,
+        "qw": 0.6585914756882648,
+        "yaw": -1.70370178828926,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 998,
+          "nanosec": 902000000
+        }
+      },
+      "image_stamp": {
+        "sec": 998,
+        "nanosec": 910000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 998,
+          "nanosec": 902000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000010.png",
+      "pose": {
+        "x": -2.220255594255222,
+        "y": -2.088689645587523,
+        "yaw": -0.06390951327372922
+      },
+      "odom_pose": {
+        "x": -0.19796291199665156,
+        "y": 0.9703964762412591,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7578316485682488,
+        "qw": 0.6524501455500873,
+        "yaw": -1.7199665432427647,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 999,
+          "nanosec": 31000000
+        }
+      },
+      "image_stamp": {
+        "sec": 999,
+        "nanosec": 9000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 999,
+          "nanosec": 31000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000011.png",
+      "pose": {
+        "x": -2.1909432372227577,
+        "y": -2.090681323633763,
+        "yaw": -0.07084687023841603
+      },
+      "odom_pose": {
+        "x": -0.20244352062734325,
+        "y": 0.9413602023319391,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7600902248021989,
+        "qw": 0.6498175514405122,
+        "yaw": -1.7269039002074518,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 999,
+          "nanosec": 144000000
+        }
+      },
+      "image_stamp": {
+        "sec": 999,
+        "nanosec": 141000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 999,
+          "nanosec": 144000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000012.png",
+      "pose": {
+        "x": -2.1556828165490733,
+        "y": -2.093289996483956,
+        "yaw": -0.051186810840507184
+      },
+      "odom_pose": {
+        "x": -0.207064325346109,
+        "y": 0.9123458693696707,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7613945296831862,
+        "qw": 0.6482888015140471,
+        "yaw": -1.730922999071235,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 999,
+          "nanosec": 257000000
+        }
+      },
+      "image_stamp": {
+        "sec": 999,
+        "nanosec": 240000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 999,
+          "nanosec": 257000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000013.png",
+      "pose": {
+        "x": -2.1221936024182297,
+        "y": -2.0951335175432435,
+        "yaw": -0.05893677870895417
+      },
+      "odom_pose": {
+        "x": -0.212538016199183,
+        "y": 0.87925561791335,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7639009157342193,
+        "qw": 0.6453335501431963,
+        "yaw": -1.7386729669396819,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 999,
+          "nanosec": 386000000
+        }
+      },
+      "image_stamp": {
+        "sec": 999,
+        "nanosec": 372000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 999,
+          "nanosec": 386000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000014.png",
+      "pose": {
+        "x": -2.088719664794712,
+        "y": -2.097236332677824,
+        "yaw": -0.06607742535003068
+      },
+      "odom_pose": {
+        "x": -0.2182678030806779,
+        "y": 0.8462087440247954,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7662000914657969,
+        "qw": 0.6426020695872403,
+        "yaw": -1.7458136135807587,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 999,
+          "nanosec": 515000000
+        }
+      },
+      "image_stamp": {
+        "sec": 999,
+        "nanosec": 504000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 999,
+          "nanosec": 515000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000015.png",
+      "pose": {
+        "x": -2.055258548614061,
+        "y": -2.0995347989771767,
+        "yaw": -0.07108128269753151
+      },
+      "odom_pose": {
+        "x": -0.22419068728603944,
+        "y": 0.8131958876492228,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7678054362623553,
+        "qw": 0.6406830823784675,
+        "yaw": -1.7508174709282596,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 999,
+          "nanosec": 644000000
+        }
+      },
+      "image_stamp": {
+        "sec": 999,
+        "nanosec": 636000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 999,
+          "nanosec": 644000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000016.png",
+      "pose": {
+        "x": -2.021810040648903,
+        "y": -2.1020098352852403,
+        "yaw": -0.07757277392929693
+      },
+      "odom_pose": {
+        "x": -0.2302877239568742,
+        "y": 0.7802147622339801,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7698808825573529,
+        "qw": 0.6381876108737237,
+        "yaw": -1.757308962160024,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 999,
+          "nanosec": 773000000
+        }
+      },
+      "image_stamp": {
+        "sec": 999,
+        "nanosec": 768000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 999,
+          "nanosec": 773000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000017.png",
+      "pose": {
+        "x": -1.992534417732918,
+        "y": -2.104481183609883,
+        "yaw": -0.09175006207549909
+      },
+      "odom_pose": {
+        "x": -0.2359273996323948,
+        "y": 0.7513813836956339,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7743853867530667,
+        "qw": 0.6327142109857368,
+        "yaw": -1.7714862503062272,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 999,
+          "nanosec": 886000000
+        }
+      },
+      "image_stamp": {
+        "sec": 999,
+        "nanosec": 867000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 999,
+          "nanosec": 886000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000018.png",
+      "pose": {
+        "x": -1.9674385710010405,
+        "y": -2.1069781421654916,
+        "yaw": -0.10677769843787555
+      },
+      "odom_pose": {
+        "x": -0.24203377085386052,
+        "y": 0.722643356766241,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.779925423266874,
+        "qw": 0.6258724583667086,
+        "yaw": -1.7890933038951449,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 999,
+          "nanosec": 999000000
+        }
+      },
+      "image_stamp": {
+        "sec": 999,
+        "nanosec": 966000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 999,
+          "nanosec": 983000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000019.png",
+      "pose": {
+        "x": -1.948081521425302,
+        "y": -2.114695721613871,
+        "yaw": -0.13137886889315328
+      },
+      "odom_pose": {
+        "x": -0.24869360817238778,
+        "y": 0.6940286864318478,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7864214413395123,
+        "qw": 0.6176903080035205,
+        "yaw": -1.8099879757628492,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1000,
+          "nanosec": 112000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1000,
+        "nanosec": 98000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1000,
+          "nanosec": 112000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000020.png",
+      "pose": {
+        "x": -1.9148826834198833,
+        "y": -2.1194627749446027,
+        "yaw": -0.15292686390465812
+      },
+      "odom_pose": {
+        "x": -0.2570053122517637,
+        "y": 0.6615355607332487,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7930306633526784,
+        "qw": 0.6091817191794341,
+        "yaw": -1.8315359707743541,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1000,
+          "nanosec": 241000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1000,
+        "nanosec": 230000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1000,
+          "nanosec": 241000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000021.png",
+      "pose": {
+        "x": -1.88178153804225,
+        "y": -2.1248681018752427,
+        "yaw": -0.170302654122427
+      },
+      "odom_pose": {
+        "x": -0.2659410718843599,
+        "y": 0.6292082412599801,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7982931750528747,
+        "qw": 0.6022690484027885,
+        "yaw": -1.848911760992123,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1000,
+          "nanosec": 370000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1000,
+        "nanosec": 362000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1000,
+          "nanosec": 370000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000022.png",
+      "pose": {
+        "x": -1.84877111851953,
+        "y": -2.1308029963754778,
+        "yaw": -0.18539845714514855
+      },
+      "odom_pose": {
+        "x": -0.27539356185850744,
+        "y": 0.597028104481471,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8028162597507261,
+        "qw": 0.5962265115540022,
+        "yaw": -1.8640075640148444,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1000,
+          "nanosec": 499000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1000,
+        "nanosec": 494000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1000,
+          "nanosec": 499000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000023.png",
+      "pose": {
+        "x": -1.8199358196786135,
+        "y": -2.1364326814402848,
+        "yaw": -0.2005660882446534
+      },
+      "odom_pose": {
+        "x": -0.2840933546448787,
+        "y": 0.5689660051542991,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.807314801716703,
+        "qw": 0.5901210138006616,
+        "yaw": -1.879175195114349,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1000,
+          "nanosec": 612000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1000,
+        "nanosec": 593000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1000,
+          "nanosec": 612000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000024.png",
+      "pose": {
+        "x": -1.7952561672923975,
+        "y": -2.1416243600250384,
+        "yaw": -0.21381432937927058
+      },
+      "odom_pose": {
+        "x": -0.29191051974662596,
+        "y": 0.5449882926236201,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8112060938665481,
+        "qw": 0.584760355422439,
+        "yaw": -1.8924234362489667,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1000,
+          "nanosec": 709000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1000,
+        "nanosec": 692000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1000,
+          "nanosec": 709000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000025.png",
+      "pose": {
+        "x": -1.7625299406523254,
+        "y": -2.1489666714443256,
+        "yaw": -0.22688566721501605
+      },
+      "odom_pose": {
+        "x": -0.30273167463514894,
+        "y": 0.5132421424010538,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8150105414783508,
+        "qw": 0.579446129747335,
+        "yaw": -1.905494774084712,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1000,
+          "nanosec": 838000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1000,
+        "nanosec": 824000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1000,
+          "nanosec": 838000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000026.png",
+      "pose": {
+        "x": -1.7341865715728613,
+        "y": -2.155646667937125,
+        "yaw": -0.23572631805346198
+      },
+      "odom_pose": {
+        "x": -0.31242274693289607,
+        "y": 0.4857821343595697,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8175639112483056,
+        "qw": 0.575837868696018,
+        "yaw": -1.9143354249231572,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1000,
+          "nanosec": 950000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1000,
+        "nanosec": 956000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1000,
+          "nanosec": 950000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000027.png",
+      "pose": {
+        "x": -1.7069178206718747,
+        "y": -2.1458871023934254,
+        "yaw": -0.22685849838127417
+      },
+      "odom_pose": {
+        "x": -0.3224102886285193,
+        "y": 0.4581518841389865,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8193842118042747,
+        "qw": 0.573244723870955,
+        "yaw": -1.9206719547603581,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1001,
+          "nanosec": 63000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1001,
+        "nanosec": 55000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1001,
+          "nanosec": 63000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000028.png",
+      "pose": {
+        "x": -1.6783151779346845,
+        "y": -2.152600450694431,
+        "yaw": -0.23446867140149155
+      },
+      "odom_pose": {
+        "x": -0.33258265075054677,
+        "y": 0.430589169000229,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8215595205113614,
+        "qw": 0.5701227536742784,
+        "yaw": -1.9282821277805757,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1001,
+          "nanosec": 176000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1001,
+        "nanosec": 154000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1001,
+          "nanosec": 176000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000029.png",
+      "pose": {
+        "x": -1.6497621267955167,
+        "y": -2.1595217648033844,
+        "yaw": -0.2410439114246527
+      },
+      "odom_pose": {
+        "x": -0.34295532182773747,
+        "y": 0.40310118957148355,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8234294242223507,
+        "qw": 0.5674187019519608,
+        "yaw": -1.9348573678037366,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1001,
+          "nanosec": 289000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1001,
+        "nanosec": 286000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1001,
+          "nanosec": 289000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000030.png",
+      "pose": {
+        "x": -1.6212499148114317,
+        "y": -2.166609515199,
+        "yaw": -0.24620133113479103
+      },
+      "odom_pose": {
+        "x": -0.35348816016709633,
+        "y": 0.3756741635859179,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.824889893003233,
+        "qw": 0.5652934321404369,
+        "yaw": -1.9400147875138751,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1001,
+          "nanosec": 402000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1001,
+        "nanosec": 385000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1001,
+          "nanosec": 402000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000031.png",
+      "pose": {
+        "x": -1.5887321115664874,
+        "y": -2.174826788768314,
+        "yaw": -0.24852103532157058
+      },
+      "odom_pose": {
+        "x": -0.36563350024292735,
+        "y": 0.3444104173735354,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.825544994782537,
+        "qw": 0.5643363018533373,
+        "yaw": -1.9423344917006542,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1001,
+          "nanosec": 531000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1001,
+        "nanosec": 517000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1001,
+          "nanosec": 531000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000032.png",
+      "pose": {
+        "x": -1.5602568889537847,
+        "y": -2.182061847915189,
+        "yaw": -0.24892934957580853
+      },
+      "odom_pose": {
+        "x": -0.3763079952529239,
+        "y": 0.3170381770563213,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8256601908554394,
+        "qw": 0.5641677491992602,
+        "yaw": -1.9427428059548915,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1001,
+          "nanosec": 644000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1001,
+        "nanosec": 649000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1001,
+          "nanosec": 644000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000033.png",
+      "pose": {
+        "x": -1.5317913576593822,
+        "y": -2.1893348956069483,
+        "yaw": -0.25186880502920467
+      },
+      "odom_pose": {
+        "x": -0.38701900253225646,
+        "y": 0.289680216283243,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.826488471786471,
+        "qw": 0.562953644631655,
+        "yaw": -1.9456822614082885,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1001,
+          "nanosec": 757000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1001,
+        "nanosec": 748000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1001,
+          "nanosec": 757000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000034.png",
+      "pose": {
+        "x": -1.5033570088274655,
+        "y": -2.196728833514081,
+        "yaw": -0.2569022214232001
+      },
+      "odom_pose": {
+        "x": -0.39784616014195007,
+        "y": 0.26236803641116907,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.827902642929544,
+        "qw": 0.5608718336931139,
+        "yaw": -1.9507156778022838,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1001,
+          "nanosec": 870000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1001,
+        "nanosec": 880000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1001,
+          "nanosec": 870000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000035.png",
+      "pose": {
+        "x": -1.4689669150620277,
+        "y": -2.204024775058646,
+        "yaw": -0.2633744849725378
+      },
+      "odom_pose": {
+        "x": -0.4103177224426208,
+        "y": 0.23123298295109382,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.828284472503395,
+        "qw": 0.5603078016677733,
+        "yaw": -1.952077920023055,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1001,
+          "nanosec": 999000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1001,
+        "nanosec": 979000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1001,
+          "nanosec": 999000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000036.png",
+      "pose": {
+        "x": -1.437842153090189,
+        "y": -2.21003687757718,
+        "yaw": -0.26870858303977646
+      },
+      "odom_pose": {
+        "x": -0.4212285300012629,
+        "y": 0.20395408256001604,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.827733308807316,
+        "qw": 0.5611217064870085,
+        "yaw": -1.950111987620912,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1002,
+          "nanosec": 112000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1002,
+        "nanosec": 111000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1002,
+          "nanosec": 112000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000037.png",
+      "pose": {
+        "x": -1.409500465769421,
+        "y": -2.217778439027375,
+        "yaw": -0.2642815654733976
+      },
+      "odom_pose": {
+        "x": -0.43205118818846105,
+        "y": 0.17664011024476295,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8264892342068508,
+        "qw": 0.562952525298691,
+        "yaw": -1.9456849700545333,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1002,
+          "nanosec": 225000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1002,
+        "nanosec": 210000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1002,
+          "nanosec": 225000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000038.png",
+      "pose": {
+        "x": -1.3770985625017156,
+        "y": -2.2264412747361226,
+        "yaw": -0.2580764972449224
+      },
+      "odom_pose": {
+        "x": -0.4442376644716274,
+        "y": 0.14539242467148705,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.824738679821498,
+        "qw": 0.5655140228202062,
+        "yaw": -1.939479901826058,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1002,
+          "nanosec": 354000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1002,
+        "nanosec": 342000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1002,
+          "nanosec": 354000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000039.png",
+      "pose": {
+        "x": -1.348668410607991,
+        "y": -2.2338512512723763,
+        "yaw": -0.2515716057233643
+      },
+      "odom_pose": {
+        "x": -0.45474052883948923,
+        "y": 0.11795392746339671,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8228950171727366,
+        "qw": 0.5681934447987601,
+        "yaw": -1.9329750103044998,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1002,
+          "nanosec": 467000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1002,
+        "nanosec": 474000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1002,
+          "nanosec": 467000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000040.png",
+      "pose": {
+        "x": -1.3161545976832811,
+        "y": -2.2420840586803608,
+        "yaw": -0.24462340532005086
+      },
+      "odom_pose": {
+        "x": -0.4665119573853541,
+        "y": 0.08654754883246271,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8209160942741919,
+        "qw": 0.5710488299275345,
+        "yaw": -1.9260268099011866,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1002,
+          "nanosec": 596000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1002,
+        "nanosec": 573000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1002,
+          "nanosec": 596000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000041.png",
+      "pose": {
+        "x": -1.2919320713638807,
+        "y": -2.248106577966263,
+        "yaw": -0.24334630604618235
+      },
+      "odom_pose": {
+        "x": -0.47517139805977177,
+        "y": 0.06313781566334362,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8205512839134773,
+        "qw": 0.5715729091445325,
+        "yaw": -1.9247497106273181,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1002,
+          "nanosec": 692000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1002,
+        "nanosec": 672000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1002,
+          "nanosec": 692000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000042.png",
+      "pose": {
+        "x": -1.2674569544918082,
+        "y": -2.2541907407193165,
+        "yaw": -0.24405824602492307
+      },
+      "odom_pose": {
+        "x": -0.48391998688669774,
+        "y": 0.0394838397640443,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.820754694723646,
+        "qw": 0.571280781305563,
+        "yaw": -1.9254616506060593,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1002,
+          "nanosec": 789000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1002,
+        "nanosec": 771000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1002,
+          "nanosec": 789000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000043.png",
+      "pose": {
+        "x": -1.2349133406344925,
+        "y": -2.2623052206426175,
+        "yaw": -0.24445209015453526
+      },
+      "odom_pose": {
+        "x": -0.4955771004923731,
+        "y": 0.00803478111828991,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.820867176600222,
+        "qw": 0.5711191455207747,
+        "yaw": -1.9258554947356716,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1002,
+          "nanosec": 918000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1002,
+        "nanosec": 903000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1002,
+          "nanosec": 918000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000044.png",
+      "pose": {
+        "x": -1.2064074590994343,
+        "y": -2.269418526030934,
+        "yaw": -0.24468604120222784
+      },
+      "odom_pose": {
+        "x": -0.5072407053241658,
+        "y": -0.023411870748693622,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8209516008495962,
+        "qw": 0.5709977837631993,
+        "yaw": -1.9261511711136525,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1003,
+          "nanosec": 47000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1003,
+        "nanosec": 35000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1003,
+          "nanosec": 31000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000045.png",
+      "pose": {
+        "x": -1.1890019563520162,
+        "y": -2.276606504324242,
+        "yaw": -0.24001784474893612
+      },
+      "odom_pose": {
+        "x": -0.5174369932606404,
+        "y": -0.0509658092459558,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8202541968145669,
+        "qw": 0.5719991718596188,
+        "yaw": -1.923710555869479,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1003,
+          "nanosec": 160000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1003,
+        "nanosec": 134000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1003,
+          "nanosec": 160000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000046.png",
+      "pose": {
+        "x": -1.1604502704925688,
+        "y": -2.2835335799726284,
+        "yaw": -0.2358566180974451
+      },
+      "odom_pose": {
+        "x": -0.5275365100738549,
+        "y": -0.07855535260199267,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8190623131541293,
+        "qw": 0.5737045643627103,
+        "yaw": -1.9195493292179875,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1003,
+          "nanosec": 273000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1003,
+        "nanosec": 266000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1003,
+          "nanosec": 273000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000047.png",
+      "pose": {
+        "x": -1.131870624944729,
+        "y": -2.290344411984691,
+        "yaw": -0.2323691361851784
+      },
+      "odom_pose": {
+        "x": -0.537523673107981,
+        "y": -0.1061857732804129,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8180606762820621,
+        "qw": 0.5751319239278369,
+        "yaw": -1.9160618473057212,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1003,
+          "nanosec": 386000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1003,
+        "nanosec": 365000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1003,
+          "nanosec": 386000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000048.png",
+      "pose": {
+        "x": -1.1032738745849664,
+        "y": -2.2970831102855755,
+        "yaw": -0.23061381573049353
+      },
+      "odom_pose": {
+        "x": -0.5474410886082897,
+        "y": -0.13384131622795176,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8175555908608328,
+        "qw": 0.575849681646343,
+        "yaw": -1.9143065268510362,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1003,
+          "nanosec": 499000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1003,
+        "nanosec": 497000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1003,
+          "nanosec": 499000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000049.png",
+      "pose": {
+        "x": -1.0706138734377848,
+        "y": -2.304715635715025,
+        "yaw": -0.22840763286340585
+      },
+      "odom_pose": {
+        "x": -0.5587043935928043,
+        "y": -0.16543354755451234,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8169198787336731,
+        "qw": 0.5767511696821783,
+        "yaw": -1.9121003439839483,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1003,
+          "nanosec": 628000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1003,
+        "nanosec": 629000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1003,
+          "nanosec": 628000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000050.png",
+      "pose": {
+        "x": -1.0379381060818909,
+        "y": -2.3122803903949567,
+        "yaw": -0.22668656124003345
+      },
+      "odom_pose": {
+        "x": -0.569902135427773,
+        "y": -0.19704907955164044,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8164232612854803,
+        "qw": 0.5774539448579259,
+        "yaw": -1.9103792723605761,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1003,
+          "nanosec": 757000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1003,
+        "nanosec": 761000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1003,
+          "nanosec": 757000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000051.png",
+      "pose": {
+        "x": -1.0052519551647534,
+        "y": -2.3198001621473487,
+        "yaw": -0.22545985534621774
+      },
+      "odom_pose": {
+        "x": -0.5810563504758113,
+        "y": -0.22867999663679742,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8160689246589448,
+        "qw": 0.5779545918201477,
+        "yaw": -1.9091525664667606,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1003,
+          "nanosec": 886000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1003,
+        "nanosec": 860000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1003,
+          "nanosec": 886000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000052.png",
+      "pose": {
+        "x": -0.9766128958832098,
+        "y": -2.3263567359236874,
+        "yaw": -0.224899264489974
+      },
+      "odom_pose": {
+        "x": -0.5907975672460793,
+        "y": -0.25639809671690733,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8159068945738743,
+        "qw": 0.5781833095021134,
+        "yaw": -1.9085919756105167,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1003,
+          "nanosec": 999000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1003,
+        "nanosec": 992000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1003,
+          "nanosec": 999000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000053.png",
+      "pose": {
+        "x": -0.9316025180700661,
+        "y": -2.3326454043808456,
+        "yaw": -0.2307359738824499
+      },
+      "odom_pose": {
+        "x": -0.6019502067773873,
+        "y": -0.2880295429638795,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8170784109666801,
+        "qw": 0.5765265564847513,
+        "yaw": -1.9126501932645215,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1004,
+          "nanosec": 128000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1004,
+        "nanosec": 124000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1004,
+          "nanosec": 128000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000054.png",
+      "pose": {
+        "x": -0.9030305097267131,
+        "y": -2.3394878108431802,
+        "yaw": -0.23985979710936903
+      },
+      "odom_pose": {
+        "x": -0.6119187464058244,
+        "y": -0.315666590647102,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8196999629277856,
+        "qw": 0.5727931308737797,
+        "yaw": -1.9217740164914405,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1004,
+          "nanosec": 241000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1004,
+        "nanosec": 223000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1004,
+          "nanosec": 241000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000055.png",
+      "pose": {
+        "x": -0.8704906314156079,
+        "y": -2.3476168269076356,
+        "yaw": -0.24880694805940262
+      },
+      "odom_pose": {
+        "x": -0.6236059553954513,
+        "y": -0.34710436615222456,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8222541854195795,
+        "qw": 0.5691204218440802,
+        "yaw": -1.9307211674414742,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1004,
+          "nanosec": 370000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1004,
+        "nanosec": 355000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1004,
+          "nanosec": 370000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000056.png",
+      "pose": {
+        "x": -0.8380086474018633,
+        "y": -2.355974407170656,
+        "yaw": -0.2546568180336905
+      },
+      "odom_pose": {
+        "x": -0.6355138991105362,
+        "y": -0.3784592590686478,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8239153059893982,
+        "qw": 0.5667129507576092,
+        "yaw": -1.9365710374157619,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1004,
+          "nanosec": 499000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1004,
+        "nanosec": 487000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1004,
+          "nanosec": 499000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000057.png",
+      "pose": {
+        "x": -0.8095882037831429,
+        "y": -2.3634217063502865,
+        "yaw": -0.2574739373517065
+      },
+      "odom_pose": {
+        "x": -0.6460667940190808,
+        "y": -0.40587860059256115,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8247127373856573,
+        "qw": 0.5655518550883338,
+        "yaw": -1.9393881567337774,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1004,
+          "nanosec": 612000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1004,
+        "nanosec": 619000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1004,
+          "nanosec": 612000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000058.png",
+      "pose": {
+        "x": -0.7771611719377508,
+        "y": -2.3719901958162617,
+        "yaw": -0.2588555160551407
+      },
+      "odom_pose": {
+        "x": -0.6581782525974958,
+        "y": -0.43715549265577514,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.825103217781627,
+        "qw": 0.5649820174186122,
+        "yaw": -1.9407697354372124,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1004,
+          "nanosec": 741000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1004,
+        "nanosec": 718000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1004,
+          "nanosec": 741000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000059.png",
+      "pose": {
+        "x": -0.7527822542655187,
+        "y": -2.3784490475868467,
+        "yaw": -0.2587543867088999
+      },
+      "odom_pose": {
+        "x": -0.6673006338341554,
+        "y": -0.46066784161620233,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8250746485958032,
+        "qw": 0.5650237377708232,
+        "yaw": -1.9406686060909712,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1004,
+          "nanosec": 838000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1004,
+        "nanosec": 817000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1004,
+          "nanosec": 838000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000060.png",
+      "pose": {
+        "x": -0.7246252903231345,
+        "y": -2.385875991889072,
+        "yaw": -0.25682557475058027
+      },
+      "odom_pose": {
+        "x": -0.6778040823039454,
+        "y": -0.4878275855465775,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8245293527169703,
+        "qw": 0.5658191818135314,
+        "yaw": -1.9387397941326516,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1004,
+          "nanosec": 950000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1004,
+        "nanosec": 949000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1004,
+          "nanosec": 950000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000061.png",
+      "pose": {
+        "x": -0.6919247051672281,
+        "y": -2.394426518188118,
+        "yaw": -0.2558011163262054
+      },
+      "odom_pose": {
+        "x": -0.6899280226524167,
+        "y": -0.5193783357746792,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.824239415446409,
+        "qw": 0.5662414555863621,
+        "yaw": -1.9377153357082768,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1005,
+          "nanosec": 80000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1005,
+        "nanosec": 48000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1005,
+          "nanosec": 80000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000062.png",
+      "pose": {
+        "x": -0.6700818642233807,
+        "y": -2.3912925820078446,
+        "yaw": -0.2581648266143379
+      },
+      "odom_pose": {
+        "x": -0.7004176028107022,
+        "y": -0.546543423426857,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8253568753932943,
+        "qw": 0.5646113957767928,
+        "yaw": -1.9416679616642445,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1005,
+          "nanosec": 192000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1005,
+        "nanosec": 180000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1005,
+          "nanosec": 192000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000063.png",
+      "pose": {
+        "x": -0.6416983757325727,
+        "y": -2.3988794005593155,
+        "yaw": -0.2634105542398713
+      },
+      "odom_pose": {
+        "x": -0.7111485292834628,
+        "y": -0.5738935505138919,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.826834933509167,
+        "qw": 0.562444657480975,
+        "yaw": -1.946913689289778,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1005,
+          "nanosec": 305000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1005,
+        "nanosec": 279000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1005,
+          "nanosec": 305000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000064.png",
+      "pose": {
+        "x": -0.6133419275845804,
+        "y": -2.406566779049766,
+        "yaw": -0.26595081176936247
+      },
+      "odom_pose": {
+        "x": -0.7219763364908109,
+        "y": -0.6012054990109457,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8275486435189731,
+        "qw": 0.5613940172551786,
+        "yaw": -1.949453946819269,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1005,
+          "nanosec": 418000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1005,
+        "nanosec": 411000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1005,
+          "nanosec": 418000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000065.png",
+      "pose": {
+        "x": -0.5809864613897058,
+        "y": -2.415401671945555,
+        "yaw": -0.26627762437215374
+      },
+      "odom_pose": {
+        "x": -0.7343941404155147,
+        "y": -0.632362033973219,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8276403677901056,
+        "qw": 0.5612587830976533,
+        "yaw": -1.9497807594220602,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1005,
+          "nanosec": 547000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1005,
+        "nanosec": 543000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1005,
+          "nanosec": 547000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000066.png",
+      "pose": {
+        "x": -0.5486202383747899,
+        "y": -2.424197053283459,
+        "yaw": -0.26416700419685735
+      },
+      "odom_pose": {
+        "x": -0.7467738932727257,
+        "y": -0.6635337013063084,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8270476049814971,
+        "qw": 0.5621318876334713,
+        "yaw": -1.9476701392467637,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1005,
+          "nanosec": 676000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1005,
+        "nanosec": 675000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1005,
+          "nanosec": 676000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000067.png",
+      "pose": {
+        "x": -0.5162328854049215,
+        "y": -2.4329142847155176,
+        "yaw": -0.2612753673287626
+      },
+      "odom_pose": {
+        "x": -0.7590783685121959,
+        "y": -0.6947351539217904,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8262340001928871,
+        "qw": 0.5633270603523857,
+        "yaw": -1.9447785023786692,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1005,
+          "nanosec": 805000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1005,
+        "nanosec": 774000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1005,
+          "nanosec": 805000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000068.png",
+      "pose": {
+        "x": -0.4918609866581265,
+        "y": -2.4393995451131394,
+        "yaw": -0.258719406856347
+      },
+      "odom_pose": {
+        "x": -0.7682635490228839,
+        "y": -0.718223033986519,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8255134048227765,
+        "qw": 0.5643825107654443,
+        "yaw": -1.9422225419062533,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1005,
+          "nanosec": 902000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1005,
+        "nanosec": 906000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1005,
+          "nanosec": 902000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000069.png",
+      "pose": {
+        "x": -0.45942362832956074,
+        "y": -2.4479288351034074,
+        "yaw": -0.25638226904136163
+      },
+      "odom_pose": {
+        "x": -0.7803868992709606,
+        "y": -0.7494953121548317,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8248533214776554,
+        "qw": 0.5653467944963335,
+        "yaw": -1.939885404091268,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1006,
+          "nanosec": 31000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1006,
+        "nanosec": 5000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1006,
+          "nanosec": 31000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000070.png",
+      "pose": {
+        "x": -0.4286916378174247,
+        "y": -2.45336276107211,
+        "yaw": -0.2505755975174249
+      },
+      "odom_pose": {
+        "x": -0.7924996306546206,
+        "y": -0.7807717125588302,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8251423878862579,
+        "qw": 0.5649248089023566,
+        "yaw": -1.9409084021084912,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1006,
+          "nanosec": 160000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1006,
+        "nanosec": 137000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1006,
+          "nanosec": 144000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000071.png",
+      "pose": {
+        "x": -0.3935453924250797,
+        "y": -2.4591070794944665,
+        "yaw": -0.2449496757776961
+      },
+      "odom_pose": {
+        "x": -0.8046620253689005,
+        "y": -0.8120288276459826,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8257793508961694,
+        "qw": 0.5639933187844526,
+        "yaw": -1.943165298961142,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1006,
+          "nanosec": 289000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1006,
+        "nanosec": 269000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1006,
+          "nanosec": 273000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000072.png",
+      "pose": {
+        "x": -0.3610200261676393,
+        "y": -2.4672943386744626,
+        "yaw": -0.24819535106839272
+      },
+      "odom_pose": {
+        "x": -0.8153902154280631,
+        "y": -0.8393800581824659,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8265744233142964,
+        "qw": 0.5628274360073773,
+        "yaw": -1.9459876548071884,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1006,
+          "nanosec": 402000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1006,
+        "nanosec": 401000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1006,
+          "nanosec": 402000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000073.png",
+      "pose": {
+        "x": -0.3285175294352912,
+        "y": -2.4755719572434813,
+        "yaw": -0.24993906715600395
+      },
+      "odom_pose": {
+        "x": -0.8277177730993867,
+        "y": -0.8705724063606757,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8270648147248336,
+        "qw": 0.5621065666260951,
+        "yaw": -1.9477313708948008,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1006,
+          "nanosec": 531000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1006,
+        "nanosec": 533000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1006,
+          "nanosec": 531000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000074.png",
+      "pose": {
+        "x": -0.29576556679144517,
+        "y": -2.4839235380003437,
+        "yaw": -0.24926071275206244
+      },
+      "odom_pose": {
+        "x": -0.8401502934063764,
+        "y": -0.9020028437896799,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8268741134227581,
+        "qw": 0.562387055817724,
+        "yaw": -1.9470530164908586,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1006,
+          "nanosec": 661000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1006,
+        "nanosec": 665000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1006,
+          "nanosec": 661000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000075.png",
+      "pose": {
+        "x": -0.2635107339672267,
+        "y": -2.492120129538108,
+        "yaw": -0.24915084508831686
+      },
+      "odom_pose": {
+        "x": -0.8523661087254475,
+        "y": -0.9329597850055946,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8268432180991621,
+        "qw": 0.5624324783326631,
+        "yaw": -1.9469431488271127,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1006,
+          "nanosec": 789000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1006,
+        "nanosec": 764000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1006,
+          "nanosec": 789000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000076.png",
+      "pose": {
+        "x": -0.23504584502320425,
+        "y": -2.4993957096323767,
+        "yaw": -0.2515239428212114
+      },
+      "odom_pose": {
+        "x": -0.8631883147353375,
+        "y": -0.9602739539547526,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8275099895067104,
+        "qw": 0.5614509927559164,
+        "yaw": -1.9493162465600071,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1006,
+          "nanosec": 902000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1006,
+        "nanosec": 896000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1006,
+          "nanosec": 902000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000077.png",
+      "pose": {
+        "x": -0.21062770766400485,
+        "y": -2.505704636710554,
+        "yaw": -0.2541142854549291
+      },
+      "odom_pose": {
+        "x": -0.8725391114712869,
+        "y": -0.9836963917735077,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8282364704640749,
+        "qw": 0.5603787549445568,
+        "yaw": -1.951906589193725,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1006,
+          "nanosec": 999000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1006,
+        "nanosec": 995000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1006,
+          "nanosec": 999000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000078.png",
+      "pose": {
+        "x": -0.18220182365174376,
+        "y": -2.5131311348060867,
+        "yaw": -0.257052219695855
+      },
+      "odom_pose": {
+        "x": -0.8835060799508548,
+        "y": -1.010952755401285,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8290587545232064,
+        "qw": 0.559161498628464,
+        "yaw": -1.9548445234346512,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1007,
+          "nanosec": 112000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1007,
+        "nanosec": 94000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1007,
+          "nanosec": 112000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000079.png",
+      "pose": {
+        "x": -0.13505197046264916,
+        "y": -2.5254816154029234,
+        "yaw": -0.2533710239763654
+      },
+      "odom_pose": {
+        "x": -0.8961111378617952,
+        "y": -1.0420339982669085,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8295894992451774,
+        "qw": 0.5583737661657608,
+        "yaw": -1.9567442207374115,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1007,
+          "nanosec": 241000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1007,
+        "nanosec": 226000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1007,
+          "nanosec": 241000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000080.png",
+      "pose": {
+        "x": -0.10661163443764132,
+        "y": -2.5328526177620896,
+        "yaw": -0.25372523552328086
+      },
+      "odom_pose": {
+        "x": -0.9087443290788623,
+        "y": -1.073103823897481,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8296931409914102,
+        "qw": 0.5582197522408249,
+        "yaw": -1.9571154990736248,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1007,
+          "nanosec": 370000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1007,
+        "nanosec": 358000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1007,
+          "nanosec": 354000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000081.png",
+      "pose": {
+        "x": -0.0741477076241488,
+        "y": -2.5412802477613887,
+        "yaw": -0.25486537039005747
+      },
+      "odom_pose": {
+        "x": -0.9198219937166763,
+        "y": -1.1003153960789736,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8300064695573018,
+        "qw": 0.5577537633158773,
+        "yaw": -1.9582385671511036,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1007,
+          "nanosec": 483000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1007,
+        "nanosec": 457000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1007,
+          "nanosec": 483000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000082.png",
+      "pose": {
+        "x": -0.04572949838923601,
+        "y": -2.54873603454239,
+        "yaw": -0.25862156775162354
+      },
+      "odom_pose": {
+        "x": -0.9309689226102635,
+        "y": -1.1274986510143994,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8310525217269163,
+        "qw": 0.5561939465072713,
+        "yaw": -1.9619947645126699,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1007,
+          "nanosec": 596000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1007,
+        "nanosec": 589000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1007,
+          "nanosec": 596000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000083.png",
+      "pose": {
+        "x": -0.013329202476680235,
+        "y": -2.5574049031947497,
+        "yaw": -0.2643236990003854
+      },
+      "odom_pose": {
+        "x": -0.9438446754384872,
+        "y": -1.1584686921515936,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8326348873858156,
+        "qw": 0.5538223039098463,
+        "yaw": -1.9676968957614318,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1007,
+          "nanosec": 725000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1007,
+        "nanosec": 721000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1007,
+          "nanosec": 725000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000084.png",
+      "pose": {
+        "x": 0.01902732409667829,
+        "y": -2.566235826114748,
+        "yaw": -0.26843536124004425
+      },
+      "odom_pose": {
+        "x": -0.9568752746175166,
+        "y": -1.1893739262802474,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8337716921702958,
+        "qw": 0.5521093780542778,
+        "yaw": -1.9718085580010907,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1007,
+          "nanosec": 854000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1007,
+        "nanosec": 853000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1007,
+          "nanosec": 854000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000085.png",
+      "pose": {
+        "x": 0.051349939754745444,
+        "y": -2.5751901027830657,
+        "yaw": -0.2716193006353803
+      },
+      "odom_pose": {
+        "x": -0.9700236624160157,
+        "y": -1.220229241088756,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8346495766569725,
+        "qw": 0.5507813397223409,
+        "yaw": -1.9749924973964266,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1007,
+          "nanosec": 983000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1007,
+        "nanosec": 985000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1007,
+          "nanosec": 983000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000086.png",
+      "pose": {
+        "x": 0.07965294913064147,
+        "y": -2.583071983201223,
+        "yaw": -0.27117996691679924
+      },
+      "odom_pose": {
+        "x": -0.981577717648843,
+        "y": -1.2472419822738887,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8345285681134991,
+        "qw": 0.5509646712834072,
+        "yaw": -1.9745531636778453,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1008,
+          "nanosec": 96000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1008,
+        "nanosec": 84000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1008,
+          "nanosec": 96000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000087.png",
+      "pose": {
+        "x": 0.11325533590347336,
+        "y": -2.5884664400101505,
+        "yaw": -0.2701321801165021
+      },
+      "odom_pose": {
+        "x": -0.9963628345452301,
+        "y": -1.2819218048641865,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8343476161192466,
+        "qw": 0.5512386556439327,
+        "yaw": -1.9738964718018328,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1008,
+          "nanosec": 241000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1008,
+        "nanosec": 216000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1008,
+          "nanosec": 225000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000088.png",
+      "pose": {
+        "x": 0.14668495609685306,
+        "y": -2.5943517282621054,
+        "yaw": -0.2745020195813662
+      },
+      "odom_pose": {
+        "x": -1.0095857794767173,
+        "y": -1.3127452170283247,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8357614859667246,
+        "qw": 0.549092650264682,
+        "yaw": -1.979036265832021,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1008,
+          "nanosec": 370000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1008,
+        "nanosec": 348000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1008,
+          "nanosec": 354000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000089.png",
+      "pose": {
+        "x": 0.17893099628363762,
+        "y": -2.6035776226950165,
+        "yaw": -0.2832730695634466
+      },
+      "odom_pose": {
+        "x": -1.021351183028827,
+        "y": -1.339666494007796,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8379127357627819,
+        "qw": 0.5458042206199311,
+        "yaw": -1.9868954426550531,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1008,
+          "nanosec": 483000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1008,
+        "nanosec": 480000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1008,
+          "nanosec": 483000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000090.png",
+      "pose": {
+        "x": 0.2071109744725732,
+        "y": -2.611888456993014,
+        "yaw": -0.29003464543660434
+      },
+      "odom_pose": {
+        "x": -1.033320850577361,
+        "y": -1.3664975990211052,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8397531920200967,
+        "qw": 0.5429683015536529,
+        "yaw": -1.9936570185282116,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1008,
+          "nanosec": 596000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1008,
+        "nanosec": 579000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1008,
+          "nanosec": 596000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000091.png",
+      "pose": {
+        "x": 0.2352382229539487,
+        "y": -2.6203760705241876,
+        "yaw": -0.29606182363868
+      },
+      "odom_pose": {
+        "x": -1.045458756911673,
+        "y": -1.393253026889242,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8413856597006708,
+        "qw": 0.5404351687761141,
+        "yaw": -1.9996841967302874,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1008,
+          "nanosec": 709000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1008,
+        "nanosec": 678000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1008,
+          "nanosec": 709000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000092.png",
+      "pose": {
+        "x": 0.26307419671082033,
+        "y": -2.628927793605799,
+        "yaw": -0.299801657023748
+      },
+      "odom_pose": {
+        "x": -1.0576216328854504,
+        "y": -1.419711255301294,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8423947568658181,
+        "qw": 0.5388609037636515,
+        "yaw": -2.003424030115355,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1008,
+          "nanosec": 821000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1008,
+        "nanosec": 810000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1008,
+          "nanosec": 821000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000093.png",
+      "pose": {
+        "x": 0.29113128316434644,
+        "y": -2.637644658079442,
+        "yaw": -0.3024484945352893
+      },
+      "odom_pose": {
+        "x": -1.069977478858464,
+        "y": -1.4463667781212213,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8431071575837901,
+        "qw": 0.5377455911776331,
+        "yaw": -2.0060708676268963,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1008,
+          "nanosec": 934000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1008,
+        "nanosec": 909000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1008,
+          "nanosec": 934000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000094.png",
+      "pose": {
+        "x": 0.3152074110474894,
+        "y": -2.6451538828187537,
+        "yaw": -0.3019733521322418
+      },
+      "odom_pose": {
+        "x": -1.0823608625611392,
+        "y": -1.473009528894374,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8429011184201182,
+        "qw": 0.5380684943072899,
+        "yaw": -2.0053047904247747,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1009,
+          "nanosec": 47000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1009,
+        "nanosec": 41000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1009,
+          "nanosec": 31000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000095.png",
+      "pose": {
+        "x": 0.3392901588127455,
+        "y": -2.6526418478239147,
+        "yaw": -0.3009300542436564
+      },
+      "odom_pose": {
+        "x": -1.0929685049366318,
+        "y": -1.4958902254463653,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8426422208817664,
+        "qw": 0.5384738504212107,
+        "yaw": -2.0043428309268383,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1009,
+          "nanosec": 144000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1009,
+        "nanosec": 140000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1009,
+          "nanosec": 128000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000096.png",
+      "pose": {
+        "x": 0.3673609966151088,
+        "y": -2.6613143205483745,
+        "yaw": -0.2980630949292064
+      },
+      "odom_pose": {
+        "x": -1.1052708671693214,
+        "y": -1.52257047135623,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.841788932724012,
+        "qw": 0.5398068105751991,
+        "yaw": -2.0011774658767028,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1009,
+          "nanosec": 257000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1009,
+        "nanosec": 239000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1009,
+          "nanosec": 241000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000097.png",
+      "pose": {
+        "x": 0.383052575455203,
+        "y": -2.6727178438226744,
+        "yaw": -0.30574105585600636
+      },
+      "odom_pose": {
+        "x": -1.1174686890793164,
+        "y": -1.5492986549846426,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8404012231890258,
+        "qw": 0.5419647442983624,
+        "yaw": -1.996046220679777,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1009,
+          "nanosec": 370000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1009,
+        "nanosec": 371000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1009,
+          "nanosec": 370000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000098.png",
+      "pose": {
+        "x": 0.4110978792856168,
+        "y": -2.681472416591092,
+        "yaw": -0.29948644357113297
+      },
+      "odom_pose": {
+        "x": -1.1295045073247196,
+        "y": -1.5761001603614189,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8387022267008801,
+        "qw": 0.5445902817044989,
+        "yaw": -1.9897916083949039,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1009,
+          "nanosec": 483000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1009,
+        "nanosec": 470000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1009,
+          "nanosec": 483000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000099.png",
+      "pose": {
+        "x": 0.443175794804751,
+        "y": -2.6912670618006307,
+        "yaw": -0.2931129755399016
+      },
+      "odom_pose": {
+        "x": -1.1430537658677205,
+        "y": -1.6067815118924116,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8369625066412271,
+        "qw": 0.5472602328662607,
+        "yaw": -1.9834181403636726,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1009,
+          "nanosec": 612000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1009,
+        "nanosec": 602000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1009,
+          "nanosec": 612000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000100.png",
+      "pose": {
+        "x": 0.47132817657460513,
+        "y": -2.6996709426207603,
+        "yaw": -0.2871519124486481
+      },
+      "odom_pose": {
+        "x": -1.1547541598608615,
+        "y": -1.6337311425496182,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8353276650644965,
+        "qw": 0.5497523915163046,
+        "yaw": -1.9774570772724192,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1009,
+          "nanosec": 725000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1009,
+        "nanosec": 701000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1009,
+          "nanosec": 725000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000101.png",
+      "pose": {
+        "x": 0.49952877222266134,
+        "y": -2.7079116102155667,
+        "yaw": -0.2815951035648891
+      },
+      "odom_pose": {
+        "x": -1.1662982530558959,
+        "y": -1.6607481022160504,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8337970083762226,
+        "qw": 0.5520711447113147,
+        "yaw": -1.9719002683886602,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1009,
+          "nanosec": 838000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1009,
+        "nanosec": 833000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1009,
+          "nanosec": 838000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000102.png",
+      "pose": {
+        "x": 0.5317790184153985,
+        "y": -2.7171229477687664,
+        "yaw": -0.27463714644033477
+      },
+      "odom_pose": {
+        "x": -1.1792889105420612,
+        "y": -1.6916700998405292,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8318713227340961,
+        "qw": 0.554968559841569,
+        "yaw": -1.964942311264105,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1009,
+          "nanosec": 967000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1009,
+        "nanosec": 965000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1009,
+          "nanosec": 967000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000103.png",
+      "pose": {
+        "x": 0.5640918377520268,
+        "y": -2.7261123592097225,
+        "yaw": -0.2681225538855111
+      },
+      "odom_pose": {
+        "x": -1.1920666851009536,
+        "y": -1.7226806833380788,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8300592158419,
+        "qw": 0.5576752623130509,
+        "yaw": -1.9584277187092822,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1010,
+          "nanosec": 96000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1010,
+        "nanosec": 97000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1010,
+          "nanosec": 96000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000104.png",
+      "pose": {
+        "x": 0.5924448206658226,
+        "y": -2.733812376260331,
+        "yaw": -0.2621731775922202
+      },
+      "odom_pose": {
+        "x": -1.2046399764171865,
+        "y": -1.7537747283007028,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.828149795283718,
+        "qw": 0.5605068390051418,
+        "yaw": -1.9515972795526628,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1010,
+          "nanosec": 225000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1010,
+        "nanosec": 196000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1010,
+          "nanosec": 209000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000105.png",
+      "pose": {
+        "x": 0.6272321065693343,
+        "y": -2.733703784679257,
+        "yaw": -0.24598317716769424
+      },
+      "odom_pose": {
+        "x": -1.2170040638428148,
+        "y": -1.784952562128376,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8264143256943051,
+        "qw": 0.5630624852422927,
+        "yaw": -1.9454188687619787,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1010,
+          "nanosec": 354000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1010,
+        "nanosec": 328000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1010,
+          "nanosec": 354000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000106.png",
+      "pose": {
+        "x": 0.654517204255842,
+        "y": -2.733797328458236,
+        "yaw": -0.24103827679429798
+      },
+      "odom_pose": {
+        "x": -1.227745928804615,
+        "y": -1.8122984274039615,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8268213355599817,
+        "qw": 0.562464646944862,
+        "yaw": -1.9468653371279416,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1010,
+          "nanosec": 467000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1010,
+        "nanosec": 460000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1010,
+          "nanosec": 467000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000107.png",
+      "pose": {
+        "x": 0.687045212187589,
+        "y": -2.7419733727533693,
+        "yaw": -0.25246119585590426
+      },
+      "odom_pose": {
+        "x": -1.240226493463897,
+        "y": -1.843429673863255,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8300203264252337,
+        "qw": 0.557733142032055,
+        "yaw": -1.9582882561895485,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1010,
+          "nanosec": 596000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1010,
+        "nanosec": 592000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1010,
+          "nanosec": 596000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000108.png",
+      "pose": {
+        "x": 0.7194686317573518,
+        "y": -2.750554710334144,
+        "yaw": -0.26476016239270495
+      },
+      "odom_pose": {
+        "x": -1.253094582337505,
+        "y": -1.8744027231160008,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8334343813988188,
+        "qw": 0.552618432467076,
+        "yaw": -1.9705872227263481,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1010,
+          "nanosec": 725000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1010,
+        "nanosec": 724000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1010,
+          "nanosec": 725000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000109.png",
+      "pose": {
+        "x": 0.7517894361327606,
+        "y": -2.759514936847073,
+        "yaw": -0.27584430340869903
+      },
+      "odom_pose": {
+        "x": -1.2663242970549864,
+        "y": -1.9052230849427294,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8364842167912482,
+        "qw": 0.547991017316098,
+        "yaw": -1.9816713637423422,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1010,
+          "nanosec": 854000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1010,
+        "nanosec": 856000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1010,
+          "nanosec": 854000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000110.png",
+      "pose": {
+        "x": 0.7800292176938468,
+        "y": -2.767620231044882,
+        "yaw": -0.2827525410910326
+      },
+      "odom_pose": {
+        "x": -1.2781574713274724,
+        "y": -1.9321146643550262,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8383720491098159,
+        "qw": 0.5450984381480178,
+        "yaw": -1.9885796014246768,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1010,
+          "nanosec": 967000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1010,
+        "nanosec": 955000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1010,
+          "nanosec": 967000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000111.png",
+      "pose": {
+        "x": 0.8122092894742807,
+        "y": -2.777073884020079,
+        "yaw": -0.28851036874647357
+      },
+      "odom_pose": {
+        "x": -1.2918571754124344,
+        "y": -1.9627291492005015,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.839937864101036,
+        "qw": 0.5426825816712654,
+        "yaw": -1.994337429080118,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1011,
+          "nanosec": 96000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1011,
+        "nanosec": 87000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1011,
+          "nanosec": 96000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000112.png",
+      "pose": {
+        "x": 0.8403616576344737,
+        "y": -2.785477931775337,
+        "yaw": -0.2913056767728775
+      },
+      "odom_pose": {
+        "x": -1.3039746160878973,
+        "y": -1.989493892486704,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.840695525959654,
+        "qw": 0.5415081094789077,
+        "yaw": -1.9971327371065213,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1011,
+          "nanosec": 209000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1011,
+        "nanosec": 219000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1011,
+          "nanosec": 209000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000113.png",
+      "pose": {
+        "x": 0.8682493219949619,
+        "y": -2.7938596066014236,
+        "yaw": -0.29252760959425067
+      },
+      "odom_pose": {
+        "x": -1.3160342528626416,
+        "y": -2.0159993533812957,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8410262122976881,
+        "qw": 0.5409943717158284,
+        "yaw": -1.9983546699278951,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1011,
+          "nanosec": 321000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1011,
+        "nanosec": 318000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1011,
+          "nanosec": 321000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000114.png",
+      "pose": {
+        "x": 0.8921954216055115,
+        "y": -2.808260873953743,
+        "yaw": -0.3057870434977166
+      },
+      "odom_pose": {
+        "x": -1.3265093011918847,
+        "y": -2.0389410528990717,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8415120393165928,
+        "qw": 0.5402383619155801,
+        "yaw": -2.000151977653042,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1011,
+          "nanosec": 418000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1011,
+        "nanosec": 417000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1011,
+          "nanosec": 418000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000115.png",
+      "pose": {
+        "x": 0.9241669343934151,
+        "y": -2.8183976150536934,
+        "yaw": -0.30801803439674363
+      },
+      "odom_pose": {
+        "x": -1.3405093797890455,
+        "y": -2.069419388636901,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8421141490666583,
+        "qw": 0.5392993231422955,
+        "yaw": -2.002382968552069,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1011,
+          "nanosec": 547000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1011,
+        "nanosec": 549000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1011,
+          "nanosec": 547000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000116.png",
+      "pose": {
+        "x": 0.9521615512173836,
+        "y": -2.8273130970274813,
+        "yaw": -0.3082097786321275
+      },
+      "odom_pose": {
+        "x": -1.3528073413743409,
+        "y": -2.0961016773466863,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8421658489646281,
+        "qw": 0.5392185853971349,
+        "yaw": -2.002574712787453,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1011,
+          "nanosec": 660000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1011,
+        "nanosec": 648000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1011,
+          "nanosec": 660000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000117.png",
+      "pose": {
+        "x": 0.9801603632493578,
+        "y": -2.8362153937431938,
+        "yaw": -0.30741135667613906
+      },
+      "odom_pose": {
+        "x": -1.3650927353154818,
+        "y": -2.122789754417307,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8419505198837824,
+        "qw": 0.5395547442729315,
+        "yaw": -2.0017762908314642,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1011,
+          "nanosec": 773000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1011,
+        "nanosec": 747000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1011,
+          "nanosec": 773000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000118.png",
+      "pose": {
+        "x": 1.008165509060965,
+        "y": -2.8450977465227676,
+        "yaw": -0.30697981269611413
+      },
+      "odom_pose": {
+        "x": -1.3790952405910835,
+        "y": -2.1532669823428434,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8418132451924274,
+        "qw": 0.539768895193669,
+        "yaw": -2.0012675474459023,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1011,
+          "nanosec": 902000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1011,
+        "nanosec": 879000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1011,
+          "nanosec": 886000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000119.png",
+      "pose": {
+        "x": 1.0401405236789754,
+        "y": -2.855223457261772,
+        "yaw": -0.3064750934801694
+      },
+      "odom_pose": {
+        "x": -1.3913486820143293,
+        "y": -2.1799697455578824,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8416978450128265,
+        "qw": 0.5399488287798798,
+        "yaw": -2.0008400276354954,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1012,
+          "nanosec": 15000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1012,
+        "nanosec": 11000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1012,
+          "nanosec": 15000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000120.png",
+      "pose": {
+        "x": 1.0721218519765698,
+        "y": -2.865329198028638,
+        "yaw": -0.3050429053318292
+      },
+      "odom_pose": {
+        "x": -1.405319206457138,
+        "y": -2.2104616428900994,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8413109750818133,
+        "qw": 0.5405514251270535,
+        "yaw": -1.9994078394871544,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1012,
+          "nanosec": 144000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1012,
+        "nanosec": 143000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1012,
+          "nanosec": 144000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000121.png",
+      "pose": {
+        "x": 1.1041276205908552,
+        "y": -2.8753572364610758,
+        "yaw": -0.3021314434291405
+      },
+      "odom_pose": {
+        "x": -1.419215633413456,
+        "y": -2.24098737133745,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8405231864863747,
+        "qw": 0.5417755743652449,
+        "yaw": -1.996496377584466,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1012,
+          "nanosec": 273000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1012,
+        "nanosec": 275000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1012,
+          "nanosec": 273000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000122.png",
+      "pose": {
+        "x": 1.1361634581775628,
+        "y": -2.885288795611197,
+        "yaw": -0.2991919780944714
+      },
+      "odom_pose": {
+        "x": -1.4330200228640508,
+        "y": -2.2715548309788813,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8397260137002013,
+        "qw": 0.5430103331569017,
+        "yaw": -1.993556912249797,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1012,
+          "nanosec": 402000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1012,
+        "nanosec": 374000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1012,
+          "nanosec": 402000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000123.png",
+      "pose": {
+        "x": 1.15892432421099,
+        "y": -2.8897501738852096,
+        "yaw": -0.28305625878479285
+      },
+      "odom_pose": {
+        "x": -1.446735710792637,
+        "y": -2.302162193681455,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8389379020904079,
+        "qw": 0.544227155180762,
+        "yaw": -1.9906574115235582,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1012,
+          "nanosec": 531000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1012,
+        "nanosec": 506000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1012,
+          "nanosec": 531000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000124.png",
+      "pose": {
+        "x": 1.1911341891393246,
+        "y": -2.8991019730165526,
+        "yaw": -0.28294724546991434
+      },
+      "odom_pose": {
+        "x": -1.4603928671560265,
+        "y": -2.3327957312793304,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.838908236841074,
+        "qw": 0.5442728820731385,
+        "yaw": -1.9905483982086798,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1012,
+          "nanosec": 660000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1012,
+        "nanosec": 638000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1012,
+          "nanosec": 660000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000125.png",
+      "pose": {
+        "x": 1.2193353936613893,
+        "y": -2.907340658348776,
+        "yaw": -0.2857257795329931
+      },
+      "odom_pose": {
+        "x": -1.4724006146849498,
+        "y": -2.3596098669502847,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8396635673963704,
+        "qw": 0.5431068896517527,
+        "yaw": -1.9933269322717586,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1012,
+          "nanosec": 773000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1012,
+        "nanosec": 770000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1012,
+          "nanosec": 773000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000126.png",
+      "pose": {
+        "x": 1.247508307195801,
+        "y": -2.915675549185243,
+        "yaw": -0.2892745958144726
+      },
+      "odom_pose": {
+        "x": -1.4844998105690403,
+        "y": -2.3863828555998863,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8406259383267534,
+        "qw": 0.5416161295717341,
+        "yaw": -1.9968757485532382,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1012,
+          "nanosec": 886000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1012,
+        "nanosec": 869000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1012,
+          "nanosec": 886000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000127.png",
+      "pose": {
+        "x": 1.2756549516311106,
+        "y": -2.9240987422767573,
+        "yaw": -0.292253348664695
+      },
+      "odom_pose": {
+        "x": -1.4966829011428162,
+        "y": -2.413117778059019,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8414316759675996,
+        "qw": 0.5403635208619808,
+        "yaw": -1.9998545014034597,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1012,
+          "nanosec": 999000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1013,
+        "nanosec": 1000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1012,
+          "nanosec": 999000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000128.png",
+      "pose": {
+        "x": 1.3037807706038027,
+        "y": -2.9325912380454002,
+        "yaw": -0.2936231326276558
+      },
+      "odom_pose": {
+        "x": -1.5089318067400652,
+        "y": -2.4398226182370606,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8418015692330626,
+        "qw": 0.5397871043631493,
+        "yaw": -2.001224285366421,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1013,
+          "nanosec": 112000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1013,
+        "nanosec": 100000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1013,
+          "nanosec": 112000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000129.png",
+      "pose": {
+        "x": 1.3319053958920635,
+        "y": -2.941087697060582,
+        "yaw": -0.2930022588113113
+      },
+      "odom_pose": {
+        "x": -1.5211844757615829,
+        "y": -2.466525735381898,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.841633958833344,
+        "qw": 0.5400484046254677,
+        "yaw": -2.0006034115500766,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1013,
+          "nanosec": 225000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1013,
+        "nanosec": 199000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1013,
+          "nanosec": 225000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000130.png",
+      "pose": {
+        "x": 1.3558054013850018,
+        "y": -2.948284313292183,
+        "yaw": -0.29197467734140775
+      },
+      "odom_pose": {
+        "x": -1.5315732993929005,
+        "y": -2.489220974779287,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8413563758911793,
+        "qw": 0.5404807570554762,
+        "yaw": -1.9995758300801731,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1013,
+          "nanosec": 321000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1013,
+        "nanosec": 298000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1013,
+          "nanosec": 321000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000131.png",
+      "pose": {
+        "x": 1.3839491878336845,
+        "y": -2.956717079494033,
+        "yaw": -0.29055816711762844
+      },
+      "odom_pose": {
+        "x": -1.543765483865663,
+        "y": -2.5159517603881354,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8409733666413054,
+        "qw": 0.5410765164003964,
+        "yaw": -1.9981593198563938,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1013,
+          "nanosec": 434000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1013,
+        "nanosec": 430000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1013,
+          "nanosec": 434000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000132.png",
+      "pose": {
+        "x": 1.4050522485774979,
+        "y": -2.965705805764334,
+        "yaw": -0.29443609086721817
+      },
+      "odom_pose": {
+        "x": -1.5559269437075056,
+        "y": -2.542696538004646,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8405486058215395,
+        "qw": 0.5417361361875968,
+        "yaw": -1.9965902181398103,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1013,
+          "nanosec": 547000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1013,
+        "nanosec": 529000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1013,
+          "nanosec": 547000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000133.png",
+      "pose": {
+        "x": 1.4371639464391772,
+        "y": -2.9753892600935856,
+        "yaw": -0.29106962441034867
+      },
+      "odom_pose": {
+        "x": -1.569732976650217,
+        "y": -2.573263249991565,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8396355472346434,
+        "qw": 0.5431502074196243,
+        "yaw": -1.9932237516829412,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1013,
+          "nanosec": 676000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1013,
+        "nanosec": 661000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1013,
+          "nanosec": 676000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000134.png",
+      "pose": {
+        "x": 1.4653188541523394,
+        "y": -2.983784811923838,
+        "yaw": -0.2896661401488455
+      },
+      "odom_pose": {
+        "x": -1.5834446463667167,
+        "y": -2.6038724216840645,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8393314774710554,
+        "qw": 0.5436199692121835,
+        "yaw": -1.9921045831146766,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1013,
+          "nanosec": 805000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1013,
+        "nanosec": 793000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1013,
+          "nanosec": 789000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000135.png",
+      "pose": {
+        "x": 1.4974452140092263,
+        "y": -2.993419491368795,
+        "yaw": -0.29364192520801097
+      },
+      "odom_pose": {
+        "x": -1.5955035392901873,
+        "y": -2.630663585886999,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8403334254426822,
+        "qw": 0.5420698608885834,
+        "yaw": -1.9957960524806042,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1013,
+          "nanosec": 918000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1013,
+        "nanosec": 892000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1013,
+          "nanosec": 918000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000136.png",
+      "pose": {
+        "x": 1.525545863415263,
+        "y": -3.0019948147273032,
+        "yaw": -0.29843256774217647
+      },
+      "odom_pose": {
+        "x": -1.6076856192576492,
+        "y": -2.6573989481514304,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8416294449348337,
+        "qw": 0.540055439208498,
+        "yaw": -2.000586695014769,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1014,
+          "nanosec": 31000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1014,
+        "nanosec": 24000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1014,
+          "nanosec": 31000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000137.png",
+      "pose": {
+        "x": 1.5536106567839436,
+        "y": -3.0106868071456687,
+        "yaw": -0.30223903954482284
+      },
+      "odom_pose": {
+        "x": -1.6199786667397411,
+        "y": -2.6840834819234614,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8426557728952961,
+        "qw": 0.5384526426773585,
+        "yaw": -2.0043931668174153,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1014,
+          "nanosec": 144000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1014,
+        "nanosec": 123000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1014,
+          "nanosec": 144000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000138.png",
+      "pose": {
+        "x": 1.5856121069773894,
+        "y": -3.0207286002910054,
+        "yaw": -0.3056816136549003
+      },
+      "odom_pose": {
+        "x": -1.6341255111162494,
+        "y": -2.714493960680696,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8435813556789888,
+        "qw": 0.5370013932484714,
+        "yaw": -2.0078357409274923,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1014,
+          "nanosec": 273000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1014,
+        "nanosec": 255000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1014,
+          "nanosec": 273000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000139.png",
+      "pose": {
+        "x": 1.6175852157199375,
+        "y": -3.0308603093518416,
+        "yaw": -0.3076403661685301
+      },
+      "odom_pose": {
+        "x": -1.6483577846056578,
+        "y": -2.7448645649301824,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8441068774370926,
+        "qw": 0.5361749522902028,
+        "yaw": -2.009794493441122,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1014,
+          "nanosec": 402000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1014,
+        "nanosec": 387000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1014,
+          "nanosec": 402000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000140.png",
+      "pose": {
+        "x": 1.6455800433650025,
+        "y": -3.0397751157262523,
+        "yaw": -0.30954703430736996
+      },
+      "odom_pose": {
+        "x": -1.6608625623571127,
+        "y": -2.7714505514824403,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8446176476273675,
+        "qw": 0.5353699929174329,
+        "yaw": -2.0117011615799623,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1014,
+          "nanosec": 515000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1014,
+        "nanosec": 519000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1014,
+          "nanosec": 515000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000141.png",
+      "pose": {
+        "x": 1.6750626371186716,
+        "y": -3.0440217676310617,
+        "yaw": -0.31756113830638627
+      },
+      "odom_pose": {
+        "x": -1.6752410909862523,
+        "y": -2.8017521616104055,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8458141820245518,
+        "qw": 0.5334776185428386,
+        "yaw": -2.0161790081299285,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1014,
+          "nanosec": 644000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1014,
+        "nanosec": 651000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1014,
+          "nanosec": 644000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000142.png",
+      "pose": {
+        "x": 1.7068949508701712,
+        "y": -3.054587389372327,
+        "yaw": -0.3228794228488288
+      },
+      "odom_pose": {
+        "x": -1.6897783025648923,
+        "y": -2.8319779459851953,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8472297828487617,
+        "qw": 0.5312265948294005,
+        "yaw": -2.0214972926723704,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1014,
+          "nanosec": 773000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1014,
+        "nanosec": 750000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1014,
+          "nanosec": 773000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000143.png",
+      "pose": {
+        "x": 1.73868911122221,
+        "y": -3.0652673985348047,
+        "yaw": -0.3250604699020689
+      },
+      "odom_pose": {
+        "x": -1.704424104828296,
+        "y": -2.862151306823243,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8478085940531797,
+        "qw": 0.5303023551235377,
+        "yaw": -2.0236783397256097,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1014,
+          "nanosec": 902000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1014,
+        "nanosec": 882000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1014,
+          "nanosec": 902000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000144.png",
+      "pose": {
+        "x": 1.7704661139120672,
+        "y": -3.075998364082656,
+        "yaw": -0.32591426872211193
+      },
+      "odom_pose": {
+        "x": -1.7191182606202389,
+        "y": -2.892301154370162,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8480349025552041,
+        "qw": 0.5299403778239449,
+        "yaw": -2.024532138545653,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1015,
+          "nanosec": 31000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1015,
+        "nanosec": 14000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1015,
+          "nanosec": 31000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000145.png",
+      "pose": {
+        "x": 1.8022407610502,
+        "y": -3.086736306050639,
+        "yaw": -0.32579439865913445
+      },
+      "odom_pose": {
+        "x": -1.733819035647242,
+        "y": -2.922447776271564,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8480031390388322,
+        "qw": 0.5299912038706746,
+        "yaw": -2.0244122684826755,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1015,
+          "nanosec": 160000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1015,
+        "nanosec": 146000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1015,
+          "nanosec": 160000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000146.png",
+      "pose": {
+        "x": 1.8340142947429303,
+        "y": -3.097477539173143,
+        "yaw": -0.3266054443774336
+      },
+      "odom_pose": {
+        "x": -1.7485229330442655,
+        "y": -2.9525928742752665,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8482179928547157,
+        "qw": 0.5296472756443835,
+        "yaw": -2.025223314200975,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1015,
+          "nanosec": 289000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1015,
+        "nanosec": 278000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1015,
+          "nanosec": 289000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000147.png",
+      "pose": {
+        "x": 1.8578938167666754,
+        "y": -3.105590281791438,
+        "yaw": -0.32860973346233385
+      },
+      "odom_pose": {
+        "x": -1.7596135039490308,
+        "y": -2.9752434239789625,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8487483499626318,
+        "qw": 0.5287969727936327,
+        "yaw": -2.0272276032858754,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1015,
+          "nanosec": 386000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1015,
+        "nanosec": 377000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1015,
+          "nanosec": 386000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000148.png",
+      "pose": {
+        "x": 1.8856871809115483,
+        "y": -3.1151145983717163,
+        "yaw": -0.33164524704857495
+      },
+      "odom_pose": {
+        "x": -1.772603045293351,
+        "y": -3.001595947813978,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8495499572700477,
+        "qw": 0.5275081706499531,
+        "yaw": -2.030263116872117,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1015,
+          "nanosec": 499000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1015,
+        "nanosec": 476000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1015,
+          "nanosec": 499000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000149.png",
+      "pose": {
+        "x": 1.913452452299914,
+        "y": -3.1247205148381805,
+        "yaw": -0.3342245485484144
+      },
+      "odom_pose": {
+        "x": -1.7856699397379885,
+        "y": -3.0279102062303385,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8502295519040898,
+        "qw": 0.5264121095386872,
+        "yaw": -2.032842418371956,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1015,
+          "nanosec": 612000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1015,
+        "nanosec": 608000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1015,
+          "nanosec": 612000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000150.png",
+      "pose": {
+        "x": 1.9424197826432055,
+        "y": -3.138022559944509,
+        "yaw": -0.3414767096858279
+      },
+      "odom_pose": {
+        "x": -1.798792446423148,
+        "y": -3.054196777685614,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8508259744515746,
+        "qw": 0.525447581780075,
+        "yaw": -2.035110486968895,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1015,
+          "nanosec": 725000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1015,
+        "nanosec": 707000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1015,
+          "nanosec": 725000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000151.png",
+      "pose": {
+        "x": 1.970091764961723,
+        "y": -3.147894007122593,
+        "yaw": -0.3436491934526269
+      },
+      "odom_pose": {
+        "x": -1.8119801257464927,
+        "y": -3.0804507143216817,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.851396235556342,
+        "qw": 0.5245230691594888,
+        "yaw": -2.0372829707356943,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1015,
+          "nanosec": 838000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1015,
+        "nanosec": 839000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1015,
+          "nanosec": 838000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000152.png",
+      "pose": {
+        "x": 2.001662494648181,
+        "y": -3.1592174562186104,
+        "yaw": -0.3445911082936468
+      },
+      "odom_pose": {
+        "x": -1.8270865748061258,
+        "y": -3.110396109112437,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.851643169158639,
+        "qw": 0.5241220396295406,
+        "yaw": -2.038224885576714,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1015,
+          "nanosec": 967000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1015,
+        "nanosec": 971000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1015,
+          "nanosec": 967000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000153.png",
+      "pose": {
+        "x": 2.033241300968632,
+        "y": -3.170518345694454,
+        "yaw": -0.3424256669397021
+      },
+      "odom_pose": {
+        "x": -1.8421716238531798,
+        "y": -3.140352283881886,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8510751923161403,
+        "qw": 0.5250438239081047,
+        "yaw": -2.0360594442227695,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1016,
+          "nanosec": 96000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1016,
+        "nanosec": 70000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1016,
+          "nanosec": 96000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000154.png",
+      "pose": {
+        "x": 2.0609279377772145,
+        "y": -3.180348609086077,
+        "yaw": -0.33989160637614174
+      },
+      "odom_pose": {
+        "x": -1.8553202253080472,
+        "y": -3.1666258107844563,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8504092629265965,
+        "qw": 0.5261217402166943,
+        "yaw": -2.033525383659209,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1016,
+          "nanosec": 209000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1016,
+        "nanosec": 202000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1016,
+          "nanosec": 209000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000155.png",
+      "pose": {
+        "x": 2.0925666028752814,
+        "y": -3.191480796267218,
+        "yaw": -0.33681236791392855
+      },
+      "odom_pose": {
+        "x": -1.870245177660772,
+        "y": -3.196662064177523,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8495982281809741,
+        "qw": 0.5274304225883728,
+        "yaw": -2.030446145196996,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1016,
+          "nanosec": 338000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1016,
+        "nanosec": 334000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1016,
+          "nanosec": 338000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000156.png",
+      "pose": {
+        "x": 2.1200618592130898,
+        "y": -3.2010716710136857,
+        "yaw": -0.33464672170438076
+      },
+      "odom_pose": {
+        "x": -1.883132744659863,
+        "y": -3.222774984663906,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8490266163654315,
+        "qw": 0.5283500777922403,
+        "yaw": -2.028280498987448,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1016,
+          "nanosec": 450000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1016,
+        "nanosec": 433000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1016,
+          "nanosec": 450000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000157.png",
+      "pose": {
+        "x": 2.1478141691940467,
+        "y": -3.210714994324518,
+        "yaw": -0.33450815149662966
+      },
+      "odom_pose": {
+        "x": -1.8961038614873411,
+        "y": -3.2491365954266094,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8489900075375937,
+        "qw": 0.5284089014213488,
+        "yaw": -2.0281419287796965,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1016,
+          "nanosec": 563000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1016,
+        "nanosec": 565000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1016,
+          "nanosec": 563000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000158.png",
+      "pose": {
+        "x": 2.1794869115254647,
+        "y": -3.221749877880143,
+        "yaw": -0.3363014570844832
+      },
+      "odom_pose": {
+        "x": -1.910936418842426,
+        "y": -3.279218591773041,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8494634655037849,
+        "qw": 0.5276474398443528,
+        "yaw": -2.0299352343675507,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1016,
+          "nanosec": 692000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1016,
+        "nanosec": 664000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1016,
+          "nanosec": 692000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000159.png",
+      "pose": {
+        "x": 2.2073727283261775,
+        "y": -3.2311797939538356,
+        "yaw": -0.32703290878593066
+      },
+      "odom_pose": {
+        "x": -1.9258342407962898,
+        "y": -3.3092683155303297,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.850140580946184,
+        "qw": 0.5265557830168469,
+        "yaw": -2.032504436717157,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1016,
+          "nanosec": 821000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1016,
+        "nanosec": 796000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1016,
+          "nanosec": 821000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000160.png",
+      "pose": {
+        "x": 2.235181916137285,
+        "y": -3.2406578155377965,
+        "yaw": -0.32997640454535665
+      },
+      "odom_pose": {
+        "x": -1.9389603356644938,
+        "y": -3.3355530916064233,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8509146173037647,
+        "qw": 0.5253040206002498,
+        "yaw": -2.035447932476583,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1016,
+          "nanosec": 934000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1016,
+        "nanosec": 928000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1016,
+          "nanosec": 934000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000161.png",
+      "pose": {
+        "x": 2.2629549470291943,
+        "y": -3.2502412167762187,
+        "yaw": -0.3341531108207279
+      },
+      "odom_pose": {
+        "x": -1.9540652277928283,
+        "y": -3.365499237433376,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8518952831475232,
+        "qw": 0.5237121600182694,
+        "yaw": -2.0391873049522373,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1017,
+          "nanosec": 63000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1017,
+        "nanosec": 60000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1017,
+          "nanosec": 47000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000162.png",
+      "pose": {
+        "x": 2.2946891769678635,
+        "y": -3.2610973079627703,
+        "yaw": -0.32158951004978675
+      },
+      "odom_pose": {
+        "x": -1.9672046966447712,
+        "y": -3.391777134639319,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8487043074047316,
+        "qw": 0.5288676569735145,
+        "yaw": -2.0270610379810132,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1017,
+          "nanosec": 176000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1017,
+        "nanosec": 159000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1017,
+          "nanosec": 176000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000163.png",
+      "pose": {
+        "x": 2.3226718828165627,
+        "y": -3.270047332177552,
+        "yaw": -0.29532251662092596
+      },
+      "odom_pose": {
+        "x": -1.979830873163031,
+        "y": -3.4183047509398787,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8416854305343647,
+        "qw": 0.5399681805682451,
+        "yaw": -2.000794044552152,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1017,
+          "nanosec": 289000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1017,
+        "nanosec": 291000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1017,
+          "nanosec": 289000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000164.png",
+      "pose": {
+        "x": 2.350919280442697,
+        "y": -3.278064821006371,
+        "yaw": -0.2557143020792926
+      },
+      "odom_pose": {
+        "x": -1.9931301720416184,
+        "y": -3.4490502839247017,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8290090729591215,
+        "qw": 0.559235153536916,
+        "yaw": -1.95466683490543,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1017,
+          "nanosec": 418000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1017,
+        "nanosec": 390000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1017,
+          "nanosec": 402000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000165.png",
+      "pose": {
+        "x": 2.3788736956516665,
+        "y": -3.284655619914489,
+        "yaw": -0.2054644359363127
+      },
+      "odom_pose": {
+        "x": -2.001853013637449,
+        "y": -3.472036223704751,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.8165839615100368,
+        "qw": 0.5772266745435235,
+        "yaw": -1.9109359638675396,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1017,
+          "nanosec": 515000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1017,
+        "nanosec": 489000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1017,
+          "nanosec": 515000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000166.png",
+      "pose": {
+        "x": 2.4063442431928364,
+        "y": -3.289578229966965,
+        "yaw": -0.14824510296956736
+      },
+      "odom_pose": {
+        "x": -2.0114986768721543,
+        "y": -3.5023679660800098,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.797221947512813,
+        "qw": 0.6036863145739497,
+        "yaw": -1.8453586369173836,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1017,
+          "nanosec": 644000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1017,
+        "nanosec": 621000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1017,
+          "nanosec": 628000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000167.png",
+      "pose": {
+        "x": 2.437692496900424,
+        "y": -3.293180713878291,
+        "yaw": -0.08031922517424875
+      },
+      "odom_pose": {
+        "x": -2.018198422701462,
+        "y": -3.5291777690982955,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7788908726305872,
+        "qw": 0.6271594761563939,
+        "yaw": -1.7857907531054753,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1017,
+          "nanosec": 757000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1017,
+        "nanosec": 753000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1017,
+          "nanosec": 757000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000168.png",
+      "pose": {
+        "x": 2.4585346979520746,
+        "y": -3.307433373283826,
+        "yaw": -0.01987766664946175
+      },
+      "odom_pose": {
+        "x": -2.023812181675865,
+        "y": -3.5599642647722565,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7564159111849692,
+        "qw": 0.6540909488031559,
+        "yaw": -1.7156322384579914,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1017,
+          "nanosec": 886000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1017,
+        "nanosec": 852000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1017,
+          "nanosec": 886000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000169.png",
+      "pose": {
+        "x": 2.485596294037533,
+        "y": -3.307105531465188,
+        "yaw": 0.04458384501622165
+      },
+      "odom_pose": {
+        "x": -2.0268596722155134,
+        "y": -3.5868557181424503,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7349448587872692,
+        "qw": 0.6781268720100694,
+        "yaw": -1.6511707267923084,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1017,
+          "nanosec": 999000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1017,
+        "nanosec": 984000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1017,
+          "nanosec": 999000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000170.png",
+      "pose": {
+        "x": 2.515604455069427,
+        "y": -3.3046081069088595,
+        "yaw": 0.12348700817363295
+      },
+      "odom_pose": {
+        "x": -2.0281217366563955,
+        "y": -3.6169411639805578,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.7076267505928683,
+        "qw": 0.7065864291403979,
+        "yaw": -1.5722675636348973,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1018,
+          "nanosec": 128000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1018,
+        "nanosec": 116000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1018,
+          "nanosec": 128000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000171.png",
+      "pose": {
+        "x": 2.5398729432388425,
+        "y": -3.3006910393333646,
+        "yaw": 0.19867169135629364
+      },
+      "odom_pose": {
+        "x": -2.0272598728230546,
+        "y": -3.6415086247193647,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.6805708233927285,
+        "qw": 0.732682301100923,
+        "yaw": -1.4970828804522365,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1018,
+          "nanosec": 241000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1018,
+        "nanosec": 248000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1018,
+          "nanosec": 241000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000172.png",
+      "pose": {
+        "x": 2.5641136792203043,
+        "y": -3.2946858159501335,
+        "yaw": 0.2900983636702943
+      },
+      "odom_pose": {
+        "x": -2.02432267595289,
+        "y": -3.66630880341532,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.6463781613759539,
+        "qw": 0.7630172163825933,
+        "yaw": -1.4056562081382362,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1018,
+          "nanosec": 370000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1018,
+        "nanosec": 347000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1018,
+          "nanosec": 370000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000173.png",
+      "pose": {
+        "x": 2.5839997600926545,
+        "y": -3.2877591140209352,
+        "yaw": 0.38414573574982686
+      },
+      "odom_pose": {
+        "x": -2.0199284503684214,
+        "y": -3.6869031277205853,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.6097969882222,
+        "qw": 0.7925576528903965,
+        "yaw": -1.3116088360587037,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1018,
+          "nanosec": 499000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1018,
+        "nanosec": 479000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1018,
+          "nanosec": 499000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000174.png",
+      "pose": {
+        "x": 2.5993181984266296,
+        "y": -3.2807334039754923,
+        "yaw": 0.47954470114556597
+      },
+      "odom_pose": {
+        "x": -2.014866708265252,
+        "y": -3.7029777636889496,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.571313146370371,
+        "qw": 0.8207321662907986,
+        "yaw": -1.216209870662964,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1018,
+          "nanosec": 628000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1018,
+        "nanosec": 611000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1018,
+          "nanosec": 628000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000175.png",
+      "pose": {
+        "x": 2.6042935704510626,
+        "y": -3.2935199734379106,
+        "yaw": 0.5589096911736554
+      },
+      "odom_pose": {
+        "x": -2.009857588700056,
+        "y": -3.7148103987097563,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.5313508735796794,
+        "qw": 0.8471518453890728,
+        "yaw": -1.1203887511383384,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1018,
+          "nanosec": 757000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1018,
+        "nanosec": 743000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1018,
+          "nanosec": 757000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000176.png",
+      "pose": {
+        "x": 2.612653685113063,
+        "y": -3.287757770436449,
+        "yaw": 0.6535503800480994
+      },
+      "odom_pose": {
+        "x": -2.005034582161634,
+        "y": -3.7237453362317643,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.4906835221309558,
+        "qw": 0.8713378685155144,
+        "yaw": -1.025748062263894,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1018,
+          "nanosec": 886000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1018,
+        "nanosec": 875000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1018,
+          "nanosec": 886000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000177.png",
+      "pose": {
+        "x": 2.6178436712946542,
+        "y": -3.283417946457787,
+        "yaw": 0.7457681909500078
+      },
+      "odom_pose": {
+        "x": -2.001282299087122,
+        "y": -3.7293747589783353,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.449999809457788,
+        "qw": 0.8930286509894039,
+        "yaw": -0.9335302513619856,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1019,
+          "nanosec": 15000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1019,
+        "nanosec": 7000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1019,
+          "nanosec": 15000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000178.png",
+      "pose": {
+        "x": 2.6234707437644644,
+        "y": -3.279093661946729,
+        "yaw": 0.8235696203724887
+      },
+      "odom_pose": {
+        "x": -1.998993465644484,
+        "y": -3.732242347018281,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.4146279765769121,
+        "qw": 0.9099910115159027,
+        "yaw": -0.8550678877837703,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1019,
+          "nanosec": 128000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1019,
+        "nanosec": 106000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1019,
+          "nanosec": 128000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000179.png",
+      "pose": {
+        "x": 2.624638441905166,
+        "y": -3.2777460420394022,
+        "yaw": 0.8992623821879013
+      },
+      "odom_pose": {
+        "x": -1.997779356375305,
+        "y": -3.7335483091329364,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.37989942074489047,
+        "qw": 0.9250277996458791,
+        "yaw": -0.7793751259683583,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1019,
+          "nanosec": 241000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1019,
+        "nanosec": 238000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1019,
+          "nanosec": 241000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000180.png",
+      "pose": {
+        "x": 2.620130426525126,
+        "y": -3.27783308422557,
+        "yaw": 0.9625710018994293
+      },
+      "odom_pose": {
+        "x": -1.997986794409014,
+        "y": -3.7333841115091984,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.34650737845429874,
+        "qw": 0.9380472465055955,
+        "yaw": -0.7076904829594604,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1019,
+          "nanosec": 354000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1019,
+        "nanosec": 337000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1019,
+          "nanosec": 354000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000181.png",
+      "pose": {
+        "x": 2.6185718279402166,
+        "y": -3.2802841133161604,
+        "yaw": 1.0400409496892145
+      },
+      "odom_pose": {
+        "x": -2.000270938327127,
+        "y": -3.7315898262160663,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.3099213113642456,
+        "qw": 0.9507622104197592,
+        "yaw": -0.6302205351696752,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1019,
+          "nanosec": 483000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1019,
+        "nanosec": 469000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1019,
+          "nanosec": 483000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000182.png",
+      "pose": {
+        "x": 2.6165936715377867,
+        "y": -3.2839835621905102,
+        "yaw": 1.1132197770712842
+      },
+      "odom_pose": {
+        "x": -2.003755669003564,
+        "y": -3.729254087181178,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.2749338053575516,
+        "qw": 0.9614631572096852,
+        "yaw": -0.5570417077876059,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1019,
+          "nanosec": 612000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1019,
+        "nanosec": 601000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1019,
+          "nanosec": 612000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000183.png",
+      "pose": {
+        "x": 2.6104357415392583,
+        "y": -3.292442442105192,
+        "yaw": 1.13978181849478
+      },
+      "odom_pose": {
+        "x": -2.0070864242158453,
+        "y": -3.7272838689772874,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.254323760595711,
+        "qw": 0.9671191368163777,
+        "yaw": -0.5142968162766056,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1019,
+          "nanosec": 692000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1019,
+        "nanosec": 700000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1019,
+          "nanosec": 692000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000184.png",
+      "pose": {
+        "x": 2.607702683742305,
+        "y": -3.298943650860836,
+        "yaw": 1.2044309887841758
+      },
+      "odom_pose": {
+        "x": -2.0133377476626504,
+        "y": -3.724019473877214,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.22293462236257366,
+        "qw": 0.9748333981517338,
+        "yaw": -0.44964764598721,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1019,
+          "nanosec": 821000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1019,
+        "nanosec": 832000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1019,
+          "nanosec": 821000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000185.png",
+      "pose": {
+        "x": 2.6063270020280553,
+        "y": -3.309683774451476,
+        "yaw": 1.2734487650185051
+      },
+      "odom_pose": {
+        "x": -2.0206400126676782,
+        "y": -3.7207684080164936,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.19398522670917243,
+        "qw": 0.981004450458096,
+        "yaw": -0.3904458428878923,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1019,
+          "nanosec": 950000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1019,
+        "nanosec": 931000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1019,
+          "nanosec": 950000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000186.png",
+      "pose": {
+        "x": 2.6040603121316797,
+        "y": -3.3178690785242386,
+        "yaw": 1.326982032557169
+      },
+      "odom_pose": {
+        "x": -2.0285791499223174,
+        "y": -3.7177505966403626,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.16766068873412263,
+        "qw": 0.9858447613357793,
+        "yaw": -0.33691257534922836,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1020,
+          "nanosec": 80000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1020,
+        "nanosec": 63000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1020,
+          "nanosec": 80000000
+        }
+      }
+    },
+    {
+      "image_path": "images/frame_000187.png",
+      "pose": {
+        "x": 2.603292077628237,
+        "y": -3.321096335544031,
+        "yaw": 1.3454334141255375
+      },
+      "odom_pose": {
+        "x": -2.0317210132140695,
+        "y": -3.716685670736827,
+        "z": 0.0,
+        "qx": 0.0,
+        "qy": 0.0,
+        "qz": -0.15855858379082177,
+        "qw": 0.9873495710771586,
+        "yaw": -0.31846119378085963,
+        "frame_id": "odom",
+        "child_frame_id": "base_link",
+        "stamp": {
+          "sec": 1020,
+          "nanosec": 209000000
+        }
+      },
+      "image_stamp": {
+        "sec": 1020,
+        "nanosec": 195000000
+      },
+      "tf_metadata": {
+        "resolved_tf_time": "latest",
+        "tf_stamp": {
+          "sec": 1020,
+          "nanosec": 209000000
+        }
+      }
+    }
+  ],
+  "nav_goal": {
+    "x": 2.7,
+    "y": -3.45,
+    "yaw": 1.57,
+    "sent_at_sec": 1778011636.9347599,
+    "result": {
+      "status": 4,
+      "status_name": "SUCCEEDED",
+      "finished_at_sec": 1778011730.34508
+    }
+  },
+  "notes": "Nav2 goal"
+}
