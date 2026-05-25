@@ -54,6 +54,21 @@ def load_runtime_settings(raw: dict[str, Any]) -> RuntimeSettings:
         ),
         spin_timeout_seconds=float(raw.get("spin_timeout_seconds", defaults.spin_timeout_seconds)),
         random_seed=None if raw.get("random_seed", defaults.random_seed) is None else int(raw.get("random_seed")),
+        suspend_updates_when_stationary=bool(
+            raw.get("suspend_updates_when_stationary", defaults.suspend_updates_when_stationary)
+        ),
+        stationary_translation_threshold_meters=float(
+            raw.get(
+                "stationary_translation_threshold_meters",
+                defaults.stationary_translation_threshold_meters,
+            )
+        ),
+        stationary_yaw_threshold_radians=float(
+            raw.get(
+                "stationary_yaw_threshold_radians",
+                defaults.stationary_yaw_threshold_radians,
+            )
+        ),
     )
 
 

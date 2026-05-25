@@ -38,6 +38,9 @@ class RuntimeSettings:
     observation_ready_timeout_seconds: float = 10.0
     spin_timeout_seconds: float = 0.05
     random_seed: int | None = None
+    suspend_updates_when_stationary: bool = True
+    stationary_translation_threshold_meters: float = 0.01
+    stationary_yaw_threshold_radians: float = 0.01
 
 
 @dataclass(frozen=True)

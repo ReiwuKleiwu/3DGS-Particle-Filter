@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import random
 
 from core.config import MeasurementSettings, MotionNoiseSettings, TurtleBotLocalizationConfig
@@ -11,6 +12,7 @@ from core.particle_filter.application.runtime_state import LocalizationRuntimeSt
 from core.particle_filter.application.snapshot_builder import LocalizationSnapshotBuilder
 from core.particle_filter.application.step_engine import LocalizationStepEngine
 from core.particle_filter.domain.motion_model import TurtleBotMotionModel
+from core.particle_filter.domain.odometry import compute_odometry_delta_in_robot_frame
 from core.particle_filter.domain.particle_filter import TurtleBotParticleFilter, TurtleBotParticleFilterConfig
 from core.particle_filter.infrastructure.renderer.renderer_service_client import RendererServiceClient
 from core.particle_filter.infrastructure.ros.turtlebot_observation_source import TurtleBotObservationSource
@@ -136,6 +138,14 @@ class TurtleBotLocalizationService:
         if not has_new_image and not command_effect.reprocess_current_observation:
             return
 
+        if (
+            has_new_image
+            and not command_effect.reprocess_current_observation
+            and not self._runtime_state.step_once_requested
+            and self._should_suspend_for_stationary_observation(observation)
+        ):
+            return
+
         self._runtime_state.last_processed_image_stamp = latest_image_stamp
         previous_odometry_pose = self._runtime_state.previous_odometry_pose
         if command_effect.reset_applied:
@@ -166,3 +176,19 @@ class TurtleBotLocalizationService:
 
         if self._runtime_state.step_once_requested:
             self._runtime_state.step_once_requested = False
+
+    def _should_suspend_for_stationary_observation(self, observation) -> bool:
+        if not self._settings.runtime.suspend_updates_when_stationary:
+            return False
+
+        previous_odometry_pose = self._runtime_state.previous_odometry_pose
+        current_odometry_pose = observation.odometry_pose
+        if previous_odometry_pose is None or current_odometry_pose is None:
+            return False
+
+        odometry_delta = compute_odometry_delta_in_robot_frame(previous_odometry_pose, current_odometry_pose)
+        translation_magnitude = math.hypot(odometry_delta.forward_meters, odometry_delta.lateral_meters)
+        return (
+            translation_magnitude < self._settings.runtime.stationary_translation_threshold_meters
+            and abs(odometry_delta.yaw_radians) < self._settings.runtime.stationary_yaw_threshold_radians
+        )

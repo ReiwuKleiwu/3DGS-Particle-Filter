@@ -23,6 +23,9 @@ runtime:
   observation_ready_timeout_seconds: 10.0
   spin_timeout_seconds: 0.05
   random_seed: 42
+  suspend_updates_when_stationary: true
+  stationary_translation_threshold_meters: 0.01
+  stationary_yaw_threshold_radians: 0.01
 
 particle_filter:
   particle_count: 256
