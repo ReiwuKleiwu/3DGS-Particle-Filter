@@ -29,6 +29,8 @@ function FilterControls({
   snapshot,
   priorPreset,
   setPriorPreset,
+  localizationMode,
+  onLocalizationModeChange,
   onGlobalReset,
   onParticleCountChange,
   onResampleThresholdChange,
@@ -46,6 +48,7 @@ function FilterControls({
   const temperature = filterConfig?.measurement?.temperature ?? null;
   const motionNoise = filterConfig?.motion_noise ?? null;
   const paused = Boolean(filterConfig?.runtime?.paused);
+  const isGlobalMode = localizationMode === 'global';
 
   const [draftParticleCount, setDraftParticleCount] = React.useState(particleCount || 256);
   const [draftResampleRatio, setDraftResampleRatio] = React.useState(resampleRatio);
@@ -64,12 +67,36 @@ function FilterControls({
   return (
     <div className="fc-wrap">
       <div className="fc-section">
+        <div className="fc-h">LOCALIZATION MODE</div>
+        <div className="fc-row">
+          <div className="fc-lbl">Reset / relocalize strategy</div>
+          <div className="fc-seg">
+            {['local', 'global'].map((key) => (
+              <button
+                key={key}
+                className={localizationMode === key ? 'on' : ''}
+                onClick={() => onLocalizationModeChange(key)}
+                disabled={!capabilities.localization_mode}
+              >
+                {key}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="fc-hint">
+          {isGlobalMode
+            ? 'Global mode reinitializes particles across free map space and ignores map-drawn priors.'
+            : 'Local mode uses the configured Gaussian prior or a map-drawn prior.'}
+        </div>
+      </div>
+
+      <div className="fc-section">
         <div className="fc-h">PRIOR</div>
         <div className="fc-row">
           <div className="fc-lbl">Spread preset</div>
           <div className="fc-seg">
             {['tight', 'medium', 'wide'].map((key) => (
-              <button key={key} className={priorPreset === key ? 'on' : ''} onClick={() => setPriorPreset(key)}>{key}</button>
+              <button key={key} className={priorPreset === key ? 'on' : ''} onClick={() => setPriorPreset(key)} disabled={isGlobalMode}>{key}</button>
             ))}
           </div>
         </div>
@@ -87,7 +114,7 @@ function FilterControls({
             <div className="fc-mval">{(presets[priorPreset].sigma_yaw * 180 / Math.PI).toFixed(0)}<span> °</span></div>
           </div>
         </div>
-        <div className="fc-hint">Left-drag the map to place a pending prior. Apply uses the spread preset above.</div>
+        <div className="fc-hint">{isGlobalMode ? 'Switch back to local mode to place and apply a manual prior from the map.' : 'Left-drag the map to place a pending prior. Apply uses the spread preset above.'}</div>
       </div>
 
       <div className="fc-section">
@@ -98,7 +125,7 @@ function FilterControls({
             className="fc-slider"
             type="range"
             min={16}
-            max={512}
+            max={2048}
             step={16}
             value={draftParticleCount || 256}
             onChange={(event) => setDraftParticleCount(Number(event.target.value))}
@@ -106,7 +133,7 @@ function FilterControls({
             onTouchEnd={() => draftParticleCount !== particleCount && onParticleCountChange(draftParticleCount)}
             disabled={!capabilities.particle_count}
           />
-          <div className="fc-rng"><span>64</span><span>512</span></div>
+          <div className="fc-rng"><span>64</span><span>2048</span></div>
         </div>
         <div className="fc-row">
           <div className="fc-lbl"><span>Resample @ ESS &lt;</span><span className="v">{(draftResampleRatio * 100).toFixed(0)}% · {draftParticleCount ? (draftResampleRatio * draftParticleCount).toFixed(0) : '—'}</span></div>
@@ -212,7 +239,7 @@ function FilterControls({
         <div className="fc-actions">
           <button className="fc-btn" onClick={onTogglePause} disabled={!capabilities.pause_resume}>{paused ? '▶ RESUME' : '❚❚ PAUSE'}</button>
           <button className="fc-btn" onClick={onStepOnce} disabled={!capabilities.single_step || !paused}>⤳ STEP ONCE</button>
-          <button className="fc-btn danger" onClick={onGlobalReset} disabled={capabilities.global_reset === false}>↻ GLOBAL RESET</button>
+          <button className="fc-btn danger" onClick={onGlobalReset} disabled={capabilities.global_reset === false}>{isGlobalMode ? '↻ GLOBAL RESET' : '↻ LOCAL RESET'}</button>
         </div>
       </div>
     </div>

@@ -10,9 +10,11 @@ from core.config.models import TurtleBotLocalizationConfig
 from core.config.sections import (
     load_control_settings,
     load_initial_pose_prior,
+    load_initialization_settings,
     load_measurement_settings,
     load_motion_noise_settings,
     load_particle_filter_settings,
+    load_recovery_settings,
     load_renderer_settings,
     load_ros_topic_settings,
     load_runtime_settings,
@@ -39,4 +41,6 @@ def load_turtlebot_localization_config(config_path: str | Path = DEFAULT_CONFIG_
         initial_pose_prior=load_initial_pose_prior(raw_config.get("initial_pose_prior", {})),
         motion_noise=load_motion_noise_settings(raw_config.get("motion_noise", {})),
         measurement=load_measurement_settings(raw_config.get("measurement", {})),
+        initialization=load_initialization_settings(raw_config.get("initialization", {})),
+        recovery=load_recovery_settings(raw_config.get("recovery", {})),
     )

@@ -143,6 +143,9 @@ class LatestOnlyHttpVisualizationPublisher:
                 "runtime": {
                     "paused": snapshot.filter_state.paused,
                 },
+                "initialization": {
+                    "mode": snapshot.filter_state.localization_mode,
+                },
             },
             "images": {
                 "observation_jpeg_base64": self._encode_observation_image(snapshot),

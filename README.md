@@ -26,6 +26,7 @@ The running system has three processes:
    - reads ROS topics and TF
    - queries the renderer service
    - publishes snapshots and polls runtime control commands
+   - supports both `local` and `global` localization modes
 
 ## Prerequisites
 
@@ -74,6 +75,37 @@ Important defaults:
 - frontend publish URL: `http://127.0.0.1:8090/api/publish-latest`
 - frontend control poll URL: `http://127.0.0.1:8090/api/reset-particle-filter/next`
 - default renderer backend in config: `vkdiff`
+- default initialization mode: `local`
+
+Key config sections:
+
+- `particle_filter`
+  - particle count and resampling threshold
+- `initial_pose_prior`
+  - Gaussian prior used for local localization and local resets
+- `motion_noise`
+  - noise applied during odometry prediction
+- `measurement`
+  - renderer-scoring metric and measurement temperature
+- `runtime`
+  - loop timing, random seed, and stationary-update suspension
+- `initialization`
+  - startup mode for the particle filter
+  - `mode: local | global`
+  - `global_yaw_uniform: true | false`
+- `recovery`
+  - adaptive random-particle recovery used by global localization
+  - `enabled`
+  - `alpha_slow`
+  - `alpha_fast`
+  - `random_particle_floor_ratio`
+  - `random_particle_max_ratio`
+
+Notes:
+
+- `local` mode initializes from `initial_pose_prior`.
+- `global` mode initializes from traversable map free space derived from [map.yaml](/home/nick/PycharmProjects/3DGSNav/map.yaml) and `map.pgm`.
+- Recovery is implemented with augmented-MCL style random-particle injection, so the filter can relocalize after losing track.
 
 ## Running The Full Project
 
@@ -140,13 +172,42 @@ python3 -m core.main
 
 The backend loads [turtlebot_localization.yaml](/home/nick/PycharmProjects/3DGSNav/turtlebot_localization.yaml) by default.
 
-## Common Operations
+## Frontend Workflow
 
-Start the browser UI:
+Open the browser UI at:
 
 ```text
 http://127.0.0.1:8090
 ```
+
+The filter controls now include a persistent localization-mode toggle:
+
+- `local`
+  - uses the configured Gaussian prior
+  - supports map-drawn priors from the UI
+  - reset performs a local reinitialization
+- `global`
+  - reinitializes particles across free map space
+  - ignores map-drawn priors
+  - reset performs a true global relocalization
+
+Typical workflows:
+
+### Local startup / tracking
+
+1. Leave the mode toggle in `local`.
+2. Optionally left-drag on the map to place a manual prior.
+3. Apply the prior or use local reset.
+4. Let the filter track from the local Gaussian prior.
+
+### Global startup / relocalization
+
+1. Switch the mode toggle to `global`.
+2. Press reset.
+3. The backend samples particles from map free space and begins global localization.
+4. Adaptive recovery stays active while tracking, so the filter can recover from major failures.
+
+## Common Operations
 
 Follow renderer logs:
 
@@ -175,11 +236,7 @@ Current structure:
 Example recorder command:
 
 ```bash
-python3 -m core.replay_tuning.record_replay_dataset \
-  --name hallway_run_01 \
-  --goal-x 2.7 \
-  --goal-y -3.45 \
-  --goal-yaw 1.57
+python3 -m core.replay_tuning.record_replay_dataset   --name hallway_run_01   --goal-x 2.7   --goal-y -3.45   --goal-yaw 1.57
 ```
 
 ## Repository Layout

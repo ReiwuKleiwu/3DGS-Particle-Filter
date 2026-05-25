@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from core.particle_filter.domain.estimator import estimate_weighted_pose
-from core.particle_filter.domain.measurement_update import apply_measurement_update
+from core.particle_filter.domain.measurement_update import MeasurementUpdateStats, apply_measurement_update
 from core.particle_filter.domain.motion_model import TurtleBotMotionModel
 from core.particle_filter.domain.odometry import OdometryDelta
 from core.particle_filter.domain.particle import Particle
@@ -55,6 +56,10 @@ class TurtleBotParticleFilter:
             )
             self._particles.append(Particle(pose=sampled_pose, weight=uniform_weight))
 
+    def initialize_global(self, pose_sampler: Callable[[], Pose2D]) -> None:
+        uniform_weight = 1.0 / self._config.particle_count
+        self._particles = [Particle(pose=pose_sampler(), weight=uniform_weight) for _ in range(self._config.particle_count)]
+
     def reconfigure(
         self,
         *,
@@ -76,15 +81,20 @@ class TurtleBotParticleFilter:
     def predict_from_odometry(self, odometry_delta: OdometryDelta) -> None:
         self._particles = self._motion_model.predict(self._particles, odometry_delta)
 
-    def update_from_measurement_errors(self, measurement_errors: list[float], *, temperature: float) -> None:
-        apply_measurement_update(self._particles, measurement_errors, temperature=temperature)
+    def update_from_measurement_errors(self, measurement_errors: list[float], *, temperature: float) -> MeasurementUpdateStats:
+        return apply_measurement_update(self._particles, measurement_errors, temperature=temperature)
 
     def effective_particle_count(self) -> float:
         if not self._particles:
             return 0.0
         return 1.0 / sum(particle.weight * particle.weight for particle in self._particles)
 
-    def resample_if_needed(self) -> bool:
+    def resample_if_needed(
+        self,
+        *,
+        random_pose_sampler: Callable[[], Pose2D] | None = None,
+        random_particle_ratio: float = 0.0,
+    ) -> bool:
         if not self._particles:
             return False
 
@@ -92,7 +102,11 @@ class TurtleBotParticleFilter:
         if self.effective_particle_count() >= threshold:
             return False
 
-        self._particles = self._resampler.resample(self._particles)
+        self._particles = self._resampler.resample(
+            self._particles,
+            random_pose_sampler=random_pose_sampler,
+            random_particle_ratio=random_particle_ratio,
+        )
         return True
 
     def estimate_pose(self) -> Pose2D:

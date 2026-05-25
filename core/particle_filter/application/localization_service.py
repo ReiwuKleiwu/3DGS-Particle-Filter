@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 import random
+from pathlib import Path
 
 from core.config import MeasurementSettings, MotionNoiseSettings, TurtleBotLocalizationConfig
 from core.particle_filter.application.command_handler import LocalizationCommandHandler
@@ -14,10 +15,15 @@ from core.particle_filter.application.step_engine import LocalizationStepEngine
 from core.particle_filter.domain.motion_model import TurtleBotMotionModel
 from core.particle_filter.domain.odometry import compute_odometry_delta_in_robot_frame
 from core.particle_filter.domain.particle_filter import TurtleBotParticleFilter, TurtleBotParticleFilterConfig
+from core.particle_filter.domain.recovery import AugmentedMclRecoveryTracker
+from core.particle_filter.infrastructure.map import FreeSpacePoseSampler
 from core.particle_filter.infrastructure.renderer.renderer_service_client import RendererServiceClient
 from core.particle_filter.infrastructure.ros.turtlebot_observation_source import TurtleBotObservationSource
 from core.particle_filter.infrastructure.visualization.control_client import ControlCommandClient
 from core.particle_filter.infrastructure.visualization.publisher import VisualizationPublisher
+
+
+DEFAULT_MAP_YAML_PATH = Path(__file__).resolve().parents[3] / "map.yaml"
 
 
 class TurtleBotLocalizationService:
@@ -71,7 +77,19 @@ class TurtleBotLocalizationService:
             motion_model=motion_model,
             rng=rng,
         )
-        particle_filter.initialize(prior)
+
+        free_space_sampler = FreeSpacePoseSampler.from_map_yaml(
+            DEFAULT_MAP_YAML_PATH,
+            global_yaw_uniform=settings.initialization.global_yaw_uniform,
+        )
+        global_pose_sampler = lambda: free_space_sampler.sample_pose(rng=rng)
+
+        if settings.initialization.mode == "global":
+            particle_filter.initialize_global(global_pose_sampler)
+        else:
+            particle_filter.initialize(prior)
+
+        recovery_tracker = AugmentedMclRecoveryTracker(settings.recovery)
         self._runtime_state = LocalizationRuntimeState(
             particle_filter=particle_filter,
             particle_filter_config=particle_filter_config,
@@ -80,6 +98,9 @@ class TurtleBotLocalizationService:
             measurement=measurement,
             motion_model=motion_model,
             rng=rng,
+            localization_mode=settings.initialization.mode,
+            recovery_tracker=recovery_tracker,
+            global_pose_sampler=global_pose_sampler,
         )
         self._step_engine = LocalizationStepEngine(renderer_client, measurement)
         self._command_handler = LocalizationCommandHandler(self._runtime_state)
@@ -104,6 +125,7 @@ class TurtleBotLocalizationService:
         self._observation_source.wait_until_ready(self._settings.runtime.observation_ready_timeout_seconds)
         print(
             "Particle filter initialized | "
+            f"mode={self._runtime_state.localization_mode} | "
             f"particles={len(self._runtime_state.particle_filter.particles)} | "
             f"prior x={self._runtime_state.prior.mean.x:.3f}, "
             f"y={self._runtime_state.prior.mean.y:.3f}, "
@@ -155,6 +177,8 @@ class TurtleBotLocalizationService:
             particle_filter=self._runtime_state.particle_filter,
             observation=observation,
             previous_odometry_pose=previous_odometry_pose,
+            recovery_tracker=self._runtime_state.recovery_tracker,
+            random_pose_sampler=self._runtime_state.global_pose_sampler,
         )
         self._runtime_state.previous_odometry_pose = step_result.previous_odometry_pose
 
@@ -171,7 +195,11 @@ class TurtleBotLocalizationService:
             observation=observation,
             step_result=step_result,
         )
-        print(status_line)
+        print(
+            status_line
+            + f" | mode={self._runtime_state.localization_mode}"
+            + f" | rand={step_result.random_particle_ratio:.3f}"
+        )
         self._runtime_state.update_count += 1
 
         if self._runtime_state.step_once_requested:

@@ -95,6 +95,7 @@ def load_filter_config() -> dict:
         "measurement": {"metric_name": "hybrid", "temperature": 0.02, "packed": False, "radius_clip": 3.0},
         "motion_noise": {"x_meters": 0.02, "y_meters": 0.02, "yaw_radians": 0.017453292519943295},
         "runtime": {"paused": False},
+        "initialization": {"mode": "local"},
     }
     if not CONFIG_PATH.is_file():
         return defaults
@@ -105,6 +106,7 @@ def load_filter_config() -> dict:
     measurement = raw_config.get("measurement", {})
     motion_noise = raw_config.get("motion_noise", {})
     particle_filter = raw_config.get("particle_filter", {})
+    initialization = raw_config.get("initialization", {})
     return {
         "particle_count": int(particle_filter.get("particle_count", defaults["particle_count"])),
         "resample_threshold_ratio": float(particle_filter.get("resample_threshold_ratio", defaults["resample_threshold_ratio"])),
@@ -130,6 +132,9 @@ def load_filter_config() -> dict:
             "yaw_radians": float(motion_noise.get("yaw_radians", defaults["motion_noise"]["yaw_radians"])),
         },
         "runtime": {"paused": False},
+        "initialization": {
+            "mode": str(initialization.get("mode", defaults["initialization"]["mode"])).strip().lower(),
+        },
     }
 
 
@@ -147,6 +152,7 @@ def capabilities_payload() -> dict:
         "motion_noise": True,
         "pause_resume": True,
         "single_step": True,
+        "localization_mode": True,
     }
 
 
@@ -170,6 +176,9 @@ def current_filter_config() -> dict:
             runtime = filter_state.get("runtime") or {}
             if "paused" in runtime:
                 config["runtime"]["paused"] = bool(runtime["paused"])
+            initialization = filter_state.get("initialization") or {}
+            if "mode" in initialization:
+                config["initialization"]["mode"] = str(initialization["mode"])
     config["capabilities"] = capabilities_payload()
     return config
 
@@ -319,8 +328,23 @@ class VisualizationRequestHandler(BaseHTTPRequestHandler):
             return None, "Missing control command type"
 
         issued_at = time.time()
-        if command_type in {"pause_particle_filter", "resume_particle_filter", "step_particle_filter"}:
+        if command_type in {
+            "pause_particle_filter",
+            "resume_particle_filter",
+            "step_particle_filter",
+            "global_reset_particle_filter",
+        }:
             return {"type": command_type, "issued_at_unix_seconds": issued_at}, None
+
+        if command_type == "set_localization_mode":
+            mode = str(payload.get("mode", "")).strip().lower()
+            if mode not in {"local", "global"}:
+                return None, f"Unsupported localization mode: {mode!r}"
+            return {
+                "type": command_type,
+                "issued_at_unix_seconds": issued_at,
+                "mode": mode,
+            }, None
 
         if command_type == "set_particle_filter_parameters":
             command: dict = {"type": command_type, "issued_at_unix_seconds": issued_at}

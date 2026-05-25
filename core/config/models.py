@@ -34,6 +34,21 @@ class MeasurementSettings:
 
 
 @dataclass(frozen=True)
+class InitializationSettings:
+    mode: str = "local"
+    global_yaw_uniform: bool = True
+
+
+@dataclass(frozen=True)
+class RecoverySettings:
+    enabled: bool = True
+    alpha_slow: float = 0.001
+    alpha_fast: float = 0.1
+    random_particle_floor_ratio: float = 0.0
+    random_particle_max_ratio: float = 0.25
+
+
+@dataclass(frozen=True)
 class RuntimeSettings:
     observation_ready_timeout_seconds: float = 10.0
     spin_timeout_seconds: float = 0.05
@@ -66,3 +81,5 @@ class TurtleBotLocalizationConfig:
     )
     motion_noise: MotionNoiseSettings = field(default_factory=MotionNoiseSettings)
     measurement: MeasurementSettings = field(default_factory=MeasurementSettings)
+    initialization: InitializationSettings = field(default_factory=InitializationSettings)
+    recovery: RecoverySettings = field(default_factory=RecoverySettings)

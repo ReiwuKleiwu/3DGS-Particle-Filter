@@ -55,5 +55,6 @@ class LocalizationSnapshotBuilder:
                 motion_noise_y_meters=runtime_state.motion_noise.y_meters,
                 motion_noise_yaw_radians=runtime_state.motion_noise.yaw_radians,
                 paused=runtime_state.paused,
+                localization_mode=runtime_state.localization_mode,
             ),
         )

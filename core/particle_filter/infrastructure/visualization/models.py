@@ -24,6 +24,7 @@ class VisualizationFilterState:
     motion_noise_y_meters: float
     motion_noise_yaw_radians: float
     paused: bool
+    localization_mode: str
 
 
 @dataclass(frozen=True)

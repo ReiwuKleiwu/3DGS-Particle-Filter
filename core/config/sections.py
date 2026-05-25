@@ -4,7 +4,14 @@ from __future__ import annotations
 
 from typing import Any
 
-from core.config.models import MeasurementSettings, MotionNoiseSettings, RuntimeSettings, TurtleBotLocalizationConfig
+from core.config.models import (
+    InitializationSettings,
+    MeasurementSettings,
+    MotionNoiseSettings,
+    RecoverySettings,
+    RuntimeSettings,
+    TurtleBotLocalizationConfig,
+)
 from core.particle_filter.domain.particle_filter import TurtleBotParticleFilterConfig
 from core.particle_filter.domain.pose import Pose2D, Pose2DPrior
 from core.particle_filter.infrastructure.renderer.renderer_service_client import RendererServiceSettings
@@ -144,4 +151,30 @@ def load_measurement_settings(raw: dict[str, Any]) -> MeasurementSettings:
         lpips_top_k=int(raw.get("lpips_top_k", defaults.lpips_top_k)),
         lpips_weight=float(raw.get("lpips_weight", defaults.lpips_weight)),
         lpips_net=str(raw.get("lpips_net", defaults.lpips_net)),
+    )
+
+
+def load_initialization_settings(raw: dict[str, Any]) -> InitializationSettings:
+    defaults = InitializationSettings()
+    mode = str(raw.get("mode", defaults.mode)).strip().lower()
+    if mode not in {"local", "global"}:
+        raise ValueError(f"Unsupported initialization mode: {mode}")
+    return InitializationSettings(
+        mode=mode,
+        global_yaw_uniform=bool(raw.get("global_yaw_uniform", defaults.global_yaw_uniform)),
+    )
+
+
+def load_recovery_settings(raw: dict[str, Any]) -> RecoverySettings:
+    defaults = RecoverySettings()
+    return RecoverySettings(
+        enabled=bool(raw.get("enabled", defaults.enabled)),
+        alpha_slow=float(raw.get("alpha_slow", defaults.alpha_slow)),
+        alpha_fast=float(raw.get("alpha_fast", defaults.alpha_fast)),
+        random_particle_floor_ratio=float(
+            raw.get("random_particle_floor_ratio", defaults.random_particle_floor_ratio)
+        ),
+        random_particle_max_ratio=float(
+            raw.get("random_particle_max_ratio", defaults.random_particle_max_ratio)
+        ),
     )

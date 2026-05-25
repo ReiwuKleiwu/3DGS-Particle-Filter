@@ -57,6 +57,17 @@ measurement:
   lpips_weight: 0.25
   lpips_net: alex
 
+initialization:
+  mode: global
+  global_yaw_uniform: true
+
+recovery:
+  enabled: true
+  alpha_slow: 0.001
+  alpha_fast: 0.1
+  random_particle_floor_ratio: 0.0
+  random_particle_max_ratio: 0.25
+
 visualization:
   enabled: true
   publish_url: http://127.0.0.1:8090/api/publish-latest

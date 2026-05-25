@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from core.config.models import MeasurementSettings, MotionNoiseSettings
 from core.particle_filter.domain.motion_model import TurtleBotMotionModel
 from core.particle_filter.domain.particle_filter import TurtleBotParticleFilter, TurtleBotParticleFilterConfig
 from core.particle_filter.domain.pose import Pose2D, Pose2DPrior
+from core.particle_filter.domain.recovery import AugmentedMclRecoveryTracker
 
 
 @dataclass
@@ -20,6 +22,9 @@ class LocalizationRuntimeState:
     measurement: MeasurementSettings
     motion_model: TurtleBotMotionModel
     rng: random.Random
+    localization_mode: str
+    recovery_tracker: AugmentedMclRecoveryTracker
+    global_pose_sampler: Callable[[], Pose2D] | None
     paused: bool = False
     step_once_requested: bool = False
     previous_odometry_pose: Pose2D | None = None

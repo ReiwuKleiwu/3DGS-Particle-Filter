@@ -30,6 +30,10 @@ class LocalizationCommandHandler:
         command_type = command.get("type")
         if command_type == "reset_particle_filter":
             return self._apply_reset_command(command, observation)
+        if command_type == "global_reset_particle_filter":
+            return self._apply_global_reset_command(observation)
+        if command_type == "set_localization_mode":
+            return self._apply_localization_mode_command(command)
         if command_type == "set_particle_filter_parameters":
             return self._apply_parameter_update_command(command)
         if command_type == "pause_particle_filter":
@@ -65,15 +69,38 @@ class LocalizationCommandHandler:
             sigma_y=float(prior_payload["sigma_y"]),
             sigma_yaw=float(prior_payload["sigma_yaw"]),
         )
+        self._runtime_state.localization_mode = "local"
         self._runtime_state.prior = prior
         self._runtime_state.particle_filter.initialize(prior)
+        self._runtime_state.recovery_tracker.reset()
         self._runtime_state.previous_odometry_pose = observation.odometry_pose
         print(
             "Particle filter reset from frontend | "
-            f"prior x={prior.mean.x:.3f}, y={prior.mean.y:.3f}, yaw={prior.mean.yaw:.3f} | "
+            f"mode=local | prior x={prior.mean.x:.3f}, y={prior.mean.y:.3f}, yaw={prior.mean.yaw:.3f} | "
             f"sigma_x={prior.sigma_x:.3f}, sigma_y={prior.sigma_y:.3f}, sigma_yaw={prior.sigma_yaw:.3f}"
         )
         return CommandEffect(reset_applied=True, reprocess_current_observation=True)
+
+    def _apply_global_reset_command(self, observation: TurtleBotObservation) -> CommandEffect:
+        if self._runtime_state.global_pose_sampler is None:
+            print("Ignoring global reset because no global pose sampler is configured")
+            return CommandEffect()
+
+        self._runtime_state.localization_mode = "global"
+        self._runtime_state.particle_filter.initialize_global(self._runtime_state.global_pose_sampler)
+        self._runtime_state.recovery_tracker.reset()
+        self._runtime_state.previous_odometry_pose = observation.odometry_pose
+        print("Particle filter reset from frontend | mode=global | samples drawn from map free space")
+        return CommandEffect(reset_applied=True, reprocess_current_observation=True)
+
+    def _apply_localization_mode_command(self, command: dict) -> CommandEffect:
+        mode = str(command.get("mode", "")).strip().lower()
+        if mode not in {"local", "global"}:
+            print(f"Ignoring invalid localization mode command: {mode!r}")
+            return CommandEffect()
+        self._runtime_state.localization_mode = mode
+        print(f"Particle filter localization mode set from frontend | mode={mode}")
+        return CommandEffect()
 
     def _apply_parameter_update_command(self, command: dict) -> CommandEffect:
         """Applies mutable runtime parameter changes without rebuilding the whole service."""

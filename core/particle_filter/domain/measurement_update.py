@@ -3,8 +3,14 @@
 from __future__ import annotations
 
 import math
+from dataclasses import dataclass
 
 from core.particle_filter.domain.particle import Particle
+
+
+@dataclass(frozen=True)
+class MeasurementUpdateStats:
+    measurement_likelihood: float
 
 
 def apply_measurement_update(
@@ -12,7 +18,7 @@ def apply_measurement_update(
     measurement_errors: list[float],
     *,
     temperature: float,
-) -> None:
+) -> MeasurementUpdateStats:
     if len(particles) != len(measurement_errors):
         raise ValueError("Measurement error count must match particle count.")
     if temperature <= 0.0:
@@ -36,3 +42,7 @@ def apply_measurement_update(
 
     for particle, unnormalized_weight in zip(particles, unnormalized_weights):
         particle.weight = unnormalized_weight / total_weight
+
+    log_measurement_likelihood = max_logit + math.log(total_weight)
+    likelihood_proxy = math.exp(max(log_measurement_likelihood, -700.0))
+    return MeasurementUpdateStats(measurement_likelihood=likelihood_proxy)

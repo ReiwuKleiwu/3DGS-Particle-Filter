@@ -112,6 +112,10 @@ function mergeLiveFilterConfig(baseConfig, filterState) {
       ...(baseConfig.runtime || {}),
       ...(filterState.runtime || {}),
     },
+    initialization: {
+      ...(baseConfig.initialization || {}),
+      ...(filterState.initialization || {}),
+    },
   };
 }
 
@@ -250,6 +254,7 @@ function App() {
   const priorPresets = React.useMemo(() => buildPriorPresets(liveFilterConfig || filterConfig || { initial_pose_prior: resetDefaults }), [liveFilterConfig, filterConfig, resetDefaults]);
   const capabilities = liveFilterConfig?.capabilities || filterConfig?.capabilities || {};
   const runtimeControlsSupported = Boolean(capabilities.pause_resume || capabilities.single_step);
+  const localizationMode = liveFilterConfig?.initialization?.mode || filterConfig?.initialization?.mode || 'local';
 
   function buildResetPayload(meanPose, sigmas) {
     return {
@@ -296,6 +301,10 @@ function App() {
   }
 
   function handleSetPrior(priorPose) {
+    if (localizationMode === 'global') {
+      setResetStatus('Switch to local mode to place a manual prior.');
+      return;
+    }
     setPendingPrior(priorPose);
     setResetStatus(`Pending prior · x=${formatNumber(priorPose.x, 3)} m · y=${formatNumber(priorPose.y, 3)} m · θ=${formatNumber((priorPose.theta * 180) / Math.PI, 1)}°`);
   }
@@ -316,17 +325,48 @@ function App() {
   }
 
   async function handleGlobalReset() {
+    if (localizationMode === 'global') {
+      await submitControlCommand(
+        { type: 'global_reset_particle_filter' },
+        'Global reset',
+        (current) => ({
+          ...current,
+          initialization: { ...(current?.initialization || {}), mode: 'global' },
+        }),
+      );
+      setPendingPrior(null);
+      return;
+    }
+
     const basePrior = liveFilterConfig?.initial_pose_prior || filterConfig?.initial_pose_prior;
     if (!basePrior) {
-      setResetStatus('Global reset unavailable until filter config is loaded.');
+      setResetStatus('Local reset unavailable until filter config is loaded.');
       return;
     }
     const sigmas = priorPresets[priorPreset];
     await submitResetPayload(
       buildResetPayload(basePrior.mean, sigmas),
-      'Global reset',
+      'Local reset',
     );
     setPendingPrior(null);
+  }
+
+  async function handleLocalizationModeChange(mode) {
+    if (mode === localizationMode) return;
+    await submitControlCommand(
+      { type: 'set_localization_mode', mode },
+      `Mode ${mode}`,
+      (current) => ({
+        ...current,
+        initialization: { ...(current?.initialization || {}), mode },
+      }),
+    );
+    if (mode === 'global') {
+      setPendingPrior(null);
+      setResetStatus('Global mode selected. Use reset to reinitialize across map free space.');
+    } else {
+      setResetStatus('Local mode selected. You can place a prior by dragging on the map.');
+    }
   }
 
   async function handleParticleCountChange(value) {
@@ -563,6 +603,8 @@ function App() {
                 snapshot={snapshot}
                 priorPreset={priorPreset}
                 setPriorPreset={setPriorPreset}
+                localizationMode={localizationMode}
+                onLocalizationModeChange={handleLocalizationModeChange}
                 onGlobalReset={handleGlobalReset}
                 onParticleCountChange={handleParticleCountChange}
                 onResampleThresholdChange={handleResampleThresholdChange}
@@ -577,9 +619,10 @@ function App() {
       </div>
 
       <div className="controls">
-        {!pendingPrior && <span className="ctrl-meta">tip: <b>left-drag</b> on map to set new prior · preset <b>{priorPreset}</b></span>}
+        {!pendingPrior && localizationMode === 'local' && <span className="ctrl-meta">tip: <b>left-drag</b> on map to set new prior · preset <b>{priorPreset}</b></span>}
+        {!pendingPrior && localizationMode === 'global' && <span className="ctrl-meta">mode <b>global</b> · reset reinitializes over the full free-space map</span>}
         <div className="ctrl-divider"></div>
-        <span className="ctrl-meta">renderer <b>{snapshot ? formatNumber(snapshot.metrics.render_and_score_milliseconds, 1) : '—'}</b> ms · best idx <b>{snapshot ? snapshot.metrics.best_particle_index : '—'}</b> · resampled <b>{snapshot ? (snapshot.metrics.resampled ? 'yes' : 'no') : '—'}</b></span>
+        <span className="ctrl-meta">mode <b>{localizationMode}</b> · renderer <b>{snapshot ? formatNumber(snapshot.metrics.render_and_score_milliseconds, 1) : '—'}</b> ms · best idx <b>{snapshot ? snapshot.metrics.best_particle_index : '—'}</b> · resampled <b>{snapshot ? (snapshot.metrics.resampled ? 'yes' : 'no') : '—'}</b></span>
         <div className="ctrl-spacer"></div>
         {pendingPrior ? (
           <div className="prior-banner">
