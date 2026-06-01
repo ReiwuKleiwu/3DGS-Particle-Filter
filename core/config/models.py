@@ -42,10 +42,21 @@ class InitializationSettings:
 @dataclass(frozen=True)
 class RecoverySettings:
     enabled: bool = True
+    strategy: str = "augmented_mcl"
     alpha_slow: float = 0.001
     alpha_fast: float = 0.1
     random_particle_floor_ratio: float = 0.0
     random_particle_max_ratio: float = 0.25
+    absolute_score_profiles: dict[str, dict[str, float | int]] = field(
+        default_factory=lambda: {
+            "default": {
+                "best_score_threshold": 0.45,
+                "median_score_threshold": 0.48,
+                "random_particle_ratio": 0.10,
+                "consecutive_bad_updates": 3,
+            }
+        }
+    )
 
 
 @dataclass(frozen=True)

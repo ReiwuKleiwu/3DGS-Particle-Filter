@@ -14,6 +14,14 @@ from core.particle_filter.infrastructure.ros.observation import TurtleBotObserva
 from core.particle_filter.domain.odometry import compute_odometry_delta_in_robot_frame
 
 
+def _median(values: list[float]) -> float:
+    sorted_values = sorted(values)
+    middle_index = len(sorted_values) // 2
+    if len(sorted_values) % 2 == 0:
+        return (sorted_values[middle_index - 1] + sorted_values[middle_index]) * 0.5
+    return sorted_values[middle_index]
+
+
 @dataclass(frozen=True)
 class LocalizationStepResult:
     estimated_pose: Pose2D
@@ -25,6 +33,7 @@ class LocalizationStepResult:
     previous_odometry_pose: Pose2D | None
     measurement_likelihood: float
     random_particle_ratio: float
+    random_particle_count: int
 
 
 class LocalizationStepEngine:
@@ -70,6 +79,8 @@ class LocalizationStepEngine:
             lpips_weight=self._measurement.lpips_weight,
             lpips_net=self._measurement.lpips_net,
         )
+        best_score = score_result.errors[score_result.best_index]
+        median_score = _median(score_result.errors)
         best_particle_pose = particle_filter.particles[score_result.best_index].pose
 
         update_stats = particle_filter.update_from_measurement_errors(
@@ -78,7 +89,12 @@ class LocalizationStepEngine:
         )
         random_particle_ratio = 0.0
         if recovery_tracker is not None and random_pose_sampler is not None:
-            random_particle_ratio = recovery_tracker.update(update_stats.measurement_likelihood)
+            random_particle_ratio = recovery_tracker.update(
+                update_stats.measurement_likelihood,
+                metric_name=self._measurement.metric_name,
+                best_score=best_score,
+                median_score=median_score,
+            )
         effective_particle_count = particle_filter.effective_particle_count()
         resampled = particle_filter.resample_if_needed(
             random_pose_sampler=random_pose_sampler,
@@ -92,8 +108,9 @@ class LocalizationStepEngine:
             resampled=resampled,
             score_result=score_result,
             best_particle_pose=best_particle_pose,
-            best_score=score_result.errors[score_result.best_index],
+            best_score=best_score,
             previous_odometry_pose=current_odometry_pose,
             measurement_likelihood=update_stats.measurement_likelihood,
             random_particle_ratio=random_particle_ratio,
+            random_particle_count=particle_filter.last_random_particle_count if resampled else 0,
         )

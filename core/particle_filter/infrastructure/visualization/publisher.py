@@ -99,6 +99,7 @@ class LatestOnlyHttpVisualizationPublisher:
                     "y": particle.y,
                     "yaw": particle.yaw,
                     "weight": particle.weight,
+                    "recovery_sample": particle.recovery_sample,
                 }
                 for particle in snapshot.particles
             ],
@@ -128,6 +129,8 @@ class LatestOnlyHttpVisualizationPublisher:
                 "effective_particle_count": snapshot.effective_particle_count,
                 "render_and_score_milliseconds": snapshot.render_and_score_milliseconds,
                 "resampled": snapshot.resampled,
+                "random_particle_ratio": snapshot.random_particle_ratio,
+                "random_particle_count": snapshot.random_particle_count,
             },
             "filter_state": {
                 "particle_count": snapshot.filter_state.particle_count,

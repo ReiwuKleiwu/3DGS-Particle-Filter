@@ -199,6 +199,7 @@ class TurtleBotLocalizationService:
             status_line
             + f" | mode={self._runtime_state.localization_mode}"
             + f" | rand={step_result.random_particle_ratio:.3f}"
+            + f" | injected={step_result.random_particle_count}"
         )
         self._runtime_state.update_count += 1
 

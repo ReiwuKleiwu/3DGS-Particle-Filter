@@ -35,6 +35,7 @@ class TurtleBotParticleFilter:
         self._motion_model = motion_model
         self._resampler = resampler or SystematicResampler(rng=self._rng)
         self._particles: list[Particle] = []
+        self._last_random_particle_count = 0
 
     @property
     def config(self) -> TurtleBotParticleFilterConfig:
@@ -43,6 +44,10 @@ class TurtleBotParticleFilter:
     @property
     def particles(self) -> list[Particle]:
         return self._particles
+
+    @property
+    def last_random_particle_count(self) -> int:
+        return self._last_random_particle_count
 
     def initialize(self, prior: Pose2DPrior) -> None:
         uniform_weight = 1.0 / self._config.particle_count
@@ -99,7 +104,9 @@ class TurtleBotParticleFilter:
             return False
 
         threshold = self._config.resample_threshold_ratio * len(self._particles)
-        if self.effective_particle_count() >= threshold:
+        should_force_recovery_resample = random_pose_sampler is not None and random_particle_ratio > 0.0
+        if self.effective_particle_count() >= threshold and not should_force_recovery_resample:
+            self._last_random_particle_count = 0
             return False
 
         self._particles = self._resampler.resample(
@@ -107,6 +114,7 @@ class TurtleBotParticleFilter:
             random_pose_sampler=random_pose_sampler,
             random_particle_ratio=random_particle_ratio,
         )
+        self._last_random_particle_count = self._resampler.last_random_count
         return True
 
     def estimate_pose(self) -> Pose2D:

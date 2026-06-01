@@ -167,8 +167,37 @@ def load_initialization_settings(raw: dict[str, Any]) -> InitializationSettings:
 
 def load_recovery_settings(raw: dict[str, Any]) -> RecoverySettings:
     defaults = RecoverySettings()
+    strategy = str(raw.get("strategy", defaults.strategy)).strip().lower()
+    if strategy not in {"augmented_mcl", "absolute_score"}:
+        raise ValueError(f"Unsupported recovery strategy: {strategy}")
+    raw_profiles = raw.get("absolute_score_profiles", defaults.absolute_score_profiles)
+    if not isinstance(raw_profiles, dict):
+        raise ValueError("recovery.absolute_score_profiles must be a mapping keyed by metric name")
+    absolute_score_profiles: dict[str, dict[str, float | int]] = {}
+    for metric_name, profile in raw_profiles.items():
+        if not isinstance(profile, dict):
+            raise ValueError(f"recovery.absolute_score_profiles.{metric_name} must be a mapping")
+        metric_key = str(metric_name).strip().lower()
+        fallback = defaults.absolute_score_profiles["default"]
+        absolute_score_profiles[metric_key] = {
+            "best_score_threshold": float(
+                profile.get("best_score_threshold", fallback["best_score_threshold"])
+            ),
+            "median_score_threshold": float(
+                profile.get("median_score_threshold", fallback["median_score_threshold"])
+            ),
+            "random_particle_ratio": float(
+                profile.get("random_particle_ratio", fallback["random_particle_ratio"])
+            ),
+            "consecutive_bad_updates": int(
+                profile.get("consecutive_bad_updates", fallback["consecutive_bad_updates"])
+            ),
+        }
+    if "default" not in absolute_score_profiles:
+        absolute_score_profiles["default"] = defaults.absolute_score_profiles["default"].copy()
     return RecoverySettings(
         enabled=bool(raw.get("enabled", defaults.enabled)),
+        strategy=strategy,
         alpha_slow=float(raw.get("alpha_slow", defaults.alpha_slow)),
         alpha_fast=float(raw.get("alpha_fast", defaults.alpha_fast)),
         random_particle_floor_ratio=float(
@@ -177,4 +206,5 @@ def load_recovery_settings(raw: dict[str, Any]) -> RecoverySettings:
         random_particle_max_ratio=float(
             raw.get("random_particle_max_ratio", defaults.random_particle_max_ratio)
         ),
+        absolute_score_profiles=absolute_score_profiles,
     )

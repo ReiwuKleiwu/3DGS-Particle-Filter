@@ -72,7 +72,6 @@ class LocalizationCommandHandler:
         self._runtime_state.localization_mode = "local"
         self._runtime_state.prior = prior
         self._runtime_state.particle_filter.initialize(prior)
-        self._runtime_state.recovery_tracker.reset()
         self._runtime_state.previous_odometry_pose = observation.odometry_pose
         print(
             "Particle filter reset from frontend | "

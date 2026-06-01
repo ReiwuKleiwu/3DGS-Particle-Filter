@@ -24,10 +24,22 @@ class LocalizationDiagnosticsFormatter:
             f"y={step_result.estimated_pose.y:.3f}, "
             f"yaw={step_result.estimated_pose.yaw:.3f} | "
             f"best_index={step_result.score_result.best_index} | "
+            f"best_score={step_result.best_score:.6f} | "
             f"render+score={step_result.score_result.elapsed_milliseconds:.1f} ms | "
             f"resampled={'yes' if step_result.resampled else 'no'} | "
             f"paused={'yes' if paused else 'no'}"
         )
+        errors = step_result.score_result.errors
+        if errors:
+            sorted_errors = sorted(errors)
+            middle_index = len(sorted_errors) // 2
+            if len(sorted_errors) % 2 == 0:
+                median_score = (sorted_errors[middle_index - 1] + sorted_errors[middle_index]) * 0.5
+            else:
+                median_score = sorted_errors[middle_index]
+            mean_score = sum(errors) / len(errors)
+            status_line += f" | median_score={median_score:.6f} | mean_score={mean_score:.6f}"
+
         diagnostics = step_result.score_result.diagnostics or {}
         if diagnostics:
             render_call_ms = diagnostics.get("render_call_ms")

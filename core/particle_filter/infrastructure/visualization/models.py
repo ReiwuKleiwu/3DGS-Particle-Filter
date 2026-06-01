@@ -13,6 +13,7 @@ class VisualizationParticle:
     y: float
     yaw: float
     weight: float
+    recovery_sample: bool
 
 
 @dataclass(frozen=True)
@@ -42,6 +43,8 @@ class VisualizationSnapshot:
     effective_particle_count: float
     render_and_score_milliseconds: float
     resampled: bool
+    random_particle_ratio: float
+    random_particle_count: int
     observation_image_rgb: object
     best_render_png_bytes: bytes
     filter_state: VisualizationFilterState

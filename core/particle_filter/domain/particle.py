@@ -10,3 +10,4 @@ from core.particle_filter.domain.pose import Pose2D
 class Particle:
     pose: Pose2D
     weight: float
+    recovery_sample: bool = False

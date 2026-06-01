@@ -58,15 +58,22 @@ measurement:
   lpips_net: alex
 
 initialization:
-  mode: global
+  mode: local
   global_yaw_uniform: true
 
 recovery:
   enabled: true
+  strategy: absolute_score
   alpha_slow: 0.001
   alpha_fast: 0.1
   random_particle_floor_ratio: 0.0
-  random_particle_max_ratio: 0.25
+  random_particle_max_ratio: 0.30
+  absolute_score_profiles:
+    lpips:
+      best_score_threshold: 0.45
+      median_score_threshold: 0.48
+      random_particle_ratio: 0.50
+      consecutive_bad_updates: 3
 
 visualization:
   enabled: true

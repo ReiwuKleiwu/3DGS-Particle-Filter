@@ -64,6 +64,7 @@ class TurtleBotMotionModel:
                 Particle(
                     pose=Pose2D(x=predicted_x, y=predicted_y, yaw=predicted_yaw),
                     weight=particle.weight,
+                    recovery_sample=False,
                 )
             )
 

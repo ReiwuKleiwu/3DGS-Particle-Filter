@@ -12,6 +12,11 @@ from core.particle_filter.domain.pose import Pose2D
 class SystematicResampler:
     def __init__(self, rng: random.Random | None = None) -> None:
         self._rng = rng or random.Random()
+        self._last_random_count = 0
+
+    @property
+    def last_random_count(self) -> int:
+        return self._last_random_count
 
     def resample(
         self,
@@ -36,6 +41,7 @@ class SystematicResampler:
         random_particle_ratio: float = 0.0,
     ) -> list[Particle]:
         if not particles or particle_count <= 0:
+            self._last_random_count = 0
             return []
 
         random_particle_ratio = min(1.0, max(0.0, float(random_particle_ratio)))
@@ -45,6 +51,7 @@ class SystematicResampler:
         random_count = 0
         if random_pose_sampler is not None and random_particle_ratio > 0.0:
             random_count = sum(1 for _ in range(particle_count) if self._rng.random() < random_particle_ratio)
+        self._last_random_count = random_count
         systematic_count = particle_count - random_count
 
         cumulative_weights: list[float] = []
@@ -63,11 +70,23 @@ class SystematicResampler:
                 while source_index < len(cumulative_weights) - 1 and position > cumulative_weights[source_index]:
                     source_index += 1
                 source_particle = particles[source_index]
-                resampled_particles.append(Particle(pose=source_particle.pose, weight=0.0))
+                resampled_particles.append(
+                    Particle(
+                        pose=source_particle.pose,
+                        weight=0.0,
+                        recovery_sample=False,
+                    )
+                )
 
         if random_count > 0 and random_pose_sampler is not None:
             for _ in range(random_count):
-                resampled_particles.append(Particle(pose=random_pose_sampler(), weight=0.0))
+                resampled_particles.append(
+                    Particle(
+                        pose=random_pose_sampler(),
+                        weight=0.0,
+                        recovery_sample=True,
+                    )
+                )
             self._rng.shuffle(resampled_particles)
 
         uniform_weight = 1.0 / particle_count
