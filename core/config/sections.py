@@ -103,11 +103,20 @@ def load_control_settings(raw: dict[str, Any]) -> ControlCommandClientSettings:
 def load_particle_filter_settings(raw: dict[str, Any]) -> TurtleBotParticleFilterConfig:
     """Parses particle-count and resampling settings for the filter core."""
     defaults = TurtleBotParticleFilterConfig(particle_count=128, resample_threshold_ratio=0.5)
+    roughening_mode = str(raw.get("roughening_mode", defaults.roughening_mode)).strip().lower()
+    if roughening_mode not in {"resample_only", "always"}:
+        raise ValueError(f"Unsupported roughening mode: {roughening_mode}")
     return TurtleBotParticleFilterConfig(
         particle_count=int(raw.get("particle_count", defaults.particle_count)),
         resample_threshold_ratio=float(
             raw.get("resample_threshold_ratio", defaults.resample_threshold_ratio)
         ),
+        roughening_enabled=bool(raw.get("roughening_enabled", defaults.roughening_enabled)),
+        roughening_mode=roughening_mode,
+        roughening_ratio=float(raw.get("roughening_ratio", defaults.roughening_ratio)),
+        roughening_sigma_x=float(raw.get("roughening_sigma_x", defaults.roughening_sigma_x)),
+        roughening_sigma_y=float(raw.get("roughening_sigma_y", defaults.roughening_sigma_y)),
+        roughening_sigma_yaw=float(raw.get("roughening_sigma_yaw", defaults.roughening_sigma_yaw)),
     )
 
 

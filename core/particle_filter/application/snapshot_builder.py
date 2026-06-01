@@ -34,6 +34,7 @@ class LocalizationSnapshotBuilder:
                     yaw=particle.pose.yaw,
                     weight=particle.weight,
                     recovery_sample=particle.recovery_sample,
+                    roughening_sample=particle.roughening_sample,
                 )
                 for particle in runtime_state.particle_filter.particles
             ],
@@ -48,6 +49,7 @@ class LocalizationSnapshotBuilder:
             resampled=step_result.resampled,
             random_particle_ratio=step_result.random_particle_ratio,
             random_particle_count=step_result.random_particle_count,
+            roughening_particle_count=step_result.roughening_particle_count,
             observation_image_rgb=observation.image_rgb,
             best_render_png_bytes=step_result.score_result.best_render_png_bytes,
             filter_state=VisualizationFilterState(

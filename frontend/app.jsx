@@ -622,7 +622,7 @@ function App() {
         {!pendingPrior && localizationMode === 'local' && <span className="ctrl-meta">tip: <b>left-drag</b> on map to set new prior · preset <b>{priorPreset}</b></span>}
         {!pendingPrior && localizationMode === 'global' && <span className="ctrl-meta">mode <b>global</b> · reset reinitializes over the full free-space map</span>}
         <div className="ctrl-divider"></div>
-        <span className="ctrl-meta">mode <b>{localizationMode}</b> · renderer <b>{snapshot ? formatNumber(snapshot.metrics.render_and_score_milliseconds, 1) : '—'}</b> ms · best idx <b>{snapshot ? snapshot.metrics.best_particle_index : '—'}</b> · resampled <b>{snapshot ? (snapshot.metrics.resampled ? 'yes' : 'no') : '—'}</b> · recovery <b>{snapshot ? `${formatNumber((snapshot.metrics.random_particle_ratio || 0) * 100, 1)}%/${snapshot.metrics.random_particle_count || 0}` : '—'}</b></span>
+        <span className="ctrl-meta">mode <b>{localizationMode}</b> · renderer <b>{snapshot ? formatNumber(snapshot.metrics.render_and_score_milliseconds, 1) : '—'}</b> ms · best idx <b>{snapshot ? snapshot.metrics.best_particle_index : '—'}</b> · resampled <b>{snapshot ? (snapshot.metrics.resampled ? 'yes' : 'no') : '—'}</b> · recovery <b>{snapshot ? `${formatNumber((snapshot.metrics.random_particle_ratio || 0) * 100, 1)}%/${snapshot.metrics.random_particle_count || 0}` : '—'}</b> · roughened <b>{snapshot ? snapshot.metrics.roughening_particle_count || 0 : '—'}</b></span>
         <div className="ctrl-spacer"></div>
         {pendingPrior ? (
           <div className="prior-banner">

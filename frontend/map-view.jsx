@@ -329,9 +329,13 @@ function MapView({ snapshot, mapMetadata, mapImage, layers, particleStyle, estim
           if (screen.x < -10 || screen.y < -10 || screen.x > size.w + 10 || screen.y > size.h + 10) return;
           const color = weightColor(particle.weight, maxWeight || 1);
           const alpha = 0.4 + 0.6 * Math.min(1, particle.weight / Math.max(maxWeight, 1e-9));
-          context.fillStyle = particle.recovery_sample
-            ? `rgba(168,85,247,${Math.max(0.85, alpha)})`
-            : `rgba(${color[0] | 0},${color[1] | 0},${color[2] | 0},${alpha})`;
+          let fillStyle = `rgba(${color[0] | 0},${color[1] | 0},${color[2] | 0},${alpha})`;
+          if (particle.recovery_sample) {
+            fillStyle = `rgba(168,85,247,${Math.max(0.85, alpha)})`;
+          } else if (particle.roughening_sample) {
+            fillStyle = `rgba(34,211,238,${Math.max(0.80, alpha)})`;
+          }
+          context.fillStyle = fillStyle;
           const forward = worldToScreen(
             particle.x + Math.cos(particle.yaw) * 0.08,
             particle.y + Math.sin(particle.yaw) * 0.08,

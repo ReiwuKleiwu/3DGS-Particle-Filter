@@ -14,6 +14,7 @@ class VisualizationParticle:
     yaw: float
     weight: float
     recovery_sample: bool
+    roughening_sample: bool
 
 
 @dataclass(frozen=True)
@@ -45,6 +46,7 @@ class VisualizationSnapshot:
     resampled: bool
     random_particle_ratio: float
     random_particle_count: int
+    roughening_particle_count: int
     observation_image_rgb: object
     best_render_png_bytes: bytes
     filter_state: VisualizationFilterState

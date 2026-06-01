@@ -11,3 +11,4 @@ class Particle:
     pose: Pose2D
     weight: float
     recovery_sample: bool = False
+    roughening_sample: bool = False

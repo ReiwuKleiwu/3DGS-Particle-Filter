@@ -34,6 +34,7 @@ class LocalizationStepResult:
     measurement_likelihood: float
     random_particle_ratio: float
     random_particle_count: int
+    roughening_particle_count: int
 
 
 class LocalizationStepEngine:
@@ -65,6 +66,9 @@ class LocalizationStepEngine:
         if previous_odometry_pose is not None and current_odometry_pose is not None:
             odometry_delta = compute_odometry_delta_in_robot_frame(previous_odometry_pose, current_odometry_pose)
             particle_filter.predict_from_odometry(odometry_delta)
+
+        pre_score_roughened = particle_filter.roughen_always_if_configured()
+        roughening_particle_count = particle_filter.last_roughening_particle_count if pre_score_roughened else 0
 
         score_result = self._renderer_client.score_particles(
             particle_poses=[particle.pose for particle in particle_filter.particles],
@@ -100,6 +104,8 @@ class LocalizationStepEngine:
             random_pose_sampler=random_pose_sampler,
             random_particle_ratio=random_particle_ratio,
         )
+        if resampled and particle_filter.config.roughening_mode == "resample_only":
+            roughening_particle_count = particle_filter.last_roughening_particle_count
         estimated_pose = particle_filter.estimate_pose()
 
         return LocalizationStepResult(
@@ -113,4 +119,5 @@ class LocalizationStepEngine:
             measurement_likelihood=update_stats.measurement_likelihood,
             random_particle_ratio=random_particle_ratio,
             random_particle_count=particle_filter.last_random_particle_count if resampled else 0,
+            roughening_particle_count=roughening_particle_count,
         )

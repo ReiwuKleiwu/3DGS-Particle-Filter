@@ -45,6 +45,12 @@ class TurtleBotLocalizationService:
         particle_filter_config = TurtleBotParticleFilterConfig(
             particle_count=settings.particle_filter.particle_count,
             resample_threshold_ratio=settings.particle_filter.resample_threshold_ratio,
+            roughening_enabled=settings.particle_filter.roughening_enabled,
+            roughening_mode=settings.particle_filter.roughening_mode,
+            roughening_ratio=settings.particle_filter.roughening_ratio,
+            roughening_sigma_x=settings.particle_filter.roughening_sigma_x,
+            roughening_sigma_y=settings.particle_filter.roughening_sigma_y,
+            roughening_sigma_yaw=settings.particle_filter.roughening_sigma_yaw,
         )
         prior = settings.initial_pose_prior
         motion_noise = MotionNoiseSettings(
@@ -127,6 +133,9 @@ class TurtleBotLocalizationService:
             "Particle filter initialized | "
             f"mode={self._runtime_state.localization_mode} | "
             f"particles={len(self._runtime_state.particle_filter.particles)} | "
+            f"roughening={'on' if self._runtime_state.particle_filter_config.roughening_enabled else 'off'} | "
+            f"roughening_mode={self._runtime_state.particle_filter_config.roughening_mode} | "
+            f"roughening_ratio={self._runtime_state.particle_filter_config.roughening_ratio:.3f} | "
             f"prior x={self._runtime_state.prior.mean.x:.3f}, "
             f"y={self._runtime_state.prior.mean.y:.3f}, "
             f"yaw={self._runtime_state.prior.mean.yaw:.3f}"
@@ -200,6 +209,7 @@ class TurtleBotLocalizationService:
             + f" | mode={self._runtime_state.localization_mode}"
             + f" | rand={step_result.random_particle_ratio:.3f}"
             + f" | injected={step_result.random_particle_count}"
+            + f" | roughened={step_result.roughening_particle_count}"
         )
         self._runtime_state.update_count += 1
 

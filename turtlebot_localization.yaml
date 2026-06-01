@@ -30,6 +30,12 @@ runtime:
 particle_filter:
   particle_count: 256
   resample_threshold_ratio: 0.4980265853932951
+  roughening_enabled: true
+  roughening_mode: always
+  roughening_ratio: 0.10
+  roughening_sigma_x: 0.20
+  roughening_sigma_y: 0.20
+  roughening_sigma_yaw: 0.20
 
 initial_pose_prior:
   mean:
