@@ -1,0 +1,39 @@
+experiment:
+  name: small_house_main_study
+  seeds: [1001, 1002, 1003, 1004, 1005]
+  frame_stride: 5
+  backend: vkdiff
+  port: 8000
+  restart_renderer: true
+  map_yaml: map.yaml
+  thresholds:
+    failure_translation_m: 0.5
+    failure_yaw_deg: 20.0
+    lost_translation_m: 0.75
+    lost_yaw_deg: 30.0
+    convergence_translation_m: 0.25
+    convergence_yaw_deg: 10.0
+    convergence_consecutive_frames: 5
+
+splats:
+  iterations: [1000, 2000, 3000, 5000, 8000, 12000, 18000, 30000]
+
+modes:
+  local:
+    particle_count: 500
+    prior_offset:
+      dx: 0.40
+      dy: 0.0
+      dyaw_degrees: 10.0
+  global:
+    particle_count: 2000
+    initialize_from_free_space: true
+
+scenarios:
+  - scenario_id: default_small_house
+    splat_csv: evaluation/configs/default_small_house_splats.csv
+    paths:
+      - path_id: route_1
+        manifest: evaluation/artifacts/datasets/default_small_house_route_1/manifest.json
+      - path_id: route_2
+        manifest: evaluation/artifacts/datasets/default_small_house_route_2/manifest.json

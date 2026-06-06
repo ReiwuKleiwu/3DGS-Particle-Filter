@@ -1,0 +1,3 @@
+splat_id,ply_path,training_iteration,quality_label,notes
+small_house_01000,/absolute/path/to/small_house_01000.ply,1000,iter_1000,
+small_house_30000,/absolute/path/to/small_house_30000.ply,30000,iter_30000,
