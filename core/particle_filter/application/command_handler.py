@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from core.config.models import MeasurementSettings, MotionNoiseSettings
+from core.config.models import MeasurementSettings, MotionNoiseSettings, RecoverySettings
 from core.particle_filter.application.runtime_state import LocalizationRuntimeState
 from core.particle_filter.domain.pose import Pose2D, Pose2DPrior
 from core.particle_filter.infrastructure.ros.observation import TurtleBotObservation
@@ -121,6 +121,25 @@ class LocalizationCommandHandler:
             if particle_count is not None:
                 reprocess_current_observation = True
 
+        roughening = command.get("roughening")
+        if roughening is not None:
+            self._runtime_state.particle_filter.reconfigure(
+                roughening_enabled=roughening.get("enabled"),
+                roughening_mode=roughening.get("mode"),
+                roughening_ratio=roughening.get("ratio"),
+                roughening_sigma_x=roughening.get("sigma_x"),
+                roughening_sigma_y=roughening.get("sigma_y"),
+                roughening_sigma_yaw=roughening.get("sigma_yaw"),
+            )
+            self._runtime_state.particle_filter_config = self._runtime_state.particle_filter.config
+            changed_fields.append(
+                "roughening=("
+                f"{'on' if self._runtime_state.particle_filter_config.roughening_enabled else 'off'}, "
+                f"{self._runtime_state.particle_filter_config.roughening_mode}, "
+                f"{self._runtime_state.particle_filter_config.roughening_ratio:.3f})"
+            )
+            reprocess_current_observation = True
+
         temperature = command.get("temperature")
         if temperature is not None:
             current = self._runtime_state.measurement
@@ -158,6 +177,32 @@ class LocalizationCommandHandler:
                 f"{self._runtime_state.motion_noise.y_meters:.3f}, "
                 f"{self._runtime_state.motion_noise.yaw_radians:.3f})"
             )
+
+        recovery = command.get("recovery")
+        if recovery is not None:
+            current = self._runtime_state.recovery_tracker.settings
+            self._runtime_state.recovery_tracker.settings = RecoverySettings(
+                enabled=bool(recovery.get("enabled", current.enabled)),
+                strategy=str(recovery.get("strategy", current.strategy)).strip().lower(),
+                alpha_slow=current.alpha_slow,
+                alpha_fast=current.alpha_fast,
+                random_particle_floor_ratio=float(
+                    recovery.get("random_particle_floor_ratio", current.random_particle_floor_ratio)
+                ),
+                random_particle_max_ratio=float(
+                    recovery.get("random_particle_max_ratio", current.random_particle_max_ratio)
+                ),
+                absolute_score_profiles=recovery.get(
+                    "absolute_score_profiles",
+                    current.absolute_score_profiles,
+                ),
+            )
+            changed_fields.append(
+                "recovery=("
+                f"{'on' if self._runtime_state.recovery_tracker.settings.enabled else 'off'}, "
+                f"{self._runtime_state.recovery_tracker.settings.strategy})"
+            )
+            reprocess_current_observation = True
 
         if changed_fields:
             print("Particle filter parameters updated from frontend | " + " | ".join(changed_fields))

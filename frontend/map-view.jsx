@@ -50,7 +50,45 @@ function computeCovarianceFromParticles(particles) {
   return { xx, yy, xy };
 }
 
-function MapView({ snapshot, mapMetadata, mapImage, layers, particleStyle, estimatedPath, groundTruthPath, onSetPrior }) {
+function drawTimedPath(context, worldToScreen, path, color, alpha, options = {}) {
+  if (!path || path.length < 2) return;
+  const nowSeconds = Date.now() / 1000;
+  const holdSeconds = options.holdSeconds ?? 20;
+  const fadeSeconds = Math.max(0.001, options.fadeSeconds ?? 10);
+  const lineDash = options.lineDash || [];
+  context.save();
+  context.lineWidth = options.lineWidth ?? 1.5;
+  context.setLineDash(lineDash);
+  for (let index = 1; index < path.length; index += 1) {
+    const from = path[index - 1];
+    const to = path[index];
+    const segmentAge = nowSeconds - (to.t ?? nowSeconds);
+    const fadeProgress = Math.max(0, Math.min(1, (segmentAge - holdSeconds) / fadeSeconds));
+    const segmentAlpha = alpha * (1 - fadeProgress);
+    if (segmentAlpha <= 0.01) continue;
+    const start = worldToScreen(from.x, from.y);
+    const end = worldToScreen(to.x, to.y);
+    context.strokeStyle = `rgba(${color[0]},${color[1]},${color[2]},${segmentAlpha})`;
+    context.beginPath();
+    context.moveTo(start.x, start.y);
+    context.lineTo(end.x, end.y);
+    context.stroke();
+  }
+  context.restore();
+}
+
+function MapView({
+  snapshot,
+  mapMetadata,
+  mapImage,
+  layers,
+  particleStyle,
+  estimatedPath,
+  groundTruthPath,
+  pathHoldSeconds = 20,
+  pathFadeSeconds = 10,
+  onSetPrior,
+}) {
   const wrapRef = React.useRef(null);
   const canvasRef = React.useRef(null);
   const [size, setSize] = React.useState({ w: 800, h: 600 });
@@ -270,28 +308,16 @@ function MapView({ snapshot, mapMetadata, mapImage, layers, particleStyle, estim
         context.strokeRect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
       }
 
-      if (layers.trail && groundTruthPath?.length > 1) {
-        context.strokeStyle = 'rgba(80,220,160,0.35)';
-        context.lineWidth = 1.5;
-        context.setLineDash([4, 4]);
-        context.beginPath();
-        groundTruthPath.forEach((point, index) => {
-          const screen = worldToScreen(point.x, point.y);
-          if (index === 0) context.moveTo(screen.x, screen.y); else context.lineTo(screen.x, screen.y);
+      if (layers.trail) {
+        drawTimedPath(context, worldToScreen, groundTruthPath, [80, 220, 160], 0.35, {
+          holdSeconds: pathHoldSeconds,
+          fadeSeconds: pathFadeSeconds,
+          lineDash: [4, 4],
         });
-        context.stroke();
-        context.setLineDash([]);
-      }
-
-      if (layers.trail && estimatedPath?.length > 1) {
-        context.strokeStyle = 'rgba(255,180,60,0.55)';
-        context.lineWidth = 1.5;
-        context.beginPath();
-        estimatedPath.forEach((point, index) => {
-          const screen = worldToScreen(point.x, point.y);
-          if (index === 0) context.moveTo(screen.x, screen.y); else context.lineTo(screen.x, screen.y);
+        drawTimedPath(context, worldToScreen, estimatedPath, [255, 180, 60], 0.55, {
+          holdSeconds: pathHoldSeconds,
+          fadeSeconds: pathFadeSeconds,
         });
-        context.stroke();
       }
 
       const particles = snapshot?.particles || [];
@@ -448,7 +474,7 @@ function MapView({ snapshot, mapMetadata, mapImage, layers, particleStyle, estim
 
     frameId = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frameId);
-  }, [snapshot, mapMetadata, mapImage, layers, particleStyle, priorDrag, size, view.scale, estimatedPath, groundTruthPath, worldToScreen, imageToScreen]);
+  }, [snapshot, mapMetadata, mapImage, layers, particleStyle, priorDrag, size, view.scale, estimatedPath, groundTruthPath, pathHoldSeconds, pathFadeSeconds, worldToScreen, imageToScreen]);
 
   return (
     <div ref={wrapRef} className="map-wrap">

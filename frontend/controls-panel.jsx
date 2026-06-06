@@ -247,3 +247,216 @@ function FilterControls({
 }
 
 Object.assign(window, { FilterControls, buildPriorPresets });
+
+function ParticleFilterModules({
+  filterConfig,
+  snapshot,
+  onRougheningChange,
+  onRecoveryChange,
+}) {
+  const capabilities = filterConfig?.capabilities || {};
+  const pf = filterConfig?.particle_filter || {};
+  const recovery = filterConfig?.recovery || {};
+  const metricName = filterConfig?.measurement?.metric_name || 'lpips';
+  const profile = recovery.absolute_score_profiles?.[metricName] || recovery.absolute_score_profiles?.default || {};
+  const roughened = snapshot?.metrics?.roughening_particle_count ?? 0;
+  const injected = snapshot?.metrics?.random_particle_count ?? 0;
+  const recoveryRatio = snapshot?.metrics?.random_particle_ratio ?? 0;
+
+  const [rougheningEnabled, setRougheningEnabled] = React.useState(Boolean(pf.roughening_enabled));
+  const [rougheningMode, setRougheningMode] = React.useState(pf.roughening_mode || 'resample_only');
+  const [rougheningRatio, setRougheningRatio] = React.useState(pf.roughening_ratio ?? 0);
+  const [rougheningSigmaX, setRougheningSigmaX] = React.useState(pf.roughening_sigma_x ?? 0.05);
+  const [rougheningSigmaY, setRougheningSigmaY] = React.useState(pf.roughening_sigma_y ?? 0.05);
+  const [rougheningSigmaYaw, setRougheningSigmaYaw] = React.useState(pf.roughening_sigma_yaw ?? 0.05);
+  const [recoveryEnabled, setRecoveryEnabled] = React.useState(Boolean(recovery.enabled));
+  const [recoveryStrategy, setRecoveryStrategy] = React.useState(recovery.strategy || 'absolute_score');
+  const [recoveryMaxRatio, setRecoveryMaxRatio] = React.useState(recovery.random_particle_max_ratio ?? 0.3);
+  const [bestThreshold, setBestThreshold] = React.useState(profile.best_score_threshold ?? 0.45);
+  const [medianThreshold, setMedianThreshold] = React.useState(profile.median_score_threshold ?? 0.48);
+  const [absoluteRatio, setAbsoluteRatio] = React.useState(profile.random_particle_ratio ?? 0.3);
+  const [badUpdates, setBadUpdates] = React.useState(profile.consecutive_bad_updates ?? 3);
+
+  React.useEffect(() => setRougheningEnabled(Boolean(pf.roughening_enabled)), [pf.roughening_enabled]);
+  React.useEffect(() => setRougheningMode(pf.roughening_mode || 'resample_only'), [pf.roughening_mode]);
+  React.useEffect(() => setRougheningRatio(pf.roughening_ratio ?? 0), [pf.roughening_ratio]);
+  React.useEffect(() => setRougheningSigmaX(pf.roughening_sigma_x ?? 0.05), [pf.roughening_sigma_x]);
+  React.useEffect(() => setRougheningSigmaY(pf.roughening_sigma_y ?? 0.05), [pf.roughening_sigma_y]);
+  React.useEffect(() => setRougheningSigmaYaw(pf.roughening_sigma_yaw ?? 0.05), [pf.roughening_sigma_yaw]);
+  React.useEffect(() => setRecoveryEnabled(Boolean(recovery.enabled)), [recovery.enabled]);
+  React.useEffect(() => setRecoveryStrategy(recovery.strategy || 'absolute_score'), [recovery.strategy]);
+  React.useEffect(() => setRecoveryMaxRatio(recovery.random_particle_max_ratio ?? 0.3), [recovery.random_particle_max_ratio]);
+  React.useEffect(() => setBestThreshold(profile.best_score_threshold ?? 0.45), [profile.best_score_threshold]);
+  React.useEffect(() => setMedianThreshold(profile.median_score_threshold ?? 0.48), [profile.median_score_threshold]);
+  React.useEffect(() => setAbsoluteRatio(profile.random_particle_ratio ?? 0.3), [profile.random_particle_ratio]);
+  React.useEffect(() => setBadUpdates(profile.consecutive_bad_updates ?? 3), [profile.consecutive_bad_updates]);
+
+  function submitRoughening(patch) {
+    onRougheningChange({
+      enabled: rougheningEnabled,
+      mode: rougheningMode,
+      ratio: rougheningRatio,
+      sigma_x: rougheningSigmaX,
+      sigma_y: rougheningSigmaY,
+      sigma_yaw: rougheningSigmaYaw,
+      ...patch,
+    });
+  }
+
+  function submitRecovery(patch) {
+    const profiles = {
+      ...(recovery.absolute_score_profiles || {}),
+      [metricName]: {
+        best_score_threshold: bestThreshold,
+        median_score_threshold: medianThreshold,
+        random_particle_ratio: absoluteRatio,
+        consecutive_bad_updates: badUpdates,
+        ...(patch.profile || {}),
+      },
+    };
+    const payload = {
+      enabled: recoveryEnabled,
+      strategy: recoveryStrategy,
+      random_particle_max_ratio: recoveryMaxRatio,
+      absolute_score_profiles: profiles,
+      ...patch,
+    };
+    delete payload.profile;
+    onRecoveryChange(payload);
+  }
+
+  return (
+    <div className="fc-wrap">
+      <div className="fc-section">
+        <div className="fc-h">ROUGHENING</div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>Module</span><span className="v">{rougheningEnabled ? 'enabled' : 'disabled'}</span></div>
+          <div className="fc-seg">
+            <button
+              className={rougheningEnabled ? 'on' : ''}
+              onClick={() => { setRougheningEnabled(true); submitRoughening({ enabled: true }); }}
+              disabled={!capabilities.pf_modules}
+            >on</button>
+            <button
+              className={!rougheningEnabled ? 'on' : ''}
+              onClick={() => { setRougheningEnabled(false); submitRoughening({ enabled: false }); }}
+              disabled={!capabilities.pf_modules}
+            >off</button>
+          </div>
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl">Mode</div>
+          <div className="fc-seg">
+            {['always', 'resample_only'].map((mode) => (
+              <button
+                key={mode}
+                className={rougheningMode === mode ? 'on' : ''}
+                onClick={() => { setRougheningMode(mode); submitRoughening({ mode }); }}
+                disabled={!capabilities.pf_modules || !rougheningEnabled}
+              >{mode.replace('_', ' ')}</button>
+            ))}
+          </div>
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>Ratio</span><span className="v">{(rougheningRatio * 100).toFixed(0)}% · last {roughened}</span></div>
+          <input className="fc-slider" type="range" min={0} max={0.3} step={0.01} value={rougheningRatio}
+            onChange={(event) => setRougheningRatio(Number(event.target.value))}
+            onMouseUp={(event) => submitRoughening({ ratio: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitRoughening({ ratio: Number(event.currentTarget.value) })}
+            disabled={!capabilities.pf_modules || !rougheningEnabled}
+          />
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>σx / σy</span><span className="v">{rougheningSigmaX.toFixed(2)} / {rougheningSigmaY.toFixed(2)} m</span></div>
+          <input className="fc-slider" type="range" min={0} max={0.3} step={0.01} value={rougheningSigmaX}
+            onChange={(event) => setRougheningSigmaX(Number(event.target.value))}
+            onMouseUp={(event) => submitRoughening({ sigma_x: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitRoughening({ sigma_x: Number(event.currentTarget.value) })}
+            disabled={!capabilities.pf_modules || !rougheningEnabled}
+          />
+          <input className="fc-slider" type="range" min={0} max={0.3} step={0.01} value={rougheningSigmaY}
+            onChange={(event) => setRougheningSigmaY(Number(event.target.value))}
+            onMouseUp={(event) => submitRoughening({ sigma_y: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitRoughening({ sigma_y: Number(event.currentTarget.value) })}
+            disabled={!capabilities.pf_modules || !rougheningEnabled}
+          />
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>σθ</span><span className="v">{(rougheningSigmaYaw * 180 / Math.PI).toFixed(1)}°</span></div>
+          <input className="fc-slider" type="range" min={0} max={0.5} step={0.01} value={rougheningSigmaYaw}
+            onChange={(event) => setRougheningSigmaYaw(Number(event.target.value))}
+            onMouseUp={(event) => submitRoughening({ sigma_yaw: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitRoughening({ sigma_yaw: Number(event.currentTarget.value) })}
+            disabled={!capabilities.pf_modules || !rougheningEnabled}
+          />
+        </div>
+      </div>
+
+      <div className="fc-section">
+        <div className="fc-h">RECOVERY</div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>Module</span><span className="v">{recoveryEnabled ? 'enabled' : 'disabled'}</span></div>
+          <div className="fc-seg">
+            <button className={recoveryEnabled ? 'on' : ''} onClick={() => { setRecoveryEnabled(true); submitRecovery({ enabled: true }); }} disabled={!capabilities.pf_modules}>on</button>
+            <button className={!recoveryEnabled ? 'on' : ''} onClick={() => { setRecoveryEnabled(false); submitRecovery({ enabled: false }); }} disabled={!capabilities.pf_modules}>off</button>
+          </div>
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl">Strategy</div>
+          <div className="fc-seg">
+            {['absolute_score', 'augmented_mcl'].map((strategy) => (
+              <button
+                key={strategy}
+                className={recoveryStrategy === strategy ? 'on' : ''}
+                onClick={() => { setRecoveryStrategy(strategy); submitRecovery({ strategy }); }}
+                disabled={!capabilities.pf_modules || !recoveryEnabled}
+              >{strategy.replace('_', ' ')}</button>
+            ))}
+          </div>
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>Max global injection</span><span className="v">{(recoveryMaxRatio * 100).toFixed(0)}% · last {injected}</span></div>
+          <input className="fc-slider" type="range" min={0} max={0.8} step={0.05} value={recoveryMaxRatio}
+            onChange={(event) => setRecoveryMaxRatio(Number(event.target.value))}
+            onMouseUp={(event) => submitRecovery({ random_particle_max_ratio: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitRecovery({ random_particle_max_ratio: Number(event.currentTarget.value) })}
+            disabled={!capabilities.pf_modules || !recoveryEnabled}
+          />
+          <div className="fc-hint">Current recovery ratio: {(recoveryRatio * 100).toFixed(1)}%</div>
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>{metricName} thresholds</span><span className="v">best {bestThreshold.toFixed(2)} · med {medianThreshold.toFixed(2)}</span></div>
+          <input className="fc-slider" type="range" min={0.1} max={0.8} step={0.01} value={bestThreshold}
+            onChange={(event) => setBestThreshold(Number(event.target.value))}
+            onMouseUp={(event) => submitRecovery({ profile: { best_score_threshold: Number(event.currentTarget.value) } })}
+            onTouchEnd={(event) => submitRecovery({ profile: { best_score_threshold: Number(event.currentTarget.value) } })}
+            disabled={!capabilities.pf_modules || !recoveryEnabled || recoveryStrategy !== 'absolute_score'}
+          />
+          <input className="fc-slider" type="range" min={0.1} max={0.8} step={0.01} value={medianThreshold}
+            onChange={(event) => setMedianThreshold(Number(event.target.value))}
+            onMouseUp={(event) => submitRecovery({ profile: { median_score_threshold: Number(event.currentTarget.value) } })}
+            onTouchEnd={(event) => submitRecovery({ profile: { median_score_threshold: Number(event.currentTarget.value) } })}
+            disabled={!capabilities.pf_modules || !recoveryEnabled || recoveryStrategy !== 'absolute_score'}
+          />
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>Absolute injection</span><span className="v">{(absoluteRatio * 100).toFixed(0)}% after {badUpdates} bad</span></div>
+          <input className="fc-slider" type="range" min={0} max={0.8} step={0.05} value={absoluteRatio}
+            onChange={(event) => setAbsoluteRatio(Number(event.target.value))}
+            onMouseUp={(event) => submitRecovery({ profile: { random_particle_ratio: Number(event.currentTarget.value) } })}
+            onTouchEnd={(event) => submitRecovery({ profile: { random_particle_ratio: Number(event.currentTarget.value) } })}
+            disabled={!capabilities.pf_modules || !recoveryEnabled || recoveryStrategy !== 'absolute_score'}
+          />
+          <input className="fc-slider" type="range" min={1} max={10} step={1} value={badUpdates}
+            onChange={(event) => setBadUpdates(Number(event.target.value))}
+            onMouseUp={(event) => submitRecovery({ profile: { consecutive_bad_updates: Number(event.currentTarget.value) } })}
+            onTouchEnd={(event) => submitRecovery({ profile: { consecutive_bad_updates: Number(event.currentTarget.value) } })}
+            disabled={!capabilities.pf_modules || !recoveryEnabled || recoveryStrategy !== 'absolute_score'}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { ParticleFilterModules });

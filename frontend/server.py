@@ -94,6 +94,28 @@ def load_filter_config() -> dict:
         },
         "measurement": {"metric_name": "hybrid", "temperature": 0.02, "packed": False, "radius_clip": 3.0},
         "motion_noise": {"x_meters": 0.02, "y_meters": 0.02, "yaw_radians": 0.017453292519943295},
+        "particle_filter": {
+            "roughening_enabled": False,
+            "roughening_mode": "resample_only",
+            "roughening_ratio": 0.0,
+            "roughening_sigma_x": 0.05,
+            "roughening_sigma_y": 0.05,
+            "roughening_sigma_yaw": 0.05,
+        },
+        "recovery": {
+            "enabled": True,
+            "strategy": "absolute_score",
+            "random_particle_floor_ratio": 0.0,
+            "random_particle_max_ratio": 0.30,
+            "absolute_score_profiles": {
+                "lpips": {
+                    "best_score_threshold": 0.45,
+                    "median_score_threshold": 0.48,
+                    "random_particle_ratio": 0.30,
+                    "consecutive_bad_updates": 3,
+                }
+            },
+        },
         "runtime": {"paused": False},
         "initialization": {"mode": "local"},
     }
@@ -107,6 +129,7 @@ def load_filter_config() -> dict:
     motion_noise = raw_config.get("motion_noise", {})
     particle_filter = raw_config.get("particle_filter", {})
     initialization = raw_config.get("initialization", {})
+    recovery = raw_config.get("recovery", {})
     return {
         "particle_count": int(particle_filter.get("particle_count", defaults["particle_count"])),
         "resample_threshold_ratio": float(particle_filter.get("resample_threshold_ratio", defaults["resample_threshold_ratio"])),
@@ -131,6 +154,28 @@ def load_filter_config() -> dict:
             "y_meters": float(motion_noise.get("y_meters", defaults["motion_noise"]["y_meters"])),
             "yaw_radians": float(motion_noise.get("yaw_radians", defaults["motion_noise"]["yaw_radians"])),
         },
+        "particle_filter": {
+            "roughening_enabled": bool(particle_filter.get("roughening_enabled", defaults["particle_filter"]["roughening_enabled"])),
+            "roughening_mode": str(particle_filter.get("roughening_mode", defaults["particle_filter"]["roughening_mode"])).strip().lower(),
+            "roughening_ratio": float(particle_filter.get("roughening_ratio", defaults["particle_filter"]["roughening_ratio"])),
+            "roughening_sigma_x": float(particle_filter.get("roughening_sigma_x", defaults["particle_filter"]["roughening_sigma_x"])),
+            "roughening_sigma_y": float(particle_filter.get("roughening_sigma_y", defaults["particle_filter"]["roughening_sigma_y"])),
+            "roughening_sigma_yaw": float(particle_filter.get("roughening_sigma_yaw", defaults["particle_filter"]["roughening_sigma_yaw"])),
+        },
+        "recovery": {
+            "enabled": bool(recovery.get("enabled", defaults["recovery"]["enabled"])),
+            "strategy": str(recovery.get("strategy", defaults["recovery"]["strategy"])).strip().lower(),
+            "random_particle_floor_ratio": float(
+                recovery.get("random_particle_floor_ratio", defaults["recovery"]["random_particle_floor_ratio"])
+            ),
+            "random_particle_max_ratio": float(
+                recovery.get("random_particle_max_ratio", defaults["recovery"]["random_particle_max_ratio"])
+            ),
+            "absolute_score_profiles": recovery.get(
+                "absolute_score_profiles",
+                defaults["recovery"]["absolute_score_profiles"],
+            ),
+        },
         "runtime": {"paused": False},
         "initialization": {
             "mode": str(initialization.get("mode", defaults["initialization"]["mode"])).strip().lower(),
@@ -153,6 +198,7 @@ def capabilities_payload() -> dict:
         "pause_resume": True,
         "single_step": True,
         "localization_mode": True,
+        "pf_modules": True,
     }
 
 
@@ -166,6 +212,17 @@ def current_filter_config() -> dict:
                 config["particle_count"] = int(filter_state["particle_count"])
             if "resample_threshold_ratio" in filter_state:
                 config["resample_threshold_ratio"] = float(filter_state["resample_threshold_ratio"])
+            particle_filter = filter_state.get("particle_filter") or {}
+            for key in (
+                "roughening_enabled",
+                "roughening_mode",
+                "roughening_ratio",
+                "roughening_sigma_x",
+                "roughening_sigma_y",
+                "roughening_sigma_yaw",
+            ):
+                if key in particle_filter:
+                    config["particle_filter"][key] = particle_filter[key]
             measurement = filter_state.get("measurement") or {}
             if "temperature" in measurement:
                 config["measurement"]["temperature"] = float(measurement["temperature"])
@@ -179,6 +236,16 @@ def current_filter_config() -> dict:
             initialization = filter_state.get("initialization") or {}
             if "mode" in initialization:
                 config["initialization"]["mode"] = str(initialization["mode"])
+            recovery = filter_state.get("recovery") or {}
+            for key in (
+                "enabled",
+                "strategy",
+                "random_particle_floor_ratio",
+                "random_particle_max_ratio",
+                "absolute_score_profiles",
+            ):
+                if key in recovery:
+                    config["recovery"][key] = recovery[key]
     config["capabilities"] = capabilities_payload()
     return config
 
@@ -361,6 +428,36 @@ class VisualizationRequestHandler(BaseHTTPRequestHandler):
                     "y_meters": float(motion_noise.get("y_meters")),
                     "yaw_radians": float(motion_noise.get("yaw_radians")),
                 }
+            if "roughening" in payload:
+                roughening = payload["roughening"]
+                roughening_command: dict = {}
+                if "enabled" in roughening:
+                    roughening_command["enabled"] = bool(roughening["enabled"])
+                if "mode" in roughening:
+                    mode = str(roughening["mode"]).strip().lower()
+                    if mode not in {"resample_only", "always"}:
+                        return None, f"Unsupported roughening mode: {mode!r}"
+                    roughening_command["mode"] = mode
+                for key in ("ratio", "sigma_x", "sigma_y", "sigma_yaw"):
+                    if key in roughening:
+                        roughening_command[key] = float(roughening[key])
+                command["roughening"] = roughening_command
+            if "recovery" in payload:
+                recovery = payload["recovery"]
+                recovery_command: dict = {}
+                if "enabled" in recovery:
+                    recovery_command["enabled"] = bool(recovery["enabled"])
+                if "strategy" in recovery:
+                    strategy = str(recovery["strategy"]).strip().lower()
+                    if strategy not in {"augmented_mcl", "absolute_score"}:
+                        return None, f"Unsupported recovery strategy: {strategy!r}"
+                    recovery_command["strategy"] = strategy
+                for key in ("random_particle_floor_ratio", "random_particle_max_ratio"):
+                    if key in recovery:
+                        recovery_command[key] = float(recovery[key])
+                if "absolute_score_profiles" in recovery:
+                    recovery_command["absolute_score_profiles"] = recovery["absolute_score_profiles"]
+                command["recovery"] = recovery_command
             if len(command) <= 2:
                 return None, "No parameter fields provided"
             return command, None

@@ -69,3 +69,6 @@ frontend_new/uploads/
 *.onnx
 *.pt
 *.pth
+
+# Deprecated Files
+core/replay_tuning

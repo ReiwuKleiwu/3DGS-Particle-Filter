@@ -25,8 +25,8 @@ TURTLEBOT_RGB_CAMERA_RPY_RAD = tuple(math.radians(v) for v in TURTLEBOT_RGB_CAME
 
 
 # Empirical map -> splat correction found by perturbation scoring.
-DEFAULT_SPLAT_MAP_X = 0.0
-DEFAULT_SPLAT_MAP_Y = 0.0
+DEFAULT_SPLAT_MAP_X = 0.034
+DEFAULT_SPLAT_MAP_Y = -0.028
 DEFAULT_SPLAT_MAP_YAW = 0.0
 
 

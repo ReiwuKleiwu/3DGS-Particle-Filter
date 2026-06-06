@@ -1,5 +1,7 @@
 const POLL_INTERVAL_MS = 50;
 const MAX_PATH_POINTS = 600;
+const PATH_HOLD_SECONDS = 20;
+const PATH_FADE_SECONDS = 10;
 const MAX_ERROR_POINTS = 1200;
 const DEFAULT_LAYERS = {
   grid: true,
@@ -84,6 +86,14 @@ function appendCapped(history, point, maxLength) {
   return next.length > maxLength ? next.slice(next.length - maxLength) : next;
 }
 
+function appendTimedPathPoint(history, point, maxLength, nowSeconds) {
+  const maxAgeSeconds = PATH_HOLD_SECONDS + PATH_FADE_SECONDS;
+  const next = history
+    .filter((historyPoint) => nowSeconds - (historyPoint.t ?? nowSeconds) <= maxAgeSeconds)
+    .concat({ ...point, t: nowSeconds });
+  return next.length > maxLength ? next.slice(next.length - maxLength) : next;
+}
+
 function poseToWorldText(pose) {
   if (!pose) return ['x: —', 'y: —', 'θ: —'];
   return [
@@ -115,6 +125,14 @@ function mergeLiveFilterConfig(baseConfig, filterState) {
     initialization: {
       ...(baseConfig.initialization || {}),
       ...(filterState.initialization || {}),
+    },
+    particle_filter: {
+      ...(baseConfig.particle_filter || {}),
+      ...(filterState.particle_filter || {}),
+    },
+    recovery: {
+      ...(baseConfig.recovery || {}),
+      ...(filterState.recovery || {}),
     },
   };
 }
@@ -213,10 +231,20 @@ function App() {
         const nextError = computePoseError(nextSnapshot.estimated_pose, nextSnapshot.ground_truth_pose);
         const timestamp = nextSnapshot.received_at_unix_seconds || Date.now() / 1000;
         if (nextSnapshot.estimated_pose) {
-          setEstimatedPath((history) => appendCapped(history, { x: nextSnapshot.estimated_pose.x, y: nextSnapshot.estimated_pose.y }, MAX_PATH_POINTS));
+          setEstimatedPath((history) => appendTimedPathPoint(
+            history,
+            { x: nextSnapshot.estimated_pose.x, y: nextSnapshot.estimated_pose.y },
+            MAX_PATH_POINTS,
+            timestamp,
+          ));
         }
         if (nextSnapshot.ground_truth_pose) {
-          setGroundTruthPath((history) => appendCapped(history, { x: nextSnapshot.ground_truth_pose.x, y: nextSnapshot.ground_truth_pose.y }, MAX_PATH_POINTS));
+          setGroundTruthPath((history) => appendTimedPathPoint(
+            history,
+            { x: nextSnapshot.ground_truth_pose.x, y: nextSnapshot.ground_truth_pose.y },
+            MAX_PATH_POINTS,
+            timestamp,
+          ));
         }
         if (nextError) {
           setErrorHistory((history) => appendCapped(history, {
@@ -414,6 +442,36 @@ function App() {
     );
   }
 
+  async function handleRougheningChange(roughening) {
+    const nextRoughening = {
+      roughening_enabled: roughening.enabled,
+      roughening_mode: roughening.mode,
+      roughening_ratio: roughening.ratio,
+      roughening_sigma_x: roughening.sigma_x,
+      roughening_sigma_y: roughening.sigma_y,
+      roughening_sigma_yaw: roughening.sigma_yaw,
+    };
+    await submitControlCommand(
+      { type: 'set_particle_filter_parameters', roughening },
+      `Roughening ${roughening.enabled ? 'on' : 'off'}`,
+      (current) => ({
+        ...current,
+        particle_filter: { ...(current?.particle_filter || {}), ...nextRoughening },
+      }),
+    );
+  }
+
+  async function handleRecoveryChange(recovery) {
+    await submitControlCommand(
+      { type: 'set_particle_filter_parameters', recovery },
+      `Recovery ${recovery.enabled ? 'on' : 'off'}`,
+      (current) => ({
+        ...current,
+        recovery: { ...(current?.recovery || {}), ...recovery },
+      }),
+    );
+  }
+
   async function handleTogglePause() {
     const paused = Boolean(liveFilterConfig?.runtime?.paused);
     await submitControlCommand(
@@ -545,6 +603,8 @@ function App() {
             particleStyle="dot"
             estimatedPath={estimatedPath}
             groundTruthPath={groundTruthPath}
+            pathHoldSeconds={PATH_HOLD_SECONDS}
+            pathFadeSeconds={PATH_FADE_SECONDS}
             onSetPrior={handleSetPrior}
           />
         </div>
@@ -553,6 +613,7 @@ function App() {
           <div className="col-tabs">
             <button className={`col-tab ${rightTab === 'views' ? 'on' : ''}`} onClick={() => setRightTab('views')}>Views <span className="badge">cam · err</span></button>
             <button className={`col-tab ${rightTab === 'filter' ? 'on' : ''}`} onClick={() => setRightTab('filter')}>Filter <span className="badge">params</span></button>
+            <button className={`col-tab ${rightTab === 'modules' ? 'on' : ''}`} onClick={() => setRightTab('modules')}>Modules <span className="badge">pf</span></button>
           </div>
 
           {rightTab === 'views' && (
@@ -612,6 +673,17 @@ function App() {
                 onMotionNoiseChange={handleMotionNoiseChange}
                 onTogglePause={handleTogglePause}
                 onStepOnce={handleStepOnce}
+              />
+            </div>
+          )}
+
+          {rightTab === 'modules' && (
+            <div className="right-pane scroll">
+              <ParticleFilterModules
+                filterConfig={liveFilterConfig || filterConfig}
+                snapshot={snapshot}
+                onRougheningChange={handleRougheningChange}
+                onRecoveryChange={handleRecoveryChange}
               />
             </div>
           )}

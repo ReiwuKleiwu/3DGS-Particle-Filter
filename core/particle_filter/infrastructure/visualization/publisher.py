@@ -137,6 +137,14 @@ class LatestOnlyHttpVisualizationPublisher:
             "filter_state": {
                 "particle_count": snapshot.filter_state.particle_count,
                 "resample_threshold_ratio": snapshot.filter_state.resample_threshold_ratio,
+                "particle_filter": {
+                    "roughening_enabled": snapshot.filter_state.roughening_enabled,
+                    "roughening_mode": snapshot.filter_state.roughening_mode,
+                    "roughening_ratio": snapshot.filter_state.roughening_ratio,
+                    "roughening_sigma_x": snapshot.filter_state.roughening_sigma_x,
+                    "roughening_sigma_y": snapshot.filter_state.roughening_sigma_y,
+                    "roughening_sigma_yaw": snapshot.filter_state.roughening_sigma_yaw,
+                },
                 "measurement": {
                     "temperature": snapshot.filter_state.temperature,
                 },
@@ -147,6 +155,13 @@ class LatestOnlyHttpVisualizationPublisher:
                 },
                 "runtime": {
                     "paused": snapshot.filter_state.paused,
+                },
+                "recovery": {
+                    "enabled": snapshot.filter_state.recovery_enabled,
+                    "strategy": snapshot.filter_state.recovery_strategy,
+                    "random_particle_floor_ratio": snapshot.filter_state.recovery_random_particle_floor_ratio,
+                    "random_particle_max_ratio": snapshot.filter_state.recovery_random_particle_max_ratio,
+                    "absolute_score_profiles": snapshot.filter_state.recovery_absolute_score_profiles,
                 },
                 "initialization": {
                     "mode": snapshot.filter_state.localization_mode,

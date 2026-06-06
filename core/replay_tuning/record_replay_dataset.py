@@ -14,17 +14,26 @@ from PIL import Image
 
 import rclpy
 from action_msgs.msg import GoalStatus
-from geometry_msgs.msg import PoseStamped, Twist
+from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped, Twist
 from nav_msgs.msg import Odometry
 from nav2_msgs.action import NavigateToPose
 from rclpy.action import ActionClient
 from rclpy.duration import Duration
 from rclpy.node import Node
+from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
 from rclpy.time import Time
 from sensor_msgs.msg import CameraInfo, Image as RosImage
 from tf2_ros import Buffer, TransformException, TransformListener
 
 from core.replay_tuning.paths import DATASETS_DIR
+
+
+REFERENCE_POSE_QOS = QoSProfile(
+    history=HistoryPolicy.KEEP_LAST,
+    depth=20,
+    reliability=ReliabilityPolicy.RELIABLE,
+    durability=DurabilityPolicy.TRANSIENT_LOCAL,
+)
 
 
 def ros_image_to_numpy(msg: RosImage) -> np.ndarray:
@@ -54,6 +63,10 @@ def stamp_to_dict(stamp) -> dict:
     return {"sec": int(stamp.sec), "nanosec": int(stamp.nanosec)}
 
 
+def stamp_to_nanoseconds(stamp) -> int:
+    return int(stamp.sec) * 1_000_000_000 + int(stamp.nanosec)
+
+
 def yaw_from_quaternion_xyzw(x: float, y: float, z: float, w: float) -> float:
     siny_cosp = 2.0 * (w * z + x * y)
     cosy_cosp = 1.0 - 2.0 * (y * y + z * z)
@@ -65,6 +78,25 @@ def yaw_to_quaternion(yaw: float) -> tuple[float, float, float, float]:
     return 0.0, 0.0, math.sin(half), math.cos(half)
 
 
+def pose_dict_from_pose(pose, *, frame_id: str | None, stamp) -> dict:
+    q = pose.orientation
+    payload = {
+        "x": float(pose.position.x),
+        "y": float(pose.position.y),
+        "z": float(pose.position.z),
+        "qx": float(q.x),
+        "qy": float(q.y),
+        "qz": float(q.z),
+        "qw": float(q.w),
+        "yaw": yaw_from_quaternion_xyzw(float(q.x), float(q.y), float(q.z), float(q.w)),
+    }
+    if frame_id is not None:
+        payload["frame_id"] = frame_id
+    if stamp is not None:
+        payload["stamp"] = stamp_to_dict(stamp)
+    return payload
+
+
 class ReplayRecorder(Node):
     def __init__(self, args: argparse.Namespace):
         super().__init__("record_replay_dataset")
@@ -72,6 +104,7 @@ class ReplayRecorder(Node):
         self.image_msg = None
         self.camera_info_msg = None
         self.odom_msg = None
+        self.amcl_pose_msg = None
         self.cmd_vel_msg = None
         self.last_recorded_image_stamp = None
         self.sequence = 0
@@ -84,6 +117,12 @@ class ReplayRecorder(Node):
         self.create_subscription(RosImage, args.image_topic, self._image_callback, 10)
         self.create_subscription(CameraInfo, args.camera_info_topic, self._camera_info_callback, 10)
         self.create_subscription(Odometry, args.odom_topic, self._odom_callback, 20)
+        self.create_subscription(
+            PoseWithCovarianceStamped,
+            args.amcl_pose_topic,
+            self._amcl_pose_callback,
+            REFERENCE_POSE_QOS,
+        )
         self.create_subscription(Twist, args.cmd_vel_topic, self._cmd_vel_callback, 50)
 
         self.nav_client = ActionClient(self, NavigateToPose, args.navigate_to_pose_action)
@@ -104,6 +143,9 @@ class ReplayRecorder(Node):
     def _odom_callback(self, msg: Odometry) -> None:
         self.odom_msg = msg
 
+    def _amcl_pose_callback(self, msg: PoseWithCovarianceStamped) -> None:
+        self.amcl_pose_msg = msg
+
     def _cmd_vel_callback(self, msg: Twist) -> None:
         self.cmd_vel_msg = msg
         self.cmd_vel_history.append(
@@ -122,7 +164,13 @@ class ReplayRecorder(Node):
         deadline = time.monotonic() + self.args.timeout
         while rclpy.ok() and time.monotonic() < deadline:
             rclpy.spin_once(self, timeout_sec=0.05)
-            if self.image_msg is not None and self.camera_info_msg is not None and self.odom_msg is not None:
+            reference_ready = self.args.reference_pose_source != "amcl" or self.amcl_pose_msg is not None
+            if (
+                self.image_msg is not None
+                and self.camera_info_msg is not None
+                and self.odom_msg is not None
+                and reference_ready
+            ):
                 return
         missing = []
         if self.image_msg is None:
@@ -131,26 +179,52 @@ class ReplayRecorder(Node):
             missing.append(self.args.camera_info_topic)
         if self.odom_msg is None:
             missing.append(self.args.odom_topic)
+        if self.args.reference_pose_source == "amcl" and self.amcl_pose_msg is None:
+            missing.append(self.args.amcl_pose_topic)
         raise TimeoutError(f"Timed out waiting for: {', '.join(missing)}")
 
     def current_odom_pose(self) -> dict | None:
         if self.odom_msg is None:
             return None
-        pose = self.odom_msg.pose.pose
-        q = pose.orientation
-        return {
-            "x": float(pose.position.x),
-            "y": float(pose.position.y),
-            "z": float(pose.position.z),
-            "qx": float(q.x),
-            "qy": float(q.y),
-            "qz": float(q.z),
-            "qw": float(q.w),
-            "yaw": yaw_from_quaternion_xyzw(float(q.x), float(q.y), float(q.z), float(q.w)),
-            "frame_id": self.odom_msg.header.frame_id,
-            "child_frame_id": self.odom_msg.child_frame_id,
-            "stamp": stamp_to_dict(self.odom_msg.header.stamp),
-        }
+        payload = pose_dict_from_pose(
+            self.odom_msg.pose.pose,
+            frame_id=self.odom_msg.header.frame_id,
+            stamp=self.odom_msg.header.stamp,
+        )
+        payload["child_frame_id"] = self.odom_msg.child_frame_id
+        return payload
+
+    def lookup_reference_pose(self) -> tuple[dict, dict]:
+        if self.args.reference_pose_source == "amcl":
+            return self.latest_amcl_pose()
+        return self.lookup_map_pose()
+
+    def latest_amcl_pose(self) -> tuple[dict, dict]:
+        if self.amcl_pose_msg is None:
+            raise TimeoutError(f"No AMCL pose received on {self.args.amcl_pose_topic}")
+        pose = pose_dict_from_pose(
+            self.amcl_pose_msg.pose.pose,
+            frame_id=self.amcl_pose_msg.header.frame_id,
+            stamp=self.amcl_pose_msg.header.stamp,
+        )
+        offset_ms = None
+        if self.image_msg is not None:
+            offset_ms = (
+                stamp_to_nanoseconds(self.amcl_pose_msg.header.stamp)
+                - stamp_to_nanoseconds(self.image_msg.header.stamp)
+            ) / 1_000_000.0
+        return (
+            pose,
+            {
+                "reference_pose_source": "amcl",
+                "reference_topic": self.args.amcl_pose_topic,
+                "amcl_stamp": stamp_to_dict(self.amcl_pose_msg.header.stamp),
+                "amcl_time_offset_ms": offset_ms,
+                "resolved_tf_time": "amcl_latest",
+                "tf_stamp": None,
+                "tf_error": None,
+            },
+        )
 
     def lookup_map_pose(self) -> tuple[dict, dict]:
         if self.args.tf_time == "latest":
@@ -214,7 +288,7 @@ class ReplayRecorder(Node):
         if stamp_key == self.last_recorded_image_stamp:
             return False
 
-        map_pose, tf_metadata = self.lookup_map_pose()
+        map_pose, reference_metadata = self.lookup_reference_pose()
         odom_pose = self.current_odom_pose()
         image_name = f"frame_{self.sequence:06d}.png"
         image_path = self.images_dir / image_name
@@ -232,7 +306,9 @@ class ReplayRecorder(Node):
                 "map_pose": map_pose,
                 "odom_pose": odom_pose,
                 "image_stamp": stamp_to_dict(self.image_msg.header.stamp),
-                "tf_metadata": tf_metadata,
+                "tf_metadata": reference_metadata,
+                "reference_metadata": reference_metadata,
+                "reference_pose_source": self.args.reference_pose_source,
             }
         )
         self.last_recorded_image_stamp = stamp_key
@@ -240,6 +316,7 @@ class ReplayRecorder(Node):
         self.get_logger().info(
             f"recorded frame {self.sequence:04d} "
             f"x={map_pose['x']:.3f}, y={map_pose['y']:.3f}, yaw={math.degrees(map_pose['yaw']):.1f}deg"
+            f" | ref={self.args.reference_pose_source}"
         )
         return True
 
@@ -358,7 +435,26 @@ class ReplayRecorder(Node):
                 break
             rclpy.spin_once(self, timeout_sec=0.02)
         else:
-            raise TimeoutError("Timed out waiting for Nav2 goal result")
+            last_feedback = self.nav_feedback_history[-1] if self.nav_feedback_history else None
+            self.nav_result = {
+                "status": None,
+                "status_name": "TIMED_OUT",
+                "finished_at_sec": self.get_clock().now().nanoseconds / 1e9,
+                "goal_timeout_sec": self.args.goal_timeout,
+                "last_distance_remaining": (
+                    None if last_feedback is None else last_feedback.get("distance_remaining")
+                ),
+                "last_feedback": last_feedback,
+            }
+            message = (
+                "Timed out waiting for Nav2 goal result; saving partial replay dataset "
+                f"with {len(self.frames)} recorded frames"
+            )
+            if last_feedback is not None:
+                message += f" and last distance_remaining={last_feedback.get('distance_remaining'):.3f}m"
+            if self.args.strict_nav_result:
+                raise TimeoutError(message)
+            self.get_logger().warn(message)
 
         final_deadline = time.monotonic() + self.args.final_settle_time
         while rclpy.ok() and time.monotonic() < final_deadline:
@@ -389,6 +485,7 @@ class ReplayRecorder(Node):
 
         manifest = {
             "ply_path": str(self.args.ply.resolve()),
+            "reference_pose_source": self.args.reference_pose_source,
             "camera_info": {
                 "width": int(camera_info.width),
                 "height": int(camera_info.height),
@@ -402,6 +499,8 @@ class ReplayRecorder(Node):
                     "odom_pose": frame["odom_pose"],
                     "image_stamp": frame["image_stamp"],
                     "tf_metadata": frame["tf_metadata"],
+                    "reference_metadata": frame["reference_metadata"],
+                    "reference_pose_source": frame["reference_pose_source"],
                 }
                 for frame in self.frames
             ],
@@ -440,6 +539,8 @@ class ReplayRecorder(Node):
                     "image_topic": self.args.image_topic,
                     "camera_info_topic": self.args.camera_info_topic,
                     "odom_topic": self.args.odom_topic,
+                    "amcl_pose_topic": self.args.amcl_pose_topic,
+                    "reference_pose_source": self.args.reference_pose_source,
                     "map_frame": self.args.map_frame,
                     "base_frame": self.args.base_frame,
                     "navigate_to_pose_action": self.args.navigate_to_pose_action,
@@ -489,10 +590,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--image-topic", default="/oakd/rgb/preview/image_raw")
     parser.add_argument("--camera-info-topic", default="/oakd/rgb/preview/camera_info")
     parser.add_argument("--odom-topic", default="/odom")
+    parser.add_argument("--amcl-pose-topic", default="/amcl_pose")
     parser.add_argument("--cmd-vel-topic", default="/cmd_vel")
     parser.add_argument("--navigate-to-pose-action", default="/navigate_to_pose")
     parser.add_argument("--map-frame", default="map")
     parser.add_argument("--base-frame", default="base_link")
+    parser.add_argument(
+        "--reference-pose-source",
+        choices=["tf", "amcl"],
+        default="tf",
+        help="Reference pose recorded as replay pose. 'tf' uses map->base TF; 'amcl' uses the latest AMCL pose.",
+    )
     parser.add_argument("--tf-time", choices=["auto", "image", "latest"], default="auto")
     parser.add_argument("--tf-timeout", type=float, default=0.5)
     parser.add_argument("--out-dir", type=Path, default=DATASETS_DIR)
@@ -502,6 +610,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--goal-y", type=float, required=True)
     parser.add_argument("--goal-yaw", type=float, required=True, help="Goal yaw in radians.")
     parser.add_argument("--goal-timeout", type=float, default=180.0)
+    parser.add_argument(
+        "--strict-nav-result",
+        action="store_true",
+        help="Fail without writing outputs if Nav2 does not return a successful result before --goal-timeout.",
+    )
     parser.add_argument("--record-rate-hz", type=float, default=2.0)
     parser.add_argument("--settle-time", type=float, default=1.0)
     parser.add_argument("--final-settle-time", type=float, default=1.0)

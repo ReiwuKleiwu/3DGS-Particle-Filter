@@ -21,10 +21,21 @@ class VisualizationParticle:
 class VisualizationFilterState:
     particle_count: int
     resample_threshold_ratio: float
+    roughening_enabled: bool
+    roughening_mode: str
+    roughening_ratio: float
+    roughening_sigma_x: float
+    roughening_sigma_y: float
+    roughening_sigma_yaw: float
     temperature: float
     motion_noise_x_meters: float
     motion_noise_y_meters: float
     motion_noise_yaw_radians: float
+    recovery_enabled: bool
+    recovery_strategy: str
+    recovery_random_particle_floor_ratio: float
+    recovery_random_particle_max_ratio: float
+    recovery_absolute_score_profiles: dict[str, dict[str, float | int]]
     paused: bool
     localization_mode: str
 

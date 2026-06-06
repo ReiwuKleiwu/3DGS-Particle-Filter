@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 import time
@@ -13,7 +14,7 @@ import numpy as np
 import torch
 
 from core.rendering.backends.base import RendererBackend
-from core.rendering.backends.vkdiff_scene import camera_entry, convert_point_cloud_to_vkdiff
+from core.rendering.scene import camera_entry, convert_point_cloud_to_vkdiff
 from core.rendering.types import CameraSpec, Pose2D
 from core.rendering.scoring import ScoreMetric, image_file_to_tensor, tensor_to_png_bytes
 
