@@ -7,6 +7,7 @@ import random
 from pathlib import Path
 
 from core.config import MeasurementSettings, MotionNoiseSettings, TurtleBotLocalizationConfig
+from core.particle_filter.application.adaptive_particle_count import AdaptiveParticleCountController
 from core.particle_filter.application.command_handler import LocalizationCommandHandler
 from core.particle_filter.application.diagnostics import LocalizationDiagnosticsFormatter
 from core.particle_filter.application.runtime_state import LocalizationRuntimeState
@@ -42,8 +43,14 @@ class TurtleBotLocalizationService:
         self._visualization_publisher = visualization_publisher
         self._control_command_client = control_command_client
 
+        adaptive_particle_count = settings.adaptive_particle_count
+        initial_particle_count = (
+            adaptive_particle_count.max_particle_count
+            if adaptive_particle_count.enabled and adaptive_particle_count.max_particle_count is not None
+            else settings.particle_filter.particle_count
+        )
         particle_filter_config = TurtleBotParticleFilterConfig(
-            particle_count=settings.particle_filter.particle_count,
+            particle_count=initial_particle_count,
             resample_threshold_ratio=settings.particle_filter.resample_threshold_ratio,
             roughening_enabled=settings.particle_filter.roughening_enabled,
             roughening_mode=settings.particle_filter.roughening_mode,
@@ -96,6 +103,10 @@ class TurtleBotLocalizationService:
             particle_filter.initialize(prior)
 
         recovery_tracker = AugmentedMclRecoveryTracker(settings.recovery)
+        adaptive_particle_count_controller = AdaptiveParticleCountController(
+            adaptive_particle_count,
+            configured_particle_count=particle_filter_config.particle_count,
+        )
         self._runtime_state = LocalizationRuntimeState(
             particle_filter=particle_filter,
             particle_filter_config=particle_filter_config,
@@ -106,6 +117,8 @@ class TurtleBotLocalizationService:
             rng=rng,
             localization_mode=settings.initialization.mode,
             recovery_tracker=recovery_tracker,
+            adaptive_particle_count_settings=adaptive_particle_count,
+            adaptive_particle_count_controller=adaptive_particle_count_controller,
             global_pose_sampler=global_pose_sampler,
         )
         self._step_engine = LocalizationStepEngine(renderer_client, measurement)
@@ -190,6 +203,7 @@ class TurtleBotLocalizationService:
             random_pose_sampler=self._runtime_state.global_pose_sampler,
         )
         self._runtime_state.previous_odometry_pose = step_result.previous_odometry_pose
+        self._apply_adaptive_particle_count(step_result)
 
         snapshot = self._snapshot_builder.build(
             runtime_state=self._runtime_state,
@@ -210,6 +224,7 @@ class TurtleBotLocalizationService:
             + f" | rand={step_result.random_particle_ratio:.3f}"
             + f" | injected={step_result.random_particle_count}"
             + f" | roughened={step_result.roughening_particle_count}"
+            + self._adaptive_status_suffix()
         )
         self._runtime_state.update_count += 1
 
@@ -230,4 +245,31 @@ class TurtleBotLocalizationService:
         return (
             translation_magnitude < self._settings.runtime.stationary_translation_threshold_meters
             and abs(odometry_delta.yaw_radians) < self._settings.runtime.stationary_yaw_threshold_radians
+        )
+
+    def _apply_adaptive_particle_count(self, step_result) -> None:
+        controller = self._runtime_state.adaptive_particle_count_controller
+        decision = controller.update(
+            particles=self._runtime_state.particle_filter.particles,
+            current_particle_count=len(self._runtime_state.particle_filter.particles),
+            best_score=step_result.best_score,
+            median_score=step_result.median_score,
+            random_particle_count=step_result.random_particle_count,
+        )
+        if (
+            self._runtime_state.adaptive_particle_count_settings.enabled
+            and decision.resize_reason is not None
+            and decision.target_particle_count != len(self._runtime_state.particle_filter.particles)
+        ):
+            self._runtime_state.particle_filter.reconfigure(particle_count=decision.target_particle_count)
+            self._runtime_state.particle_filter_config = self._runtime_state.particle_filter.config
+
+    def _adaptive_status_suffix(self) -> str:
+        status = self._runtime_state.adaptive_particle_count_controller.status()
+        if not status.enabled:
+            return ""
+        return (
+            f" | adaptive_particles={len(self._runtime_state.particle_filter.particles)}/{status.max_particle_count}"
+            f" | spread={status.xy_spread_meters:.3f}"
+            f" | yaw_spread={status.yaw_spread_radians:.3f}"
         )

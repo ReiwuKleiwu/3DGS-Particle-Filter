@@ -18,6 +18,28 @@ class VisualizationParticle:
 
 
 @dataclass(frozen=True)
+class VisualizationAdaptiveParticleCountState:
+    enabled: bool
+    min_particle_count: int
+    medium_particle_count: int
+    max_particle_count: int
+    target_particle_count: int
+    stable_required_updates: int
+    unstable_required_updates: int
+    xy_spread_stable_meters: float
+    xy_spread_unstable_meters: float
+    yaw_spread_stable_radians: float
+    yaw_spread_unstable_radians: float
+    best_score_stable_threshold: float
+    median_score_stable_threshold: float
+    stable_update_count: int
+    unstable_update_count: int
+    xy_spread_meters: float
+    yaw_spread_radians: float
+    last_resize_reason: str
+
+
+@dataclass(frozen=True)
 class VisualizationFilterState:
     particle_count: int
     resample_threshold_ratio: float
@@ -36,6 +58,7 @@ class VisualizationFilterState:
     recovery_random_particle_floor_ratio: float
     recovery_random_particle_max_ratio: float
     recovery_absolute_score_profiles: dict[str, dict[str, float | int]]
+    adaptive_particle_count: VisualizationAdaptiveParticleCountState
     paused: bool
     localization_mode: str
 

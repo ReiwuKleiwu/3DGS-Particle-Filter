@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from core.config.models import (
+    AdaptiveParticleCountSettings,
     InitializationSettings,
     MeasurementSettings,
     MotionNoiseSettings,
@@ -217,3 +218,37 @@ def load_recovery_settings(raw: dict[str, Any]) -> RecoverySettings:
         ),
         absolute_score_profiles=absolute_score_profiles,
     )
+
+
+def load_adaptive_particle_count_settings(raw: dict[str, Any]) -> AdaptiveParticleCountSettings:
+    defaults = AdaptiveParticleCountSettings()
+    max_particle_count = raw.get("max_particle_count", defaults.max_particle_count)
+    settings = AdaptiveParticleCountSettings(
+        enabled=bool(raw.get("enabled", defaults.enabled)),
+        min_particle_count=int(raw.get("min_particle_count", defaults.min_particle_count)),
+        medium_particle_count=int(raw.get("medium_particle_count", defaults.medium_particle_count)),
+        max_particle_count=None if max_particle_count is None else int(max_particle_count),
+        stable_required_updates=int(raw.get("stable_required_updates", defaults.stable_required_updates)),
+        unstable_required_updates=int(raw.get("unstable_required_updates", defaults.unstable_required_updates)),
+        xy_spread_stable_meters=float(raw.get("xy_spread_stable_meters", defaults.xy_spread_stable_meters)),
+        xy_spread_unstable_meters=float(raw.get("xy_spread_unstable_meters", defaults.xy_spread_unstable_meters)),
+        yaw_spread_stable_radians=float(raw.get("yaw_spread_stable_radians", defaults.yaw_spread_stable_radians)),
+        yaw_spread_unstable_radians=float(raw.get("yaw_spread_unstable_radians", defaults.yaw_spread_unstable_radians)),
+        best_score_stable_threshold=float(
+            raw.get("best_score_stable_threshold", defaults.best_score_stable_threshold)
+        ),
+        median_score_stable_threshold=float(
+            raw.get("median_score_stable_threshold", defaults.median_score_stable_threshold)
+        ),
+    )
+    if settings.min_particle_count <= 0:
+        raise ValueError("adaptive_particle_count.min_particle_count must be positive")
+    if settings.medium_particle_count < settings.min_particle_count:
+        raise ValueError("adaptive_particle_count.medium_particle_count must be >= min_particle_count")
+    if settings.max_particle_count is not None and settings.max_particle_count < settings.medium_particle_count:
+        raise ValueError("adaptive_particle_count.max_particle_count must be >= medium_particle_count")
+    if settings.stable_required_updates <= 0:
+        raise ValueError("adaptive_particle_count.stable_required_updates must be positive")
+    if settings.unstable_required_updates <= 0:
+        raise ValueError("adaptive_particle_count.unstable_required_updates must be positive")
+    return settings

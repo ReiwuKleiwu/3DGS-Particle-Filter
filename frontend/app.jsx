@@ -134,6 +134,10 @@ function mergeLiveFilterConfig(baseConfig, filterState) {
       ...(baseConfig.recovery || {}),
       ...(filterState.recovery || {}),
     },
+    adaptive_particle_count: {
+      ...(baseConfig.adaptive_particle_count || {}),
+      ...(filterState.adaptive_particle_count || {}),
+    },
   };
 }
 
@@ -472,6 +476,17 @@ function App() {
     );
   }
 
+  async function handleAdaptiveParticleCountChange(adaptiveParticleCount) {
+    await submitControlCommand(
+      { type: 'set_particle_filter_parameters', adaptive_particle_count: adaptiveParticleCount },
+      `Adaptive particles ${adaptiveParticleCount.enabled ? 'on' : 'off'}`,
+      (current) => ({
+        ...current,
+        adaptive_particle_count: { ...(current?.adaptive_particle_count || {}), ...adaptiveParticleCount },
+      }),
+    );
+  }
+
   async function handleTogglePause() {
     const paused = Boolean(liveFilterConfig?.runtime?.paused);
     await submitControlCommand(
@@ -684,6 +699,7 @@ function App() {
                 snapshot={snapshot}
                 onRougheningChange={handleRougheningChange}
                 onRecoveryChange={handleRecoveryChange}
+                onAdaptiveParticleCountChange={handleAdaptiveParticleCountChange}
               />
             </div>
           )}

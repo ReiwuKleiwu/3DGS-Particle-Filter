@@ -6,6 +6,7 @@ from core.particle_filter.application.runtime_state import LocalizationRuntimeSt
 from core.particle_filter.application.step_engine import LocalizationStepResult
 from core.particle_filter.infrastructure.ros.observation import TurtleBotObservation
 from core.particle_filter.infrastructure.visualization.models import (
+    VisualizationAdaptiveParticleCountState,
     VisualizationFilterState,
     VisualizationParticle,
     VisualizationSnapshot,
@@ -23,6 +24,7 @@ class LocalizationSnapshotBuilder:
         step_result: LocalizationStepResult,
     ) -> VisualizationSnapshot:
         """Builds the frontend snapshot DTO from the latest live filter state and step result."""
+        adaptive_particle_count = runtime_state.adaptive_particle_count_controller.status()
         return VisualizationSnapshot(
             update_index=runtime_state.update_count,
             image_stamp_seconds=observation.image_stamp_seconds,
@@ -70,6 +72,26 @@ class LocalizationSnapshotBuilder:
                 recovery_random_particle_floor_ratio=runtime_state.recovery_tracker.settings.random_particle_floor_ratio,
                 recovery_random_particle_max_ratio=runtime_state.recovery_tracker.settings.random_particle_max_ratio,
                 recovery_absolute_score_profiles=runtime_state.recovery_tracker.settings.absolute_score_profiles,
+                adaptive_particle_count=VisualizationAdaptiveParticleCountState(
+                    enabled=adaptive_particle_count.enabled,
+                    min_particle_count=adaptive_particle_count.min_particle_count,
+                    medium_particle_count=adaptive_particle_count.medium_particle_count,
+                    max_particle_count=adaptive_particle_count.max_particle_count,
+                    target_particle_count=adaptive_particle_count.target_particle_count,
+                    stable_required_updates=adaptive_particle_count.stable_required_updates,
+                    unstable_required_updates=adaptive_particle_count.unstable_required_updates,
+                    xy_spread_stable_meters=adaptive_particle_count.xy_spread_stable_meters,
+                    xy_spread_unstable_meters=adaptive_particle_count.xy_spread_unstable_meters,
+                    yaw_spread_stable_radians=adaptive_particle_count.yaw_spread_stable_radians,
+                    yaw_spread_unstable_radians=adaptive_particle_count.yaw_spread_unstable_radians,
+                    best_score_stable_threshold=adaptive_particle_count.best_score_stable_threshold,
+                    median_score_stable_threshold=adaptive_particle_count.median_score_stable_threshold,
+                    stable_update_count=adaptive_particle_count.stable_update_count,
+                    unstable_update_count=adaptive_particle_count.unstable_update_count,
+                    xy_spread_meters=adaptive_particle_count.xy_spread_meters,
+                    yaw_spread_radians=adaptive_particle_count.yaw_spread_radians,
+                    last_resize_reason=adaptive_particle_count.last_resize_reason,
+                ),
                 paused=runtime_state.paused,
                 localization_mode=runtime_state.localization_mode,
             ),

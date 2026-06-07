@@ -2,6 +2,7 @@
 
 from core.config.loader import DEFAULT_CONFIG_PATH, load_turtlebot_localization_config
 from core.config.models import (
+    AdaptiveParticleCountSettings,
     InitializationSettings,
     MeasurementSettings,
     MotionNoiseSettings,
@@ -12,6 +13,7 @@ from core.config.models import (
 
 __all__ = [
     "DEFAULT_CONFIG_PATH",
+    "AdaptiveParticleCountSettings",
     "InitializationSettings",
     "MeasurementSettings",
     "MotionNoiseSettings",

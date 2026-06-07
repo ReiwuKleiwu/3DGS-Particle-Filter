@@ -253,10 +253,12 @@ function ParticleFilterModules({
   snapshot,
   onRougheningChange,
   onRecoveryChange,
+  onAdaptiveParticleCountChange,
 }) {
   const capabilities = filterConfig?.capabilities || {};
   const pf = filterConfig?.particle_filter || {};
   const recovery = filterConfig?.recovery || {};
+  const adaptive = filterConfig?.adaptive_particle_count || {};
   const metricName = filterConfig?.measurement?.metric_name || 'lpips';
   const profile = recovery.absolute_score_profiles?.[metricName] || recovery.absolute_score_profiles?.default || {};
   const roughened = snapshot?.metrics?.roughening_particle_count ?? 0;
@@ -276,6 +278,12 @@ function ParticleFilterModules({
   const [medianThreshold, setMedianThreshold] = React.useState(profile.median_score_threshold ?? 0.48);
   const [absoluteRatio, setAbsoluteRatio] = React.useState(profile.random_particle_ratio ?? 0.3);
   const [badUpdates, setBadUpdates] = React.useState(profile.consecutive_bad_updates ?? 3);
+  const [adaptiveEnabled, setAdaptiveEnabled] = React.useState(Boolean(adaptive.enabled));
+  const [adaptiveMinCount, setAdaptiveMinCount] = React.useState(adaptive.min_particle_count ?? 128);
+  const [adaptiveMediumCount, setAdaptiveMediumCount] = React.useState(adaptive.medium_particle_count ?? 256);
+  const [adaptiveMaxCount, setAdaptiveMaxCount] = React.useState(adaptive.max_particle_count ?? filterConfig?.particle_count ?? 256);
+  const [adaptiveStableUpdates, setAdaptiveStableUpdates] = React.useState(adaptive.stable_required_updates ?? 8);
+  const [adaptiveUnstableUpdates, setAdaptiveUnstableUpdates] = React.useState(adaptive.unstable_required_updates ?? 2);
 
   React.useEffect(() => setRougheningEnabled(Boolean(pf.roughening_enabled)), [pf.roughening_enabled]);
   React.useEffect(() => setRougheningMode(pf.roughening_mode || 'resample_only'), [pf.roughening_mode]);
@@ -290,6 +298,12 @@ function ParticleFilterModules({
   React.useEffect(() => setMedianThreshold(profile.median_score_threshold ?? 0.48), [profile.median_score_threshold]);
   React.useEffect(() => setAbsoluteRatio(profile.random_particle_ratio ?? 0.3), [profile.random_particle_ratio]);
   React.useEffect(() => setBadUpdates(profile.consecutive_bad_updates ?? 3), [profile.consecutive_bad_updates]);
+  React.useEffect(() => setAdaptiveEnabled(Boolean(adaptive.enabled)), [adaptive.enabled]);
+  React.useEffect(() => setAdaptiveMinCount(adaptive.min_particle_count ?? 128), [adaptive.min_particle_count]);
+  React.useEffect(() => setAdaptiveMediumCount(adaptive.medium_particle_count ?? 256), [adaptive.medium_particle_count]);
+  React.useEffect(() => setAdaptiveMaxCount(adaptive.max_particle_count ?? filterConfig?.particle_count ?? 256), [adaptive.max_particle_count, filterConfig?.particle_count]);
+  React.useEffect(() => setAdaptiveStableUpdates(adaptive.stable_required_updates ?? 8), [adaptive.stable_required_updates]);
+  React.useEffect(() => setAdaptiveUnstableUpdates(adaptive.unstable_required_updates ?? 2), [adaptive.unstable_required_updates]);
 
   function submitRoughening(patch) {
     onRougheningChange({
@@ -325,8 +339,95 @@ function ParticleFilterModules({
     onRecoveryChange(payload);
   }
 
+  function submitAdaptiveParticleCount(patch) {
+    onAdaptiveParticleCountChange({
+      enabled: adaptiveEnabled,
+      min_particle_count: adaptiveMinCount,
+      medium_particle_count: adaptiveMediumCount,
+      max_particle_count: adaptiveMaxCount,
+      stable_required_updates: adaptiveStableUpdates,
+      unstable_required_updates: adaptiveUnstableUpdates,
+      ...patch,
+    });
+  }
+
   return (
     <div className="fc-wrap">
+      <div className="fc-section">
+        <div className="fc-h">ADAPTIVE PARTICLES</div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>Module</span><span className="v">{adaptiveEnabled ? 'enabled' : 'disabled'}</span></div>
+          <div className="fc-seg">
+            <button
+              className={adaptiveEnabled ? 'on' : ''}
+              onClick={() => { setAdaptiveEnabled(true); submitAdaptiveParticleCount({ enabled: true }); }}
+              disabled={!capabilities.adaptive_particle_count}
+            >on</button>
+            <button
+              className={!adaptiveEnabled ? 'on' : ''}
+              onClick={() => { setAdaptiveEnabled(false); submitAdaptiveParticleCount({ enabled: false }); }}
+              disabled={!capabilities.adaptive_particle_count}
+            >off</button>
+          </div>
+        </div>
+        <div className="fc-row tworow">
+          <div className="fc-mini">
+            <div className="fc-mlbl">current</div>
+            <div className="fc-mval">{snapshot?.particles?.length ?? '—'}</div>
+          </div>
+          <div className="fc-mini">
+            <div className="fc-mlbl">target</div>
+            <div className="fc-mval">{adaptive.target_particle_count ?? '—'}</div>
+          </div>
+          <div className="fc-mini">
+            <div className="fc-mlbl">max</div>
+            <div className="fc-mval">{adaptive.max_particle_count ?? adaptiveMaxCount}</div>
+          </div>
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>Min / medium</span><span className="v">{adaptiveMinCount} / {adaptiveMediumCount}</span></div>
+          <input className="fc-slider" type="range" min={16} max={1024} step={16} value={adaptiveMinCount}
+            onChange={(event) => setAdaptiveMinCount(Number(event.target.value))}
+            onMouseUp={(event) => submitAdaptiveParticleCount({ min_particle_count: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitAdaptiveParticleCount({ min_particle_count: Number(event.currentTarget.value) })}
+            disabled={!capabilities.adaptive_particle_count || !adaptiveEnabled}
+          />
+          <input className="fc-slider" type="range" min={16} max={2048} step={16} value={adaptiveMediumCount}
+            onChange={(event) => setAdaptiveMediumCount(Number(event.target.value))}
+            onMouseUp={(event) => submitAdaptiveParticleCount({ medium_particle_count: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitAdaptiveParticleCount({ medium_particle_count: Number(event.currentTarget.value) })}
+            disabled={!capabilities.adaptive_particle_count || !adaptiveEnabled}
+          />
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>Max count</span><span className="v">{adaptiveMaxCount}</span></div>
+          <input className="fc-slider" type="range" min={16} max={2048} step={16} value={adaptiveMaxCount}
+            onChange={(event) => setAdaptiveMaxCount(Number(event.target.value))}
+            onMouseUp={(event) => submitAdaptiveParticleCount({ max_particle_count: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitAdaptiveParticleCount({ max_particle_count: Number(event.currentTarget.value) })}
+            disabled={!capabilities.adaptive_particle_count || !adaptiveEnabled}
+          />
+        </div>
+        <div className="fc-row">
+          <div className="fc-lbl"><span>Stable / unstable frames</span><span className="v">{adaptiveStableUpdates} / {adaptiveUnstableUpdates}</span></div>
+          <input className="fc-slider" type="range" min={1} max={30} step={1} value={adaptiveStableUpdates}
+            onChange={(event) => setAdaptiveStableUpdates(Number(event.target.value))}
+            onMouseUp={(event) => submitAdaptiveParticleCount({ stable_required_updates: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitAdaptiveParticleCount({ stable_required_updates: Number(event.currentTarget.value) })}
+            disabled={!capabilities.adaptive_particle_count || !adaptiveEnabled}
+          />
+          <input className="fc-slider" type="range" min={1} max={10} step={1} value={adaptiveUnstableUpdates}
+            onChange={(event) => setAdaptiveUnstableUpdates(Number(event.target.value))}
+            onMouseUp={(event) => submitAdaptiveParticleCount({ unstable_required_updates: Number(event.currentTarget.value) })}
+            onTouchEnd={(event) => submitAdaptiveParticleCount({ unstable_required_updates: Number(event.currentTarget.value) })}
+            disabled={!capabilities.adaptive_particle_count || !adaptiveEnabled}
+          />
+        </div>
+        <div className="fc-hint">
+          stable {adaptive.stable_update_count ?? 0} · unstable {adaptive.unstable_update_count ?? 0} · spread {(adaptive.xy_spread_meters ?? 0).toFixed(2)}m · reason {adaptive.last_resize_reason || '—'}
+        </div>
+      </div>
+
       <div className="fc-section">
         <div className="fc-h">ROUGHENING</div>
         <div className="fc-row">

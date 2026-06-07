@@ -6,7 +6,8 @@ import random
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from core.config.models import MeasurementSettings, MotionNoiseSettings
+from core.config.models import AdaptiveParticleCountSettings, MeasurementSettings, MotionNoiseSettings
+from core.particle_filter.application.adaptive_particle_count import AdaptiveParticleCountController
 from core.particle_filter.domain.motion_model import TurtleBotMotionModel
 from core.particle_filter.domain.particle_filter import TurtleBotParticleFilter, TurtleBotParticleFilterConfig
 from core.particle_filter.domain.pose import Pose2D, Pose2DPrior
@@ -24,6 +25,8 @@ class LocalizationRuntimeState:
     rng: random.Random
     localization_mode: str
     recovery_tracker: AugmentedMclRecoveryTracker
+    adaptive_particle_count_settings: AdaptiveParticleCountSettings
+    adaptive_particle_count_controller: AdaptiveParticleCountController
     global_pose_sampler: Callable[[], Pose2D] | None
     paused: bool = False
     step_once_requested: bool = False

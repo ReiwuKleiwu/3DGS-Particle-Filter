@@ -57,6 +57,10 @@ core/renders/
 core/replay_tuning/artifacts/results/
 core/replay_tuning/artifacts/datasets/*/images/
 core/replay_tuning/artifacts/datasets/*/raw_capture.json
+evaluation/artifacts/results/*
+!evaluation/artifacts/results/.gitkeep
+evaluation/artifacts/datasets/*
+!evaluation/artifacts/datasets/.gitkeep
 frontend/uploads/
 frontend_new/uploads/
 

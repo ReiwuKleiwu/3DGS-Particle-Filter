@@ -116,6 +116,26 @@ def load_filter_config() -> dict:
                 }
             },
         },
+        "adaptive_particle_count": {
+            "enabled": False,
+            "min_particle_count": 128,
+            "medium_particle_count": 256,
+            "max_particle_count": 256,
+            "target_particle_count": 256,
+            "stable_required_updates": 8,
+            "unstable_required_updates": 2,
+            "xy_spread_stable_meters": 0.30,
+            "xy_spread_unstable_meters": 0.75,
+            "yaw_spread_stable_radians": 0.20,
+            "yaw_spread_unstable_radians": 0.60,
+            "best_score_stable_threshold": 0.45,
+            "median_score_stable_threshold": 0.50,
+            "stable_update_count": 0,
+            "unstable_update_count": 0,
+            "xy_spread_meters": 0.0,
+            "yaw_spread_radians": 0.0,
+            "last_resize_reason": "",
+        },
         "runtime": {"paused": False},
         "initialization": {"mode": "local"},
     }
@@ -130,6 +150,11 @@ def load_filter_config() -> dict:
     particle_filter = raw_config.get("particle_filter", {})
     initialization = raw_config.get("initialization", {})
     recovery = raw_config.get("recovery", {})
+    adaptive_particle_count = raw_config.get("adaptive_particle_count", {})
+    adaptive_max = adaptive_particle_count.get("max_particle_count")
+    resolved_adaptive_max = int(adaptive_max) if adaptive_max is not None else int(
+        particle_filter.get("particle_count", defaults["particle_count"])
+    )
     return {
         "particle_count": int(particle_filter.get("particle_count", defaults["particle_count"])),
         "resample_threshold_ratio": float(particle_filter.get("resample_threshold_ratio", defaults["resample_threshold_ratio"])),
@@ -176,6 +201,76 @@ def load_filter_config() -> dict:
                 defaults["recovery"]["absolute_score_profiles"],
             ),
         },
+        "adaptive_particle_count": {
+            "enabled": bool(adaptive_particle_count.get("enabled", defaults["adaptive_particle_count"]["enabled"])),
+            "min_particle_count": int(
+                adaptive_particle_count.get(
+                    "min_particle_count",
+                    defaults["adaptive_particle_count"]["min_particle_count"],
+                )
+            ),
+            "medium_particle_count": int(
+                adaptive_particle_count.get(
+                    "medium_particle_count",
+                    defaults["adaptive_particle_count"]["medium_particle_count"],
+                )
+            ),
+            "max_particle_count": resolved_adaptive_max,
+            "target_particle_count": resolved_adaptive_max,
+            "stable_required_updates": int(
+                adaptive_particle_count.get(
+                    "stable_required_updates",
+                    defaults["adaptive_particle_count"]["stable_required_updates"],
+                )
+            ),
+            "unstable_required_updates": int(
+                adaptive_particle_count.get(
+                    "unstable_required_updates",
+                    defaults["adaptive_particle_count"]["unstable_required_updates"],
+                )
+            ),
+            "xy_spread_stable_meters": float(
+                adaptive_particle_count.get(
+                    "xy_spread_stable_meters",
+                    defaults["adaptive_particle_count"]["xy_spread_stable_meters"],
+                )
+            ),
+            "xy_spread_unstable_meters": float(
+                adaptive_particle_count.get(
+                    "xy_spread_unstable_meters",
+                    defaults["adaptive_particle_count"]["xy_spread_unstable_meters"],
+                )
+            ),
+            "yaw_spread_stable_radians": float(
+                adaptive_particle_count.get(
+                    "yaw_spread_stable_radians",
+                    defaults["adaptive_particle_count"]["yaw_spread_stable_radians"],
+                )
+            ),
+            "yaw_spread_unstable_radians": float(
+                adaptive_particle_count.get(
+                    "yaw_spread_unstable_radians",
+                    defaults["adaptive_particle_count"]["yaw_spread_unstable_radians"],
+                )
+            ),
+            "best_score_stable_threshold": float(
+                adaptive_particle_count.get(
+                    "best_score_stable_threshold",
+                    defaults["adaptive_particle_count"]["best_score_stable_threshold"],
+                )
+            ),
+            "median_score_stable_threshold": float(
+                adaptive_particle_count.get(
+                    "median_score_stable_threshold",
+                    defaults["adaptive_particle_count"]["median_score_stable_threshold"],
+                )
+            ),
+            "stable_update_count": 0,
+            "unstable_update_count": 0,
+            "xy_spread_meters": 0.0,
+            "yaw_spread_radians": 0.0,
+            "last_resize_reason": "",
+        },
         "runtime": {"paused": False},
         "initialization": {
             "mode": str(initialization.get("mode", defaults["initialization"]["mode"])).strip().lower(),
@@ -199,6 +294,7 @@ def capabilities_payload() -> dict:
         "single_step": True,
         "localization_mode": True,
         "pf_modules": True,
+        "adaptive_particle_count": True,
     }
 
 
@@ -246,6 +342,29 @@ def current_filter_config() -> dict:
             ):
                 if key in recovery:
                     config["recovery"][key] = recovery[key]
+            adaptive_particle_count = filter_state.get("adaptive_particle_count") or {}
+            for key in (
+                "enabled",
+                "min_particle_count",
+                "medium_particle_count",
+                "max_particle_count",
+                "target_particle_count",
+                "stable_required_updates",
+                "unstable_required_updates",
+                "xy_spread_stable_meters",
+                "xy_spread_unstable_meters",
+                "yaw_spread_stable_radians",
+                "yaw_spread_unstable_radians",
+                "best_score_stable_threshold",
+                "median_score_stable_threshold",
+                "stable_update_count",
+                "unstable_update_count",
+                "xy_spread_meters",
+                "yaw_spread_radians",
+                "last_resize_reason",
+            ):
+                if key in adaptive_particle_count:
+                    config["adaptive_particle_count"][key] = adaptive_particle_count[key]
     config["capabilities"] = capabilities_payload()
     return config
 
@@ -458,6 +577,33 @@ class VisualizationRequestHandler(BaseHTTPRequestHandler):
                 if "absolute_score_profiles" in recovery:
                     recovery_command["absolute_score_profiles"] = recovery["absolute_score_profiles"]
                 command["recovery"] = recovery_command
+            if "adaptive_particle_count" in payload:
+                adaptive = payload["adaptive_particle_count"]
+                adaptive_command: dict = {}
+                if "enabled" in adaptive:
+                    adaptive_command["enabled"] = bool(adaptive["enabled"])
+                for key in (
+                    "min_particle_count",
+                    "medium_particle_count",
+                    "stable_required_updates",
+                    "unstable_required_updates",
+                ):
+                    if key in adaptive:
+                        adaptive_command[key] = int(adaptive[key])
+                if "max_particle_count" in adaptive:
+                    value = adaptive["max_particle_count"]
+                    adaptive_command["max_particle_count"] = None if value in {None, ""} else int(value)
+                for key in (
+                    "xy_spread_stable_meters",
+                    "xy_spread_unstable_meters",
+                    "yaw_spread_stable_radians",
+                    "yaw_spread_unstable_radians",
+                    "best_score_stable_threshold",
+                    "median_score_stable_threshold",
+                ):
+                    if key in adaptive:
+                        adaptive_command[key] = float(adaptive[key])
+                command["adaptive_particle_count"] = adaptive_command
             if len(command) <= 2:
                 return None, "No parameter fields provided"
             return command, None

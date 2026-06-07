@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from core.config.models import MeasurementSettings, MotionNoiseSettings, RecoverySettings
+from core.config.models import AdaptiveParticleCountSettings, MeasurementSettings, MotionNoiseSettings, RecoverySettings
 from core.particle_filter.application.runtime_state import LocalizationRuntimeState
 from core.particle_filter.domain.pose import Pose2D, Pose2DPrior
 from core.particle_filter.infrastructure.ros.observation import TurtleBotObservation
@@ -71,6 +71,7 @@ class LocalizationCommandHandler:
         )
         self._runtime_state.localization_mode = "local"
         self._runtime_state.prior = prior
+        self._reset_adaptive_particle_count()
         self._runtime_state.particle_filter.initialize(prior)
         self._runtime_state.previous_odometry_pose = observation.odometry_pose
         print(
@@ -86,6 +87,7 @@ class LocalizationCommandHandler:
             return CommandEffect()
 
         self._runtime_state.localization_mode = "global"
+        self._reset_adaptive_particle_count()
         self._runtime_state.particle_filter.initialize_global(self._runtime_state.global_pose_sampler)
         self._runtime_state.recovery_tracker.reset()
         self._runtime_state.previous_odometry_pose = observation.odometry_pose
@@ -114,6 +116,8 @@ class LocalizationCommandHandler:
                 resample_threshold_ratio=float(resample_threshold_ratio) if resample_threshold_ratio is not None else None,
             )
             self._runtime_state.particle_filter_config = self._runtime_state.particle_filter.config
+            if particle_count is not None:
+                self._runtime_state.adaptive_particle_count_controller.set_configured_particle_count(int(particle_count))
             changed_fields.append(
                 f"particles={self._runtime_state.particle_filter_config.particle_count}, "
                 f"resample={self._runtime_state.particle_filter_config.resample_threshold_ratio:.2f}"
@@ -137,6 +141,67 @@ class LocalizationCommandHandler:
                 f"{'on' if self._runtime_state.particle_filter_config.roughening_enabled else 'off'}, "
                 f"{self._runtime_state.particle_filter_config.roughening_mode}, "
                 f"{self._runtime_state.particle_filter_config.roughening_ratio:.3f})"
+            )
+            reprocess_current_observation = True
+
+        adaptive_particle_count = command.get("adaptive_particle_count")
+        if adaptive_particle_count is not None:
+            current = self._runtime_state.adaptive_particle_count_settings
+            settings = AdaptiveParticleCountSettings(
+                enabled=bool(adaptive_particle_count.get("enabled", current.enabled)),
+                min_particle_count=int(
+                    adaptive_particle_count.get("min_particle_count", current.min_particle_count)
+                ),
+                medium_particle_count=int(
+                    adaptive_particle_count.get("medium_particle_count", current.medium_particle_count)
+                ),
+                max_particle_count=(
+                    current.max_particle_count
+                    if "max_particle_count" not in adaptive_particle_count
+                    else (
+                        None
+                        if adaptive_particle_count.get("max_particle_count") is None
+                        else int(adaptive_particle_count.get("max_particle_count"))
+                    )
+                ),
+                stable_required_updates=int(
+                    adaptive_particle_count.get("stable_required_updates", current.stable_required_updates)
+                ),
+                unstable_required_updates=int(
+                    adaptive_particle_count.get("unstable_required_updates", current.unstable_required_updates)
+                ),
+                xy_spread_stable_meters=float(
+                    adaptive_particle_count.get("xy_spread_stable_meters", current.xy_spread_stable_meters)
+                ),
+                xy_spread_unstable_meters=float(
+                    adaptive_particle_count.get("xy_spread_unstable_meters", current.xy_spread_unstable_meters)
+                ),
+                yaw_spread_stable_radians=float(
+                    adaptive_particle_count.get("yaw_spread_stable_radians", current.yaw_spread_stable_radians)
+                ),
+                yaw_spread_unstable_radians=float(
+                    adaptive_particle_count.get("yaw_spread_unstable_radians", current.yaw_spread_unstable_radians)
+                ),
+                best_score_stable_threshold=float(
+                    adaptive_particle_count.get("best_score_stable_threshold", current.best_score_stable_threshold)
+                ),
+                median_score_stable_threshold=float(
+                    adaptive_particle_count.get("median_score_stable_threshold", current.median_score_stable_threshold)
+                ),
+            )
+            settings = self._normalize_adaptive_particle_count_settings(settings)
+            self._runtime_state.adaptive_particle_count_settings = settings
+            self._runtime_state.adaptive_particle_count_controller.update_settings(settings)
+            if settings.enabled:
+                decision = self._runtime_state.adaptive_particle_count_controller.reset()
+                if decision.target_particle_count != len(self._runtime_state.particle_filter.particles):
+                    self._runtime_state.particle_filter.reconfigure(particle_count=decision.target_particle_count)
+                    self._runtime_state.particle_filter_config = self._runtime_state.particle_filter.config
+            changed_fields.append(
+                "adaptive_particles=("
+                f"{'on' if settings.enabled else 'off'}, "
+                f"min={settings.min_particle_count}, medium={settings.medium_particle_count}, "
+                f"max={settings.max_particle_count if settings.max_particle_count is not None else 'configured'})"
             )
             reprocess_current_observation = True
 
@@ -208,3 +273,35 @@ class LocalizationCommandHandler:
             print("Particle filter parameters updated from frontend | " + " | ".join(changed_fields))
 
         return CommandEffect(reprocess_current_observation=reprocess_current_observation)
+
+    def _reset_adaptive_particle_count(self) -> None:
+        if not self._runtime_state.adaptive_particle_count_settings.enabled:
+            return
+        decision = self._runtime_state.adaptive_particle_count_controller.reset()
+        if decision.target_particle_count != len(self._runtime_state.particle_filter.particles):
+            self._runtime_state.particle_filter.reconfigure(particle_count=decision.target_particle_count)
+            self._runtime_state.particle_filter_config = self._runtime_state.particle_filter.config
+
+    @staticmethod
+    def _normalize_adaptive_particle_count_settings(
+        settings: AdaptiveParticleCountSettings,
+    ) -> AdaptiveParticleCountSettings:
+        min_particle_count = max(1, settings.min_particle_count)
+        medium_particle_count = max(min_particle_count, settings.medium_particle_count)
+        max_particle_count = settings.max_particle_count
+        if max_particle_count is not None:
+            max_particle_count = max(min_particle_count, max_particle_count)
+        return AdaptiveParticleCountSettings(
+            enabled=settings.enabled,
+            min_particle_count=min_particle_count,
+            medium_particle_count=medium_particle_count,
+            max_particle_count=max_particle_count,
+            stable_required_updates=max(1, settings.stable_required_updates),
+            unstable_required_updates=max(1, settings.unstable_required_updates),
+            xy_spread_stable_meters=settings.xy_spread_stable_meters,
+            xy_spread_unstable_meters=settings.xy_spread_unstable_meters,
+            yaw_spread_stable_radians=settings.yaw_spread_stable_radians,
+            yaw_spread_unstable_radians=settings.yaw_spread_unstable_radians,
+            best_score_stable_threshold=settings.best_score_stable_threshold,
+            median_score_stable_threshold=settings.median_score_stable_threshold,
+        )

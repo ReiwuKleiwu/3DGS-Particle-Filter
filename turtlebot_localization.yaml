@@ -81,6 +81,20 @@ recovery:
       random_particle_ratio: 0.50
       consecutive_bad_updates: 3
 
+adaptive_particle_count:
+  enabled: false
+  min_particle_count: 128
+  medium_particle_count: 256
+  max_particle_count:
+  stable_required_updates: 8
+  unstable_required_updates: 2
+  xy_spread_stable_meters: 0.30
+  xy_spread_unstable_meters: 0.75
+  yaw_spread_stable_radians: 0.20
+  yaw_spread_unstable_radians: 0.60
+  best_score_stable_threshold: 0.45
+  median_score_stable_threshold: 0.50
+
 visualization:
   enabled: true
   publish_url: http://127.0.0.1:8090/api/publish-latest

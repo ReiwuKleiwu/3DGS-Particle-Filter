@@ -100,6 +100,10 @@ Key config sections:
   - `alpha_fast`
   - `random_particle_floor_ratio`
   - `random_particle_max_ratio`
+- `adaptive_particle_count`
+  - optional heuristic particle-count reduction/expansion
+  - disabled by default
+  - uses particle spread, renderer scores, recovery activity, and hysteresis
 
 Notes:
 

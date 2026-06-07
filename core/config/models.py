@@ -60,6 +60,22 @@ class RecoverySettings:
 
 
 @dataclass(frozen=True)
+class AdaptiveParticleCountSettings:
+    enabled: bool = False
+    min_particle_count: int = 128
+    medium_particle_count: int = 256
+    max_particle_count: int | None = None
+    stable_required_updates: int = 8
+    unstable_required_updates: int = 2
+    xy_spread_stable_meters: float = 0.30
+    xy_spread_unstable_meters: float = 0.75
+    yaw_spread_stable_radians: float = 0.20
+    yaw_spread_unstable_radians: float = 0.60
+    best_score_stable_threshold: float = 0.45
+    median_score_stable_threshold: float = 0.50
+
+
+@dataclass(frozen=True)
 class RuntimeSettings:
     observation_ready_timeout_seconds: float = 10.0
     spin_timeout_seconds: float = 0.05
@@ -94,3 +110,4 @@ class TurtleBotLocalizationConfig:
     measurement: MeasurementSettings = field(default_factory=MeasurementSettings)
     initialization: InitializationSettings = field(default_factory=InitializationSettings)
     recovery: RecoverySettings = field(default_factory=RecoverySettings)
+    adaptive_particle_count: AdaptiveParticleCountSettings = field(default_factory=AdaptiveParticleCountSettings)

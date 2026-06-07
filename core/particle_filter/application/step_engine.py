@@ -30,6 +30,7 @@ class LocalizationStepResult:
     score_result: RendererScoreResult
     best_particle_pose: Pose2D
     best_score: float
+    median_score: float
     previous_odometry_pose: Pose2D | None
     measurement_likelihood: float
     random_particle_ratio: float
@@ -115,6 +116,7 @@ class LocalizationStepEngine:
             score_result=score_result,
             best_particle_pose=best_particle_pose,
             best_score=best_score,
+            median_score=median_score,
             previous_odometry_pose=current_odometry_pose,
             measurement_likelihood=update_stats.measurement_likelihood,
             random_particle_ratio=random_particle_ratio,
