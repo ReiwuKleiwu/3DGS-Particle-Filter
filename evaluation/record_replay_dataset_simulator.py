@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Records ROS observations and poses into replay datasets for offline evaluation."""
+"""Records simulator ROS observations and poses into replay datasets for offline evaluation."""
 
 import argparse
 import csv
@@ -104,7 +104,7 @@ def pose_dict_from_pose(pose, *, frame_id: str | None, stamp) -> dict:
 
 class ReplayRecorder(Node):
     def __init__(self, args: argparse.Namespace):
-        super().__init__("record_replay_dataset")
+        super().__init__("record_replay_dataset_simulator")
         self.args = args
         self.image_msg = None
         self.camera_info_msg = None

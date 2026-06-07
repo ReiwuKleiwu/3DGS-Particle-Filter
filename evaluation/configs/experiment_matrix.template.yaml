@@ -2,6 +2,14 @@ experiment:
   name: small_house_main_study
   seeds: [1001, 1002, 1003, 1004, 1005]
   frame_stride: 5
+  gpu_memory_poll_stride: 1
+  record_particles:
+    enabled: false
+    frame_stride: 1
+    modes: [global]
+    seeds: [1001]
+    path_ids: [route_1]
+    splat_ids: [default_small_house_30000]
   backend: vkdiff
   port: 8000
   restart_renderer: true
@@ -21,13 +29,18 @@ splats:
 modes:
   local:
     particle_count: 500
-    prior_offset:
-      dx: 0.40
-      dy: 0.0
-      dyaw_degrees: 10.0
+    prior_offsets:
+      - dx: 0.20
+        dy: 0.0
+        dyaw_degrees: 5.0
+      - dx: 0.40
+        dy: 0.0
+        dyaw_degrees: 10.0
+      - dx: 0.50
+        dy: 0.0
+        dyaw_degrees: 15.0
   global:
     particle_count: 2000
-    initialize_from_free_space: true
 
 scenarios:
   - scenario_id: default_small_house

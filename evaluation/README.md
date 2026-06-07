@@ -1,18 +1,19 @@
 # Evaluation Tooling
 
-Dieser Ordner ist der eigenständige Einstiegspunkt für die finalen Replay-Experimente der Bachelorarbeit. Er ist so aufgebaut, dass er nicht von `core/replay_tuning` abhängt.
-
-Die Skripte verwenden weiterhin die zentrale Lokalisierungs- und Renderer-Logik aus `core/particle_filter`, `core/config` und `core/rendering`.
+Die Skripte verwenden die zentrale Lokalisierungs- und Renderer-Logik aus `core/particle_filter`, `core/config` und `core/rendering`.
 
 ## Inhalt
 
 ```text
 evaluation/
-  record_replay_dataset.py      # Replays mit Kamera, Odometrie und Referenzpose aufzeichnen
+  record_replay_dataset_simulator.py  # Simulator-Replays mit Kamera, Odometrie und Referenzpose aufzeichnen
   generate_splat_csv.py         # explizite Splat-CSV aus einem Splat-Ordner erzeugen
   run_matrix_experiment.py      # Szenario/Pfad/Splat/Mode/Seed-Matrix ausführen
   analyze_matrix_results.py     # per_run_summary.csv aggregieren und Plots erzeugen
   plot_replay_paths.py          # GT-Pfad gegen PF-Schätzung auf der PGM Map plotten
+  plot_particle_snapshots.py    # aufgezeichnete Partikelwolken als PNG-Sequenz plotten
+  make_particle_video.py        # PNG-Sequenz zu MP4-Video konvertieren
+  plot_style.py                 # gemeinsame farbenblindenfreundliche Plot-Stile
   models.py                     # Replay-Manifest- und Prior-Modelle
   evaluator.py                  # Offline-Observation-Helfer
   paths.py                      # evaluation/artifacts Pfade
@@ -20,12 +21,12 @@ evaluation/
   artifacts/                    # Datasets und Results
 ```
 
-## 1. Replay Aufzeichnen
+## 1. Simulator-Replay Aufzeichnen
 
 Beispiel für einen lokalen Nav2-Run mit TF-Referenzpose:
 
 ```bash
-python3 evaluation/record_replay_dataset.py \
+python3 evaluation/record_replay_dataset_simulator.py \
   --name default_small_house_route_1 \
   --goal-x 5.24 \
   --goal-y -0.333 \
@@ -43,6 +44,8 @@ evaluation/artifacts/datasets/<name>/
 ```
 
 Wichtig ist die `manifest.json`; sie wird später in der Experiment-Matrix referenziert.
+
+Dieses Skript ist explizit für den Simulator gedacht. Für den physischen TurtleBot sollte später ein separates Recorder-Skript ergänzt werden, weil Topics, Referenzpose und Ablauf abweichen können.
 
 ## 2. Splat CSV Erzeugen
 
@@ -133,20 +136,30 @@ python3 evaluation/run_matrix_experiment.py \
   --build-image
 ```
 
-Der Runner startet den Renderer pro Splat neu, wenn `restart_renderer: true` in der Matrix steht.
+Der Runner startet den Renderer bei jedem Splat-Wechsel neu, wenn `restart_renderer: true` in der Matrix steht. Matrizen mit mehreren Splats werden ohne diese Option abgelehnt, damit Splat-Vergleiche nicht versehentlich mit einem alten Renderer-Zustand laufen.
+
+Während des Runs zeigt das Skript eine Zusammenfassung der Studie, einen Gesamtfortschrittsbalken und einen Frame-Fortschrittsbalken für den aktuellen Run. Falls die Terminal-Ausgabe in Logs zu unruhig ist:
+
+```bash
+python3 evaluation/run_matrix_experiment.py \
+  --matrix evaluation/configs/small_house_default/main_matrix.yaml \
+  --run-name small_house_default_main_old \
+  --no-progress
+```
 
 ## Local Und Global
 
-`local` ist ein Tracking-Test. Der PF startet am ersten Referenzpose-Frame mit fixem Offset:
+`local` ist ein Tracking-Test. Der PF startet am ersten Referenzpose-Frame mit einem von drei festen Offsets:
 
 ```text
-dx = 0.40 m
-dy = 0.00 m
-dyaw = 10 deg
 particle_count = 500
+
+prior_case 0: dx = 0.20 m, dy = 0.00 m, dyaw = 5 deg
+prior_case 1: dx = 0.40 m, dy = 0.00 m, dyaw = 10 deg
+prior_case 2: dx = 0.50 m, dy = 0.00 m, dyaw = 15 deg
 ```
 
-Dieser Prior ist für alle lokalen Runs gleich, damit die Ergebnisse reproduzierbar bleiben.
+Diese Prior-Fälle sind für alle lokalen Runs gleich, damit die Ergebnisse reproduzierbar bleiben.
 
 `global` ist ein globaler Lokalisierungstest:
 
@@ -166,6 +179,7 @@ evaluation/artifacts/results/<run_name>/
   per_frame.csv
   per_run_summary.csv
   experiment_metadata.json
+  particles/                 # optional, nur bei record_particles.enabled=true
 ```
 
 `per_frame.csv` ist für Pfadplots und Debugging gedacht. Sie enthält pro Frame u.a.:
@@ -180,12 +194,68 @@ combined_pose_error_m
 effective_particle_count
 resampled
 render_and_score_ms
+total_frame_ms
+total_hz
+gpu_memory_used_mb
+gpu_memory_total_mb
+gpu_memory_free_mb
+```
+
+Wenn `record_particles` aktiviert ist, schreibt der Runner pro ausgewähltem Run eine CSV unter `particles/<run_id>.csv`. Jede Zeile beschreibt einen Partikel nach einem vollständigen PF-Step:
+
+```text
+frame_index, replay_time_s, particle_index
+x, y, yaw, weight
+recovery_sample, roughening_sample
+```
+
+Für komplette Matrix-Runs sollte Partikelrecording sparsam gefiltert werden, z.B. nur ein globaler Run:
+
+```yaml
+experiment:
+  gpu_memory_poll_stride: 1
+  record_particles:
+    enabled: true
+    frame_stride: 1
+    modes: [global]
+    seeds: [42]
+    path_ids: [route_3]
+    splat_ids: [default_small_house_30000]
+```
+
+Aufgezeichnete Partikelwolken können anschließend als PNG-Sequenz geplottet werden:
+
+```bash
+python3 evaluation/plot_particle_snapshots.py \
+  --input-dir evaluation/artifacts/results/<run_name> \
+  --map-yaml map.yaml \
+  --run-id small_house_default__route_3__default_small_house_30000__global__seed42
+```
+
+Aus der PNG-Sequenz kann anschließend ein MP4 erzeugt werden:
+
+```bash
+python3 evaluation/make_particle_video.py \
+  --frames-dir evaluation/artifacts/results/<run_name>/particle_plots/small_house_default__route_3__default_small_house_30000__global__seed42 \
+  --fps 8
 ```
 
 `per_run_summary.csv` ist die Grundlage für die wissenschaftliche Aggregation. Jeder Eintrag entspricht:
 
 ```text
 scenario × path × splat × mode × seed
+```
+
+Für lokale Runs kommt zusätzlich der feste `prior_case_index` dazu:
+
+```text
+scenario × path × splat × local × prior_case × seed
+```
+
+`frame_error_by_condition.csv` wird von `analyze_matrix_results.py` erzeugt und mittelt die per-frame Fehler pro:
+
+```text
+scenario × path × mode × prior_case × splat × frame_index
 ```
 
 ## Metriken
@@ -202,6 +272,11 @@ mean_combined_pose_error_m
 p95_combined_pose_error_m
 failure_rate
 lost_tracking_rate
+mean_total_frame_ms
+mean_total_hz
+mean_gpu_memory_used_mb
+max_gpu_memory_used_mb
+p95_gpu_memory_used_mb
 ```
 
 Combined Pose Error:
@@ -243,7 +318,15 @@ plots/failure_rate_by_splat.png
 plots/failure_rate_by_splat.pdf
 plots/runtime_by_splat.png
 plots/runtime_by_splat.pdf
+plots/total_hz_by_splat.png
+plots/total_hz_by_splat.pdf
+plots/gpu_memory_by_splat.png
+plots/gpu_memory_by_splat.pdf
+plots/convergence_error_by_frame__*.png
+plots/convergence_error_by_frame__*.pdf
 ```
+
+Lokale Prior-Fälle werden in `summary_by_condition.csv` und in den Plots getrennt gehalten.
 
 ## Pfadplot
 
@@ -271,6 +354,7 @@ Das erzeugt PNG und PDF im Ergebnisordner.
 local + global
 local: 500 Partikel
 global: 2000 Partikel
+local prior cases: 3
 frame_stride: 5
 ```
 

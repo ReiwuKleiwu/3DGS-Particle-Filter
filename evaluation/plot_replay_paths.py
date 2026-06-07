@@ -19,6 +19,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from PIL import Image
 
+from evaluation.plot_style import ERROR_LINK_COLOR, GT_COLOR, PF_COLOR
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Plot PF estimate paths against replay ground truth on a PGM map.")
@@ -109,6 +111,10 @@ def group_rows(
     return grouped
 
 
+def available_values(rows: list[dict], key: str) -> list[str]:
+    return sorted({row.get(key, "") for row in rows if row.get(key, "")})
+
+
 def axis_bounds(grouped: dict[str, list[dict]], *, origin: list[float], resolution: float, height: int) -> tuple[float, float, float, float]:
     xs = []
     ys = []
@@ -157,13 +163,28 @@ def plot_panel(
     if show_error_links:
         step = max(1, len(rows) // 18)
         for gt, est in zip(gt_points[::step], est_points[::step]):
-            ax.plot([gt[0], est[0]], [gt[1], est[1]], color="#9B5DE5", alpha=0.35, linewidth=0.8)
+            error_line = ax.plot(
+                [gt[0], est[0]],
+                [gt[1], est[1]],
+                color=ERROR_LINK_COLOR,
+                alpha=0.55,
+                linewidth=0.9,
+                zorder=2,
+            )[0]
 
-    ax.plot(gt_xs, gt_ys, color="#1B9E77", linewidth=2.2, label="GT")
-    ax.plot(est_xs, est_ys, color="#D95F02", linewidth=1.9, linestyle="--", label="PF estimate")
-    ax.scatter([gt_xs[0]], [gt_ys[0]], color="#1B9E77", s=26, marker="o", zorder=4)
-    ax.scatter([gt_xs[-1]], [gt_ys[-1]], color="#1B9E77", s=42, marker="*", zorder=4)
-    ax.scatter([est_xs[-1]], [est_ys[-1]], color="#D95F02", s=42, marker="x", zorder=4)
+    gt_line = ax.plot(gt_xs, gt_ys, color=GT_COLOR, linewidth=2.0, linestyle="-", label="GT", zorder=3)[0]
+    pf_line = ax.plot(
+        est_xs,
+        est_ys,
+        color=PF_COLOR,
+        linewidth=1.8,
+        linestyle="--",
+        label="PF estimate",
+        zorder=4,
+    )[0]
+    ax.scatter([gt_xs[0]], [gt_ys[0]], color=GT_COLOR, s=18, marker="o", zorder=5)
+    ax.scatter([gt_xs[-1]], [gt_ys[-1]], color=GT_COLOR, s=28, marker="*", zorder=5)
+    ax.scatter([est_xs[-1]], [est_ys[-1]], color=PF_COLOR, s=24, marker="x", linewidths=1.1, zorder=5)
 
     mean_error = sum(float(row["translation_error_m"]) for row in rows) / len(rows)
     final_error = float(rows[-1]["translation_error_m"])
@@ -187,8 +208,9 @@ def main() -> None:
     origin = list(map_metadata["origin"])
     resolution = float(map_metadata["resolution"])
 
+    all_rows = read_csv(per_frame_path)
     grouped = group_rows(
-        read_csv(per_frame_path),
+        all_rows,
         seed=args.seed,
         prior_case_index=args.prior_case_index,
         mode=args.mode,
@@ -196,7 +218,13 @@ def main() -> None:
         path_id=args.path_id,
     )
     if not grouped:
-        raise ValueError("No rows found for the requested filters")
+        raise ValueError(
+            "No rows found for the requested filters. "
+            f"Available scenario_id={available_values(all_rows, 'scenario_id')}, "
+            f"path_id={available_values(all_rows, 'path_id')}, "
+            f"seed={available_values(all_rows, 'seed')}, "
+            f"localization_mode={available_values(all_rows, 'localization_mode')}."
+        )
 
     splat_ids = sort_splat_ids(list(grouped))
     bounds = axis_bounds(grouped, origin=origin, resolution=resolution, height=map_image.height)

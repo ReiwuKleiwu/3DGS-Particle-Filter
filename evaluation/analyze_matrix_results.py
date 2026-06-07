@@ -19,6 +19,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from evaluation.plot_style import COLORBLIND_SAFE_COLORS, LINE_STYLES, MARKERS
+
 
 SUMMARY_KEYS = [
     "mean_translation_error_m",
@@ -32,6 +34,11 @@ SUMMARY_KEYS = [
     "lost_tracking_rate",
     "converged",
     "mean_render_and_score_ms",
+    "mean_total_frame_ms",
+    "mean_total_hz",
+    "mean_gpu_memory_used_mb",
+    "max_gpu_memory_used_mb",
+    "p95_gpu_memory_used_mb",
     "mean_x_bias_m",
     "mean_y_bias_m",
 ]
@@ -73,6 +80,10 @@ def summarize_by_condition(rows: list[dict]) -> list[dict]:
         key = (
             row["scenario_id"],
             row["localization_mode"],
+            row.get("prior_case_index", ""),
+            row.get("prior_dx", ""),
+            row.get("prior_dy", ""),
+            row.get("prior_dyaw_degrees", ""),
             row["splat_id"],
             row.get("training_iteration", ""),
             row.get("particle_count", ""),
@@ -82,10 +93,14 @@ def summarize_by_condition(rows: list[dict]) -> list[dict]:
 
     summaries = []
     for key, group_rows in grouped.items():
-        scenario_id, mode, splat_id, training_iteration, particle_count, metric_name = key
+        scenario_id, mode, prior_case_index, prior_dx, prior_dy, prior_dyaw_degrees, splat_id, training_iteration, particle_count, metric_name = key
         row = {
             "scenario_id": scenario_id,
             "localization_mode": mode,
+            "prior_case_index": prior_case_index,
+            "prior_dx": prior_dx,
+            "prior_dy": prior_dy,
+            "prior_dyaw_degrees": prior_dyaw_degrees,
             "splat_id": splat_id,
             "training_iteration": training_iteration,
             "particle_count": particle_count,
@@ -107,6 +122,7 @@ def summarize_by_condition(rows: list[dict]) -> list[dict]:
         key=lambda row: (
             row["scenario_id"],
             row["localization_mode"],
+            int(float(row["prior_case_index"])) if row["prior_case_index"] else -1,
             int(float(row["training_iteration"])) if row["training_iteration"] else -1,
         )
     )
@@ -126,15 +142,24 @@ def write_csv(path: Path, rows: list[dict]) -> None:
 def plot_metric_by_splat(rows: list[dict], *, metric_key: str, ylabel: str, output_path: Path) -> None:
     grouped: dict[tuple[str, str], list[dict]] = defaultdict(list)
     for row in rows:
-        grouped[(row["scenario_id"], row["localization_mode"])].append(row)
+        grouped[(row["scenario_id"], row["localization_mode"], row.get("prior_case_index", ""))].append(row)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig, ax = plt.subplots(figsize=(8.0, 4.8), constrained_layout=True)
-    for (scenario_id, mode), group_rows in sorted(grouped.items()):
+    for series_index, ((scenario_id, mode, prior_case_index), group_rows) in enumerate(sorted(grouped.items())):
         ordered = sorted(group_rows, key=lambda row: int(float(row["training_iteration"])))
         xs = [int(float(row["training_iteration"])) for row in ordered]
         ys = [float(row[metric_key]) for row in ordered]
-        ax.plot(xs, ys, marker="o", linewidth=1.6, label=f"{scenario_id} / {mode}")
+        prior_label = f" / prior {prior_case_index}" if mode == "local" and prior_case_index != "" else ""
+        ax.plot(
+            xs,
+            ys,
+            marker=MARKERS[series_index % len(MARKERS)],
+            linestyle=LINE_STYLES[series_index % len(LINE_STYLES)],
+            color=COLORBLIND_SAFE_COLORS[series_index % len(COLORBLIND_SAFE_COLORS)],
+            linewidth=1.7,
+            label=f"{scenario_id} / {mode}{prior_label}",
+        )
 
     ax.set_xlabel("Splat training iteration")
     ax.set_ylabel(ylabel)
@@ -145,6 +170,113 @@ def plot_metric_by_splat(rows: list[dict], *, metric_key: str, ylabel: str, outp
     fig.savefig(output_path.with_suffix(".png"), dpi=300, bbox_inches="tight")
     fig.savefig(output_path.with_suffix(".pdf"), bbox_inches="tight")
     plt.close(fig)
+
+
+def summarize_frame_errors(rows: list[dict]) -> list[dict]:
+    grouped: dict[tuple, list[dict]] = defaultdict(list)
+    for row in rows:
+        key = (
+            row["scenario_id"],
+            row["path_id"],
+            row["localization_mode"],
+            row.get("prior_case_index", ""),
+            row["splat_id"],
+            row.get("training_iteration", ""),
+            int(float(row["frame_index"])),
+        )
+        grouped[key].append(row)
+
+    summaries = []
+    for key, group_rows in grouped.items():
+        scenario_id, path_id, mode, prior_case_index, splat_id, training_iteration, frame_index = key
+        combined_values = [to_float(item, "combined_pose_error_m") for item in group_rows]
+        translation_values = [to_float(item, "translation_error_m") for item in group_rows]
+        yaw_values = [to_float(item, "yaw_error_degrees") for item in group_rows]
+        replay_times = [to_float(item, "replay_time_s") for item in group_rows]
+        summaries.append(
+            {
+                "scenario_id": scenario_id,
+                "path_id": path_id,
+                "localization_mode": mode,
+                "prior_case_index": prior_case_index,
+                "splat_id": splat_id,
+                "training_iteration": training_iteration,
+                "frame_index": frame_index,
+                "mean_replay_time_s": mean(replay_times),
+                "mean_combined_pose_error_m": mean(combined_values),
+                "std_combined_pose_error_m": stdev(combined_values),
+                "mean_translation_error_m": mean(translation_values),
+                "mean_yaw_error_degrees": mean(yaw_values),
+                "sample_count": len(group_rows),
+            }
+        )
+
+    summaries.sort(
+        key=lambda row: (
+            row["scenario_id"],
+            row["path_id"],
+            row["localization_mode"],
+            int(float(row["prior_case_index"])) if row["prior_case_index"] else -1,
+            int(float(row["training_iteration"])) if row["training_iteration"] else -1,
+            int(row["frame_index"]),
+        )
+    )
+    return summaries
+
+
+def safe_name(*parts: str) -> str:
+    return "__".join(part.replace("/", "_").replace(" ", "_") for part in parts if part != "")
+
+
+def plot_convergence_by_frame(rows: list[dict], *, plots_dir: Path) -> None:
+    grouped: dict[tuple[str, str, str, str], list[dict]] = defaultdict(list)
+    for row in rows:
+        key = (
+            row["scenario_id"],
+            row["path_id"],
+            row["localization_mode"],
+            row.get("prior_case_index", ""),
+        )
+        grouped[key].append(row)
+
+    for (scenario_id, path_id, mode, prior_case_index), group_rows in sorted(grouped.items()):
+        by_splat: dict[str, list[dict]] = defaultdict(list)
+        for row in group_rows:
+            by_splat[row["splat_id"]].append(row)
+
+        fig, ax = plt.subplots(figsize=(8.4, 4.8), constrained_layout=True)
+        for series_index, (splat_id, splat_rows) in enumerate(sorted(
+            by_splat.items(),
+            key=lambda item: int(float(item[1][0]["training_iteration"])) if item[1][0]["training_iteration"] else -1,
+        )):
+            ordered = sorted(splat_rows, key=lambda row: int(row["frame_index"]))
+            xs = [int(row["frame_index"]) for row in ordered]
+            ys = [float(row["mean_combined_pose_error_m"]) for row in ordered]
+            iteration = ordered[0].get("training_iteration", "")
+            label = f"{int(float(iteration))} iter" if iteration else splat_id
+            ax.plot(
+                xs,
+                ys,
+                marker=MARKERS[series_index % len(MARKERS)],
+                linestyle=LINE_STYLES[series_index % len(LINE_STYLES)],
+                color=COLORBLIND_SAFE_COLORS[series_index % len(COLORBLIND_SAFE_COLORS)],
+                markersize=3,
+                linewidth=1.5,
+                label=label,
+            )
+
+        prior_label = f" prior {prior_case_index}" if mode == "local" and prior_case_index != "" else ""
+        ax.set_title(f"{scenario_id} / {path_id} / {mode}{prior_label}")
+        ax.set_xlabel("Evaluated PF frame")
+        ax.set_ylabel("Mean combined pose error [m]")
+        ax.grid(True, color="#D9D9D9", linewidth=0.8, alpha=0.9)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.legend(frameon=False, fontsize=8, title="Splat")
+        output_base = plots_dir / safe_name("convergence_error_by_frame", scenario_id, path_id, mode, f"prior{prior_case_index}" if prior_case_index != "" else "")
+        fig.savefig(output_base.with_suffix(".png"), dpi=300, bbox_inches="tight")
+        fig.savefig(output_base.with_suffix(".pdf"), bbox_inches="tight")
+        plt.close(fig)
 
 
 def main() -> None:
@@ -176,7 +308,26 @@ def main() -> None:
         ylabel="Mean render and score time [ms]",
         output_path=plots_dir / "runtime_by_splat",
     )
+    plot_metric_by_splat(
+        summaries,
+        metric_key="mean_mean_total_hz",
+        ylabel="Mean total PF throughput [Hz]",
+        output_path=plots_dir / "total_hz_by_splat",
+    )
+    plot_metric_by_splat(
+        summaries,
+        metric_key="mean_max_gpu_memory_used_mb",
+        ylabel="Max GPU memory used [MiB]",
+        output_path=plots_dir / "gpu_memory_by_splat",
+    )
+    per_frame_path = input_dir / "per_frame.csv"
+    if per_frame_path.is_file():
+        frame_error_summaries = summarize_frame_errors(read_csv(per_frame_path))
+        write_csv(input_dir / "frame_error_by_condition.csv", frame_error_summaries)
+        plot_convergence_by_frame(frame_error_summaries, plots_dir=plots_dir)
     print(f"Wrote {input_dir / 'summary_by_condition.csv'}")
+    if per_frame_path.is_file():
+        print(f"Wrote {input_dir / 'frame_error_by_condition.csv'}")
     print(f"Wrote plots under {plots_dir}")
 
 
