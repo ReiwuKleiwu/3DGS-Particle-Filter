@@ -25,6 +25,7 @@ from core.particle_filter.infrastructure.visualization.publisher import Visualiz
 
 
 DEFAULT_MAP_YAML_PATH = Path(__file__).resolve().parents[3] / "map.yaml"
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
 
 class TurtleBotLocalizationService:
@@ -91,8 +92,11 @@ class TurtleBotLocalizationService:
             rng=rng,
         )
 
+        map_yaml_path = Path(settings.map.yaml_path)
+        if not map_yaml_path.is_absolute():
+            map_yaml_path = PROJECT_ROOT / map_yaml_path
         free_space_sampler = FreeSpacePoseSampler.from_map_yaml(
-            DEFAULT_MAP_YAML_PATH,
+            map_yaml_path,
             global_yaw_uniform=settings.initialization.global_yaw_uniform,
         )
         global_pose_sampler = lambda: free_space_sampler.sample_pose(rng=rng)

@@ -23,10 +23,24 @@ mimetypes.add_type("text/javascript", ".js")
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 WEB_ROOT = PROJECT_ROOT / "frontend"
-MAP_YAML_PATH = PROJECT_ROOT / "map.yaml"
 SNAPSHOT_STORE = LatestSnapshotStore()
 CONTROL_COMMAND_STORE = PendingResetCommandStore()
 CONFIG_PATH = PROJECT_ROOT / "turtlebot_localization.yaml"
+
+
+def load_configured_map_yaml_path() -> Path:
+    if not CONFIG_PATH.is_file():
+        return PROJECT_ROOT / "map.yaml"
+    with CONFIG_PATH.open("r", encoding="utf-8") as config_file:
+        raw_config = yaml.safe_load(config_file) or {}
+    raw_path = str((raw_config.get("map") or {}).get("yaml_path", "map.yaml"))
+    map_yaml_path = Path(raw_path)
+    if not map_yaml_path.is_absolute():
+        map_yaml_path = PROJECT_ROOT / map_yaml_path
+    return map_yaml_path
+
+
+MAP_YAML_PATH = load_configured_map_yaml_path()
 
 
 def load_map_metadata() -> dict | None:

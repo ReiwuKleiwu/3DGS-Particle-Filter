@@ -8,14 +8,24 @@ renderer:
   score_batch_size: 16
   include_best_render_preview: true
 
+map:
+  yaml_path: cps_labor_map.yaml
+
+camera_override:
+    fx_scale: 1.8
+    fy_scale: 1.8
+    cx_offset: 0.0
+    cy_offset: 0.0
+
+
 ros:
-  image_topic: /oakd/rgb/preview/image_raw
-  camera_info_topic: /oakd/rgb/preview/camera_info
-  odometry_topic: /odom
-  amcl_pose_topic: /amcl_pose
+  image_topic: /robot_1/oakd/rgb/preview/image_raw
+  camera_info_topic: /robot_1/oakd/rgb/preview/camera_info
+  odometry_topic: /robot_1/odom
+  amcl_pose_topic: /robot_1/amcl_pose
   map_frame: map
   base_frame: base_link
-  tf_lookup_mode: auto
+  tf_lookup_mode: latest
   tf_timeout_seconds: 0.5
   require_odometry: true
 
@@ -23,7 +33,7 @@ runtime:
   observation_ready_timeout_seconds: 10.0
   spin_timeout_seconds: 0.05
   random_seed: 42
-  suspend_updates_when_stationary: true
+  suspend_updates_when_stationary: false
   stationary_translation_threshold_meters: 0.01
   stationary_yaw_threshold_radians: 0.01
 
@@ -73,13 +83,13 @@ recovery:
   alpha_slow: 0.001
   alpha_fast: 0.1
   random_particle_floor_ratio: 0.0
-  random_particle_max_ratio: 0.30
+  random_particle_max_ratio: 0.25
   absolute_score_profiles:
     lpips:
-      best_score_threshold: 0.45
-      median_score_threshold: 0.48
-      random_particle_ratio: 0.50
-      consecutive_bad_updates: 3
+      best_score_threshold: 0.60
+      median_score_threshold: 0.65
+      random_particle_ratio: 0.25
+      consecutive_bad_updates: 5
 
 adaptive_particle_count:
   enabled: false

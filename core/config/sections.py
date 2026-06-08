@@ -6,7 +6,9 @@ from typing import Any
 
 from core.config.models import (
     AdaptiveParticleCountSettings,
+    CameraOverrideSettings,
     InitializationSettings,
+    MapSettings,
     MeasurementSettings,
     MotionNoiseSettings,
     RecoverySettings,
@@ -34,6 +36,23 @@ def load_renderer_settings(raw: dict[str, Any]) -> RendererServiceSettings:
         include_best_render_preview=bool(
             raw.get("include_best_render_preview", defaults.include_best_render_preview)
         ),
+    )
+
+
+def load_map_settings(raw: dict[str, Any]) -> MapSettings:
+    defaults = MapSettings()
+    return MapSettings(
+        yaml_path=str(raw.get("yaml_path", defaults.yaml_path)),
+    )
+
+
+def load_camera_override_settings(raw: dict[str, Any]) -> CameraOverrideSettings:
+    defaults = CameraOverrideSettings()
+    return CameraOverrideSettings(
+        fx_scale=float(raw.get("fx_scale", defaults.fx_scale)),
+        fy_scale=float(raw.get("fy_scale", defaults.fy_scale)),
+        cx_offset=float(raw.get("cx_offset", defaults.cx_offset)),
+        cy_offset=float(raw.get("cy_offset", defaults.cy_offset)),
     )
 
 

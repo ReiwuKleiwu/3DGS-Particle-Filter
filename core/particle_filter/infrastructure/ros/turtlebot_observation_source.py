@@ -9,6 +9,7 @@ from geometry_msgs.msg import PoseWithCovarianceStamped
 from nav_msgs.msg import Odometry
 from rclpy.duration import Duration
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
 from rclpy.time import Time
 from sensor_msgs.msg import CameraInfo, Image as RosImage
 from tf2_ros import Buffer, TransformException, TransformListener
@@ -24,17 +25,18 @@ from core.particle_filter.infrastructure.ros.tf_helpers import pose_measurement_
 
 
 class TurtleBotObservationSource(Node):
-    def __init__(self, settings: RosTopicSettings) -> None:
+    def __init__(self, settings: RosTopicSettings, camera_override: object | None = None) -> None:
         super().__init__("turtlebot_observation_source")
         self._settings = settings
+        self._camera_override = camera_override
         self._image_message: RosImage | None = None
         self._camera_info_message: CameraInfo | None = None
         self._odometry_message: Odometry | None = None
         self._amcl_pose_message: PoseWithCovarianceStamped | None = None
         self._sequence_number = 0
 
-        self.create_subscription(RosImage, settings.image_topic, self._handle_image, 10)
-        self.create_subscription(CameraInfo, settings.camera_info_topic, self._handle_camera_info, 10)
+        self.create_subscription(RosImage, settings.image_topic, self._handle_image, qos_profile_sensor_data)
+        self.create_subscription(CameraInfo, settings.camera_info_topic, self._handle_camera_info, qos_profile_sensor_data)
         self.create_subscription(Odometry, settings.odometry_topic, self._handle_odometry, 20)
         self.create_subscription(PoseWithCovarianceStamped, settings.amcl_pose_topic, self._handle_amcl_pose, 20)
 
@@ -110,15 +112,19 @@ class TurtleBotObservationSource(Node):
     def _handle_amcl_pose(self, message: PoseWithCovarianceStamped) -> None:
         self._amcl_pose_message = message
 
-    @staticmethod
-    def _build_camera_intrinsics(message: CameraInfo) -> CameraIntrinsics:
+    def _build_camera_intrinsics(self, message: CameraInfo) -> CameraIntrinsics:
+        override = self._camera_override
+        fx_scale = float(getattr(override, "fx_scale", 1.0))
+        fy_scale = float(getattr(override, "fy_scale", 1.0))
+        cx_offset = float(getattr(override, "cx_offset", 0.0))
+        cy_offset = float(getattr(override, "cy_offset", 0.0))
         return CameraIntrinsics(
             width=int(message.width),
             height=int(message.height),
-            fx=float(message.k[0]),
-            fy=float(message.k[4]),
-            cx=float(message.k[2]),
-            cy=float(message.k[5]),
+            fx=float(message.k[0]) * fx_scale,
+            fy=float(message.k[4]) * fy_scale,
+            cx=float(message.k[2]) + cx_offset,
+            cy=float(message.k[5]) + cy_offset,
             distortion_model=message.distortion_model,
             distortion_coefficients=tuple(float(value) for value in message.d),
         )
@@ -149,7 +155,10 @@ class TurtleBotObservationSource(Node):
 
     def _lookup_map_pose(self) -> tuple[PoseMeasurement | None, str | None, str | None]:
         if self._settings.tf_lookup_mode == "latest":
-            return self._lookup_map_pose_at(Time(), "latest")
+            try:
+                return self._lookup_map_pose_at(Time(), "latest")
+            except TimeoutError as exc:
+                return None, None, str(exc)
 
         try:
             image_time = Time.from_msg(self._image_message.header.stamp)

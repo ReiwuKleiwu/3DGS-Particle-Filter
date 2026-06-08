@@ -9,9 +9,11 @@ import yaml
 from core.config.models import TurtleBotLocalizationConfig
 from core.config.sections import (
     load_adaptive_particle_count_settings,
+    load_camera_override_settings,
     load_control_settings,
     load_initial_pose_prior,
     load_initialization_settings,
+    load_map_settings,
     load_measurement_settings,
     load_motion_noise_settings,
     load_particle_filter_settings,
@@ -34,6 +36,8 @@ def load_turtlebot_localization_config(config_path: str | Path = DEFAULT_CONFIG_
 
     return TurtleBotLocalizationConfig(
         renderer=load_renderer_settings(raw_config.get("renderer", {})),
+        map=load_map_settings(raw_config.get("map", {})),
+        camera_override=load_camera_override_settings(raw_config.get("camera_override", {})),
         ros=load_ros_topic_settings(raw_config.get("ros", {})),
         runtime=load_runtime_settings(raw_config.get("runtime", {})),
         visualization=load_visualization_settings(raw_config.get("visualization", {})),

@@ -31,6 +31,8 @@ class ControlCommandClient:
         )
         try:
             with urllib.request.urlopen(request, timeout=self._settings.request_timeout_seconds) as response:
+                if response.status == 204:
+                    return None
                 payload = json.loads(response.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             if exc.code == 204:

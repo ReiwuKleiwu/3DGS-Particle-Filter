@@ -16,7 +16,7 @@ def main() -> None:
     settings = load_turtlebot_localization_config()
 
     rclpy.init()
-    observation_source = TurtleBotObservationSource(settings.ros)
+    observation_source = TurtleBotObservationSource(settings.ros, settings.camera_override)
     renderer_client = RendererServiceClient(settings.renderer)
     visualization_publisher = create_visualization_publisher(settings.visualization)
     control_command_client = ControlCommandClient(settings.control)

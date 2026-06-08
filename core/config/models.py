@@ -86,8 +86,23 @@ class RuntimeSettings:
 
 
 @dataclass(frozen=True)
+class MapSettings:
+    yaml_path: str = "map.yaml"
+
+
+@dataclass(frozen=True)
+class CameraOverrideSettings:
+    fx_scale: float = 1.0
+    fy_scale: float = 1.0
+    cx_offset: float = 0.0
+    cy_offset: float = 0.0
+
+
+@dataclass(frozen=True)
 class TurtleBotLocalizationConfig:
     renderer: RendererServiceSettings = field(default_factory=RendererServiceSettings)
+    map: MapSettings = field(default_factory=MapSettings)
+    camera_override: CameraOverrideSettings = field(default_factory=CameraOverrideSettings)
     ros: RosTopicSettings = field(default_factory=RosTopicSettings)
     runtime: RuntimeSettings = field(default_factory=RuntimeSettings)
     visualization: VisualizationPublisherSettings = field(default_factory=VisualizationPublisherSettings)
