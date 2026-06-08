@@ -117,13 +117,23 @@ RUN curl -L "https://github.com/microsoft/onnxruntime/releases/download/v${ONNXR
     && mkdir -p /opt/onnxruntime \
     && tar -xzf /tmp/onnxruntime.tgz --strip-components=1 -C /opt/onnxruntime \
     && rm /tmp/onnxruntime.tgz \
+    && if [ ! -f /opt/onnxruntime/lib/libonnxruntime.so ] && [ -f "/opt/onnxruntime/lib/libonnxruntime.so.${ONNXRUNTIME_VERSION}" ]; then \
+        ln -s "libonnxruntime.so.${ONNXRUNTIME_VERSION}" /opt/onnxruntime/lib/libonnxruntime.so; \
+    fi \
+    && test -f /opt/onnxruntime/lib/libonnxruntime.so \
     && ldconfig /opt/onnxruntime/lib || true
 
 RUN mkdir -p /opt/lpips_models \
     && cd /app \
     && python -m core.rendering.export_lpips_onnx --net alex --width 320 --height 240 --output /opt/lpips_models/lpips_alex_320x240.onnx \
     && python -m core.rendering.export_lpips_onnx --net vgg --width 320 --height 240 --output /opt/lpips_models/lpips_vgg_320x240.onnx \
-    && python -m core.rendering.export_lpips_onnx --net squeeze --width 320 --height 240 --output /opt/lpips_models/lpips_squeeze_320x240.onnx
+    && python -m core.rendering.export_lpips_onnx --net squeeze --width 320 --height 240 --output /opt/lpips_models/lpips_squeeze_320x240.onnx \
+    && python -m core.rendering.export_lpips_onnx --net alex --width 300 --height 300 --output /opt/lpips_models/lpips_alex_300x300.onnx \
+    && python -m core.rendering.export_lpips_onnx --net vgg --width 300 --height 300 --output /opt/lpips_models/lpips_vgg_300x300.onnx \
+    && python -m core.rendering.export_lpips_onnx --net squeeze --width 300 --height 300 --output /opt/lpips_models/lpips_squeeze_300x300.onnx \
+    && python -m core.rendering.export_lpips_onnx --net alex --width 320 --height 320 --output /opt/lpips_models/lpips_alex_320x320.onnx \
+    && python -m core.rendering.export_lpips_onnx --net vgg --width 320 --height 320 --output /opt/lpips_models/lpips_vgg_320x320.onnx \
+    && python -m core.rendering.export_lpips_onnx --net squeeze --width 320 --height 320 --output /opt/lpips_models/lpips_squeeze_320x320.onnx
 
 RUN cmake -S /app/third_party/VkDiffGaussianRasterizer -B /opt/vkdiff_build -G Ninja -DCMAKE_BUILD_TYPE=Release \
     && cmake --build /opt/vkdiff_build --target ForwardRenderServer
