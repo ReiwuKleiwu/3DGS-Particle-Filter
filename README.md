@@ -45,7 +45,7 @@ You need:
 - an NVIDIA GPU runtime for the renderer containers
 - a splat file at `./splat.ply`
 
-Important: the Python package metadata in [pyproject.toml](/home/nick/PycharmProjects/3DGSNav/pyproject.toml) does not install ROS itself. ROS remains an external system dependency.
+Important: the Python package metadata in `pyproject.toml` does not install ROS itself. ROS remains an external system dependency.
 
 ## Python Dependencies
 
@@ -67,7 +67,7 @@ The main localization backend also needs the ROS environment to be sourced befor
 
 ## Configuration
 
-Runtime configuration lives in [turtlebot_localization.yaml](/home/nick/PycharmProjects/3DGSNav/turtlebot_localization.yaml).
+Runtime configuration lives in `turtlebot_localization.yaml`.
 
 Important defaults:
 
@@ -81,6 +81,11 @@ Key config sections:
 
 - `particle_filter`
   - particle count and resampling threshold
+- `map`
+  - `yaml_path` points to the occupancy-map YAML used by global initialization and the frontend map
+- `camera_override`
+  - optional focal-length/principal-point adjustment applied to ROS `camera_info`
+  - useful when an OAK-D preview stream is cropped/resized and its effective FOV does not match the published intrinsics
 - `initial_pose_prior`
   - Gaussian prior used for local localization and local resets
 - `motion_noise`
@@ -108,8 +113,57 @@ Key config sections:
 Notes:
 
 - `local` mode initializes from `initial_pose_prior`.
-- `global` mode initializes from traversable map free space derived from [map.yaml](/home/nick/PycharmProjects/3DGSNav/map.yaml) and `map.pgm`.
+- `global` mode initializes from traversable map free space derived from `map.yaml_path` and the map image referenced inside that YAML.
 - Recovery is implemented with augmented-MCL style random-particle injection, so the filter can relocalize after losing track.
+
+### Namespaced Robots
+
+For physical TurtleBots using ROS namespaces such as `/robot_1` or `/robot_2`, set the camera, odometry, and AMCL topics in `turtlebot_localization.yaml`, for example:
+
+```yaml
+ros:
+  image_topic: /robot_1/oakd/rgb/preview/image_raw
+  camera_info_topic: /robot_1/oakd/rgb/preview/camera_info
+  odometry_topic: /robot_1/odom
+  amcl_pose_topic: /robot_1/amcl_pose
+  map_frame: map
+  base_frame: base_link
+```
+
+TF is usually published on namespaced topics while frame IDs remain `map` and `base_link`. Start the backend with TF remaps:
+
+```bash
+python3 -m core.main --ros-args \
+  -r /tf:=/robot_1/tf \
+  -r /tf_static:=/robot_1/tf_static
+```
+
+Use `/robot_2/...` and `/robot_2/tf` for the second robot.
+
+### Map Selection
+
+The map image does not need to be named `map.pgm`. Configure the map YAML path:
+
+```yaml
+map:
+  yaml_path: cps_labor_map.yaml
+```
+
+The image path inside `cps_labor_map.yaml` is resolved relative to that YAML file.
+
+### Camera FOV Override
+
+If real camera images appear more zoomed-in than renderer previews, increase the focal-length scale:
+
+```yaml
+camera_override:
+  fx_scale: 1.35
+  fy_scale: 1.35
+  cx_offset: 0.0
+  cy_offset: 0.0
+```
+
+Larger `fx_scale`/`fy_scale` means narrower rendered FOV. Restart `core.main` after changing these values.
 
 ## Running The Full Project
 
@@ -148,6 +202,8 @@ Health check:
 curl http://127.0.0.1:8000/health
 ```
 
+For the `vkdiff` backend, LPIPS scoring uses pre-exported ONNX models inside the Docker image. The image currently builds LPIPS models for `320x240`, `300x300`, and `320x320`. If the ROS camera stream uses a different image size with `measurement.metric_name: lpips`, add the matching export in `core/renderer_backends/vkdiff/Dockerfile` and rebuild the image.
+
 ### 2. Start the frontend server
 
 ```bash
@@ -174,7 +230,7 @@ Make sure your ROS environment is sourced first, then run:
 python3 -m core.main
 ```
 
-The backend loads [turtlebot_localization.yaml](/home/nick/PycharmProjects/3DGSNav/turtlebot_localization.yaml) by default.
+The backend loads `turtlebot_localization.yaml` by default.
 
 ## Frontend Workflow
 
@@ -194,6 +250,8 @@ The filter controls now include a persistent localization-mode toggle:
   - reinitializes particles across free map space
   - ignores map-drawn priors
   - reset performs a true global relocalization
+
+The map layer panel also provides toggles for occupancy grid, particles, robot markers, GT pose, AMCL pose, covariance, path history, and density heatmap.
 
 Typical workflows:
 
@@ -229,13 +287,13 @@ If you started `gsplat`, use `3dgsnav-renderer-gsplat` instead.
 
 ## Replay Tuning
 
-Replay-tuning code lives under [core/replay_tuning](/home/nick/PycharmProjects/3DGSNav/core/replay_tuning).
+Replay-tuning code lives under `core/replay_tuning`.
 
 Current structure:
 
-- code: [core/replay_tuning](/home/nick/PycharmProjects/3DGSNav/core/replay_tuning)
-- recorded datasets: [core/replay_tuning/artifacts/datasets](/home/nick/PycharmProjects/3DGSNav/core/replay_tuning/artifacts/datasets)
-- generated results: [core/replay_tuning/artifacts/results](/home/nick/PycharmProjects/3DGSNav/core/replay_tuning/artifacts/results)
+- code: `core/replay_tuning`
+- recorded datasets: `core/replay_tuning/artifacts/datasets`
+- generated results: `core/replay_tuning/artifacts/results`
 
 Example recorder command:
 
@@ -261,7 +319,7 @@ third_party/
 start_renderer.sh
 start_visualization_frontend.sh
 turtlebot_localization.yaml
-map.yaml
-map.pgm
+cps_labor_map.yaml
+cps_labor_map.pgm
 splat.ply
 ```

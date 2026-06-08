@@ -11,6 +11,7 @@ evaluation/
   run_matrix_experiment.py      # Szenario/Pfad/Splat/Mode/Seed-Matrix ausführen
   analyze_matrix_results.py     # per_run_summary.csv aggregieren und Plots erzeugen
   plot_replay_paths.py          # GT-Pfad gegen PF-Schätzung auf der PGM Map plotten
+  plot_dataset_path.py          # aufgezeichneten Dataset-Pfad direkt aus manifest.json auf der Map plotten
   plot_particle_snapshots.py    # aufgezeichnete Partikelwolken als PNG-Sequenz plotten
   make_particle_video.py        # PNG-Sequenz zu MP4-Video konvertieren
   plot_style.py                 # gemeinsame farbenblindenfreundliche Plot-Stile
@@ -21,7 +22,7 @@ evaluation/
   artifacts/                    # Datasets und Results
 ```
 
-## 1. Simulator-Replay Aufzeichnen
+## 1. Replay Aufzeichnen
 
 Beispiel für einen lokalen Nav2-Run mit TF-Referenzpose:
 
@@ -37,6 +38,47 @@ python3 evaluation/record_replay_dataset_simulator.py \
   --tf-time latest
 ```
 
+Mehrere Nav2-Waypoints können als zusammenhängender Run aufgezeichnet werden:
+
+```bash
+python3 evaluation/record_replay_dataset_simulator.py \
+  --name default_small_house_route_multi \
+  --waypoint 2.0 -1.0 0.0 \
+  --waypoint 4.0 -1.0 1.57 \
+  --waypoint 5.24 -0.333 -0.00525 \
+  --record-rate-hz 2.0 \
+  --goal-timeout 180 \
+  --reference-pose-source tf \
+  --tf-time latest
+```
+
+`--goal-timeout` gilt pro Waypoint. Ohne `--waypoint` bleibt der alte Single-Goal-Aufruf mit `--goal-x`, `--goal-y` und `--goal-yaw` gültig.
+
+Für echte TurtleBots mit ROS-Namespace müssen Topics, Action und TF remapped werden. Beispiel für `robot_1`:
+
+```bash
+python3 evaluation/record_replay_dataset_simulator.py \
+  --name labor_default \
+  --image-topic /robot_1/oakd/rgb/preview/image_raw \
+  --camera-info-topic /robot_1/oakd/rgb/preview/camera_info \
+  --odom-topic /robot_1/odom \
+  --amcl-pose-topic /robot_1/amcl_pose \
+  --cmd-vel-topic /robot_1/cmd_vel \
+  --navigate-to-pose-action /robot_1/navigate_to_pose \
+  --map-frame map \
+  --base-frame base_link \
+  --reference-pose-source tf \
+  --tf-time latest \
+  --waypoint 3.2171 -5.6471 0.0000003 \
+  --waypoint 1.4609 -4.3213 -0.00005 \
+  --waypoint 0.32951 0.12498 0.0 \
+  --record-rate-hz 2.0 \
+  --goal-timeout 600 \
+  --ros-args -r /tf:=/robot_1/tf -r /tf_static:=/robot_1/tf_static
+```
+
+Die Waypoints sind `map -> base_link` Posen, nicht OAK-D-Kameraposen. `--ros-args` wird vom Recorder an ROS weitergereicht und nicht als Recorder-Argument interpretiert.
+
 Das Dataset landet unter:
 
 ```text
@@ -45,7 +87,26 @@ evaluation/artifacts/datasets/<name>/
 
 Wichtig ist die `manifest.json`; sie wird später in der Experiment-Matrix referenziert.
 
-Dieses Skript ist explizit für den Simulator gedacht. Für den physischen TurtleBot sollte später ein separates Recorder-Skript ergänzt werden, weil Topics, Referenzpose und Ablauf abweichen können.
+Das Skript kann sowohl im Simulator als auch im Labor verwendet werden, solange Topics, Nav2-Action und TF-Remapping passend gesetzt sind.
+
+### Dataset-Pfad Schnell Prüfen
+
+Direkt nach dem Recording kann der aufgezeichnete Pfad auf der Map geplottet werden:
+
+```bash
+python3 evaluation/plot_dataset_path.py \
+  evaluation/artifacts/datasets/labor_default \
+  --map-yaml cps_labor_map.yaml \
+  --show-waypoints
+```
+
+Das erzeugt standardmäßig:
+
+```text
+evaluation/artifacts/datasets/labor_default/dataset_path_overlay.png
+```
+
+Mit `--full-map` wird die komplette Map statt eines Pfad-Zooms angezeigt.
 
 ## 2. Splat CSV Erzeugen
 
