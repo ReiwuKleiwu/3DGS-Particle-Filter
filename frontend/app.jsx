@@ -7,6 +7,8 @@ const DEFAULT_LAYERS = {
   grid: true,
   particles: true,
   robots: true,
+  groundTruthPose: true,
+  amclPose: true,
   heatmap: false,
   covariance: true,
   trail: true,
@@ -579,6 +581,8 @@ function App() {
               { key: 'particles', name: 'Particles', swatch: 'oklch(0.78 0.14 200)' },
               { key: 'heatmap', name: 'Density heatmap', swatch: 'oklch(0.78 0.14 75)' },
               { key: 'robots', name: 'Robot markers', swatch: 'oklch(0.78 0.16 145)' },
+              { key: 'groundTruthPose', name: 'GT pose', swatch: 'rgba(80,220,160,0.95)' },
+              { key: 'amclPose', name: 'AMCL pose', swatch: 'rgba(255,79,216,1)' },
               { key: 'covariance', name: '2σ covariance', swatch: 'oklch(0.78 0.14 75)' },
               { key: 'trail', name: 'Path history', swatch: '#7d8493' },
             ].map((layer) => (
