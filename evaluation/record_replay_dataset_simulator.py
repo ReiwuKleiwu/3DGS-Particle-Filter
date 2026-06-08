@@ -18,6 +18,7 @@ import numpy as np
 from PIL import Image
 
 import rclpy
+from rclpy.utilities import remove_ros_args
 from action_msgs.msg import GoalStatus
 from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped, Twist
 from nav_msgs.msg import Odometry
@@ -117,6 +118,7 @@ class ReplayRecorder(Node):
         self.cmd_vel_history = []
         self.nav_feedback_history = []
         self.nav_goal_sent_at = None
+        self.nav_goal_history = []
         self.nav_result = None
 
         self.create_subscription(RosImage, args.image_topic, self._image_callback, 10)
@@ -369,17 +371,17 @@ class ReplayRecorder(Node):
             }
         )
 
-    def send_nav_goal(self):
+    def send_nav_goal(self, *, goal_x: float, goal_y: float, goal_yaw: float, waypoint_index: int):
         if not self.nav_client.wait_for_server(timeout_sec=self.args.timeout):
             raise TimeoutError(f"Timed out waiting for Nav2 action server {self.args.navigate_to_pose_action}")
 
         goal_pose = PoseStamped()
         goal_pose.header.frame_id = self.args.map_frame
         goal_pose.header.stamp = self.get_clock().now().to_msg()
-        goal_pose.pose.position.x = float(self.args.goal_x)
-        goal_pose.pose.position.y = float(self.args.goal_y)
+        goal_pose.pose.position.x = float(goal_x)
+        goal_pose.pose.position.y = float(goal_y)
         goal_pose.pose.position.z = 0.0
-        qx, qy, qz, qw = yaw_to_quaternion(float(self.args.goal_yaw))
+        qx, qy, qz, qw = yaw_to_quaternion(float(goal_yaw))
         goal_pose.pose.orientation.x = qx
         goal_pose.pose.orientation.y = qy
         goal_pose.pose.orientation.z = qz
@@ -401,12 +403,69 @@ class ReplayRecorder(Node):
         if not goal_handle.accepted:
             raise RuntimeError("Nav2 goal was rejected")
         self.nav_goal_sent_at = self.get_clock().now().nanoseconds / 1e9
+        self.nav_goal_history.append(
+            {
+                "waypoint_index": waypoint_index,
+                "x": float(goal_x),
+                "y": float(goal_y),
+                "yaw": float(goal_yaw),
+                "sent_at_sec": self.nav_goal_sent_at,
+                "result": None,
+            }
+        )
 
         self.get_logger().info(
-            f"sent nav2 goal x={self.args.goal_x:.3f}, y={self.args.goal_y:.3f}, "
-            f"yaw={math.degrees(self.args.goal_yaw):.1f}deg"
+            f"sent nav2 waypoint {waypoint_index + 1}/{len(self.args.waypoints)} "
+            f"x={goal_x:.3f}, y={goal_y:.3f}, yaw={math.degrees(goal_yaw):.1f}deg"
         )
         return goal_handle.get_result_async()
+
+    def _record_until_nav_result(self, result_future, *, next_record_time: float, waypoint_index: int) -> tuple[float, bool]:
+        deadline = time.monotonic() + self.args.goal_timeout
+        while rclpy.ok() and time.monotonic() < deadline:
+            now = time.monotonic()
+            if now >= next_record_time:
+                self.wait_and_record_frame(timeout_sec=0.25)
+                next_record_time = now + 1.0 / self.args.record_rate_hz
+            if result_future.done():
+                result = result_future.result()
+                status = result.status
+                nav_result = {
+                    "status": int(status),
+                    "status_name": self.goal_status_name(status),
+                    "finished_at_sec": self.get_clock().now().nanoseconds / 1e9,
+                }
+                self.nav_result = nav_result
+                self.nav_goal_history[waypoint_index]["result"] = nav_result
+                if status != GoalStatus.STATUS_SUCCEEDED:
+                    raise RuntimeError(f"Nav2 waypoint {waypoint_index + 1} finished with status {status}")
+                self.get_logger().info(f"Nav2 waypoint {waypoint_index + 1} reached")
+                return next_record_time, True
+            rclpy.spin_once(self, timeout_sec=0.02)
+
+        last_feedback = self.nav_feedback_history[-1] if self.nav_feedback_history else None
+        nav_result = {
+            "status": None,
+            "status_name": "TIMED_OUT",
+            "finished_at_sec": self.get_clock().now().nanoseconds / 1e9,
+            "goal_timeout_sec": self.args.goal_timeout,
+            "last_distance_remaining": (
+                None if last_feedback is None else last_feedback.get("distance_remaining")
+            ),
+            "last_feedback": last_feedback,
+        }
+        self.nav_result = nav_result
+        self.nav_goal_history[waypoint_index]["result"] = nav_result
+        message = (
+            f"Timed out waiting for Nav2 waypoint {waypoint_index + 1}; saving partial replay dataset "
+            f"with {len(self.frames)} recorded frames"
+        )
+        if last_feedback is not None:
+            message += f" and last distance_remaining={last_feedback.get('distance_remaining'):.3f}m"
+        if self.args.strict_nav_result:
+            raise TimeoutError(message)
+        self.get_logger().warn(message)
+        return next_record_time, False
 
     def run(self) -> None:
         self.wait_until_ready()
@@ -419,47 +478,20 @@ class ReplayRecorder(Node):
         next_record_time = time.monotonic()
         self.wait_and_record_frame()
 
-        result_future = self.send_nav_goal()
-        deadline = time.monotonic() + self.args.goal_timeout
-        while rclpy.ok() and time.monotonic() < deadline:
-            now = time.monotonic()
-            if now >= next_record_time:
-                self.wait_and_record_frame(timeout_sec=0.25)
-                next_record_time = now + 1.0 / self.args.record_rate_hz
-            if result_future.done():
-                result = result_future.result()
-                status = result.status
-                self.nav_result = {
-                    "status": int(status),
-                    "status_name": self.goal_status_name(status),
-                    "finished_at_sec": self.get_clock().now().nanoseconds / 1e9,
-                }
-                if status != GoalStatus.STATUS_SUCCEEDED:
-                    raise RuntimeError(f"Nav2 goal finished with status {status}")
-                self.get_logger().info("Nav2 goal reached")
-                break
-            rclpy.spin_once(self, timeout_sec=0.02)
-        else:
-            last_feedback = self.nav_feedback_history[-1] if self.nav_feedback_history else None
-            self.nav_result = {
-                "status": None,
-                "status_name": "TIMED_OUT",
-                "finished_at_sec": self.get_clock().now().nanoseconds / 1e9,
-                "goal_timeout_sec": self.args.goal_timeout,
-                "last_distance_remaining": (
-                    None if last_feedback is None else last_feedback.get("distance_remaining")
-                ),
-                "last_feedback": last_feedback,
-            }
-            message = (
-                "Timed out waiting for Nav2 goal result; saving partial replay dataset "
-                f"with {len(self.frames)} recorded frames"
+        for waypoint_index, (goal_x, goal_y, goal_yaw) in enumerate(self.args.waypoints):
+            result_future = self.send_nav_goal(
+                goal_x=goal_x,
+                goal_y=goal_y,
+                goal_yaw=goal_yaw,
+                waypoint_index=waypoint_index,
             )
-            if last_feedback is not None:
-                message += f" and last distance_remaining={last_feedback.get('distance_remaining'):.3f}m"
-            if self.args.strict_nav_result:
-                raise TimeoutError(message)
-            self.get_logger().warn(message)
+            next_record_time, waypoint_succeeded = self._record_until_nav_result(
+                result_future,
+                next_record_time=next_record_time,
+                waypoint_index=waypoint_index,
+            )
+            if not waypoint_succeeded:
+                break
 
         final_deadline = time.monotonic() + self.args.final_settle_time
         while rclpy.ok() and time.monotonic() < final_deadline:
@@ -510,12 +542,13 @@ class ReplayRecorder(Node):
                 for frame in self.frames
             ],
             "nav_goal": {
-                "x": self.args.goal_x,
-                "y": self.args.goal_y,
-                "yaw": self.args.goal_yaw,
+                "x": self.args.waypoints[-1][0],
+                "y": self.args.waypoints[-1][1],
+                "yaw": self.args.waypoints[-1][2],
                 "sent_at_sec": self.nav_goal_sent_at,
                 "result": self.nav_result,
             },
+            "nav_goals": self.nav_goal_history,
             "notes": self.args.notes,
         }
 
@@ -550,12 +583,13 @@ class ReplayRecorder(Node):
                     "base_frame": self.args.base_frame,
                     "navigate_to_pose_action": self.args.navigate_to_pose_action,
                     "nav_goal": {
-                        "x": self.args.goal_x,
-                        "y": self.args.goal_y,
-                        "yaw": self.args.goal_yaw,
+                        "x": self.args.waypoints[-1][0],
+                        "y": self.args.waypoints[-1][1],
+                        "yaw": self.args.waypoints[-1][2],
                         "sent_at_sec": self.nav_goal_sent_at,
                         "result": self.nav_result,
                     },
+                    "nav_goals": self.nav_goal_history,
                     "cmd_vel_history": self.cmd_vel_history,
                     "nav_feedback_history": self.nav_feedback_history,
                     "frames": self.frames,
@@ -611,10 +645,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out-dir", type=Path, default=DATASETS_DIR)
     parser.add_argument("--name", required=True, help="Subdirectory name under out-dir.")
     parser.add_argument("--ply", type=Path, default=Path("splat.ply"))
-    parser.add_argument("--goal-x", type=float, required=True)
-    parser.add_argument("--goal-y", type=float, required=True)
-    parser.add_argument("--goal-yaw", type=float, required=True, help="Goal yaw in radians.")
-    parser.add_argument("--goal-timeout", type=float, default=180.0)
+    parser.add_argument("--goal-x", type=float)
+    parser.add_argument("--goal-y", type=float)
+    parser.add_argument("--goal-yaw", type=float, help="Goal yaw in radians.")
+    parser.add_argument(
+        "--waypoint",
+        nargs=3,
+        type=float,
+        action="append",
+        metavar=("X", "Y", "YAW"),
+        help="Nav2 waypoint as x y yaw in radians. Can be passed multiple times.",
+    )
+    parser.add_argument("--goal-timeout", type=float, default=180.0, help="Timeout per waypoint in seconds.")
     parser.add_argument(
         "--strict-nav-result",
         action="store_true",
@@ -631,7 +673,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--prior-sigma-y", type=float, default=0.5)
     parser.add_argument("--prior-sigma-yaw-deg", type=float, default=30.0)
     parser.add_argument("--notes", default="")
-    return parser.parse_args()
+    args = parser.parse_args(args=remove_ros_args(sys.argv)[1:])
+    if args.waypoint:
+        args.waypoints = [tuple(waypoint) for waypoint in args.waypoint]
+    else:
+        missing_goal_fields = [
+            name
+            for name, value in (
+                ("--goal-x", args.goal_x),
+                ("--goal-y", args.goal_y),
+                ("--goal-yaw", args.goal_yaw),
+            )
+            if value is None
+        ]
+        if missing_goal_fields:
+            parser.error("Either pass one or more --waypoint X Y YAW values or provide " + ", ".join(missing_goal_fields))
+        args.waypoints = [(args.goal_x, args.goal_y, args.goal_yaw)]
+    args.goal_x, args.goal_y, args.goal_yaw = args.waypoints[-1]
+    return args
 
 
 def main() -> None:
