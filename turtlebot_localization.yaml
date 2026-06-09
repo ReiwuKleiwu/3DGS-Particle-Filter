@@ -7,13 +7,22 @@ renderer:
   poll_interval_seconds: 0.5
   score_batch_size: 16
   include_best_render_preview: true
+  #splat_map_x: 0.034 # small_house
+  #splat_map_y: -0.028 # small_house
+  splat_map_x: -0.016483
+  splat_map_y: 0.025263
+  splat_map_scale: 0.956853
+  splat_map_scale_x: 1.0
+  splat_map_scale_y: 1.0
+  splat_map_yaw_degrees: 4.128334
+
 
 map:
   yaml_path: cps_labor_map.yaml
 
 camera_override:
-    fx_scale: 1.8
-    fy_scale: 1.8
+    fx_scale: 1.7777714591
+    fy_scale: 1.7777714591
     cx_offset: 0.0
     cy_offset: 0.0
 
