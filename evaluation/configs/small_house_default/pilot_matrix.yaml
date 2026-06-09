@@ -41,4 +41,4 @@ scenarios:
     splat_csv: evaluation/configs/small_house_default/splats.csv
     paths:
       - path_id: route_1
-        manifest: evaluation/artifacts/datasets/default_small_house_route_1/manifest.json
+        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_1/manifest.json

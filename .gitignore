@@ -63,6 +63,7 @@ evaluation/artifacts/datasets/*
 !evaluation/artifacts/datasets/.gitkeep
 frontend/uploads/
 frontend_new/uploads/
+evaluation/artifacts
 
 # Common large ML / robotics artifacts
 *.bag

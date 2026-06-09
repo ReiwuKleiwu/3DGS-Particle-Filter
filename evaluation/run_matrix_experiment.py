@@ -321,7 +321,7 @@ def measurement_with_overrides(base: MeasurementSettings, raw: dict | None) -> M
     return replace(base, **raw)
 
 
-def restart_renderer(*, splat: SplatSpec, backend: str, port: int, build_image: bool) -> None:
+def restart_renderer(*, splat: SplatSpec, backend: str, port: int, build_image: bool, settings=None) -> None:
     env = os.environ.copy()
     env.update(
         {
@@ -331,6 +331,25 @@ def restart_renderer(*, splat: SplatSpec, backend: str, port: int, build_image: 
             "BUILD_IMAGE": "1" if build_image else "0",
         }
     )
+    if settings is not None:
+        env.update(
+            {
+                "SPLAT_MAP_X": str(settings.renderer.splat_map_x),
+                "SPLAT_MAP_Y": str(settings.renderer.splat_map_y),
+                "SPLAT_MAP_SCALE": str(settings.renderer.splat_map_scale),
+                "SPLAT_MAP_SCALE_X": str(
+                    settings.renderer.splat_map_scale_x
+                    if settings.renderer.splat_map_scale_x is not None
+                    else settings.renderer.splat_map_scale
+                ),
+                "SPLAT_MAP_SCALE_Y": str(
+                    settings.renderer.splat_map_scale_y
+                    if settings.renderer.splat_map_scale_y is not None
+                    else settings.renderer.splat_map_scale
+                ),
+                "SPLAT_MAP_YAW_DEGREES": str(settings.renderer.splat_map_yaw_degrees),
+            }
+        )
     print(f"Restarting renderer for {splat.splat_id}: {splat.ply_path}", flush=True)
     subprocess.run([str(REPO_ROOT / "start_renderer.sh")], cwd=REPO_ROOT, env=env, check=True)
 
@@ -693,7 +712,7 @@ def evaluate_run(
 
     try:
         for frame_index, frame in enumerate(sampled_frames):
-            observation = build_observation(manifest, frame, frame_index)
+            observation = build_observation(manifest, frame, frame_index, settings.camera_override)
             frame_start = time.perf_counter()
             step_result = step_engine.run_step(
                 particle_filter=particle_filter,
@@ -984,7 +1003,13 @@ def main() -> None:
                 if restart_renderer_enabled and active_splat_id != splat.splat_id:
                     if console is not None:
                         console.print(f"[yellow]Restarting renderer[/yellow] splat={splat.splat_id}")
-                    restart_renderer(splat=splat, backend=backend, port=port, build_image=args.build_image)
+                    restart_renderer(
+                        splat=splat,
+                        backend=backend,
+                        port=port,
+                        build_image=args.build_image,
+                        settings=settings,
+                    )
                     active_splat_id = splat.splat_id
                 health = dict(renderer_client.wait_until_ready())
                 renderer_health_by_splat[splat.splat_id] = health

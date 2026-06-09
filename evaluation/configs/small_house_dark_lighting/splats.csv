@@ -1,0 +1,9 @@
+splat_id,ply_path,training_iteration,quality_label,notes
+default_small_house_01000,/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/small_house_original/export_01000.ply,1000,iter_1000,
+default_small_house_02000,/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/small_house_original/export_02000.ply,2000,iter_2000,
+default_small_house_03000,/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/small_house_original/export_03000.ply,3000,iter_3000,
+default_small_house_05000,/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/small_house_original/export_05000.ply,5000,iter_5000,
+default_small_house_08000,/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/small_house_original/export_08000.ply,8000,iter_8000,
+default_small_house_12000,/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/small_house_original/export_12000.ply,12000,iter_12000,
+default_small_house_18000,/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/small_house_original/export_18000.ply,18000,iter_18000,
+default_small_house_30000,/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/small_house_original/export_30000.ply,30000,iter_30000,
