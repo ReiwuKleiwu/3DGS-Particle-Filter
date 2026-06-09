@@ -36,6 +36,20 @@ def load_renderer_settings(raw: dict[str, Any]) -> RendererServiceSettings:
         include_best_render_preview=bool(
             raw.get("include_best_render_preview", defaults.include_best_render_preview)
         ),
+        splat_map_x=float(raw.get("splat_map_x", defaults.splat_map_x)),
+        splat_map_y=float(raw.get("splat_map_y", defaults.splat_map_y)),
+        splat_map_scale=float(raw.get("splat_map_scale", defaults.splat_map_scale)),
+        splat_map_scale_x=(
+            None
+            if raw.get("splat_map_scale_x", defaults.splat_map_scale_x) is None
+            else float(raw.get("splat_map_scale_x", defaults.splat_map_scale_x))
+        ),
+        splat_map_scale_y=(
+            None
+            if raw.get("splat_map_scale_y", defaults.splat_map_scale_y) is None
+            else float(raw.get("splat_map_scale_y", defaults.splat_map_scale_y))
+        ),
+        splat_map_yaw_degrees=float(raw.get("splat_map_yaw_degrees", defaults.splat_map_yaw_degrees)),
     )
 
 

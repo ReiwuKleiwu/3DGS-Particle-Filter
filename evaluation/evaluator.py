@@ -21,7 +21,7 @@ from core.particle_filter.domain.motion_model import TurtleBotMotionModel
 from core.particle_filter.domain.particle_filter import TurtleBotParticleFilter, TurtleBotParticleFilterConfig
 from core.particle_filter.domain.pose import wrap_angle
 from core.particle_filter.infrastructure.renderer.renderer_service_client import RendererServiceClient
-from core.particle_filter.infrastructure.ros.observation import TurtleBotObservation
+from core.particle_filter.infrastructure.ros.observation import CameraIntrinsics, TurtleBotObservation
 from evaluation.models import (
     DEFAULT_PRIOR_BANK,
     PriorOffset,
@@ -37,10 +37,12 @@ def build_observation(
     manifest: ReplayManifest,
     frame: ReplayFrame,
     sequence_number: int,
+    camera_override: object | None = None,
 ) -> TurtleBotObservation:
     """Builds an offline observation object from one replay frame and its image payload."""
     image = Image.open(manifest.resolve_image_path(frame.image_path)).convert("RGB")
     image_rgb = np.asarray(image, dtype=np.uint8)
+    camera = apply_camera_override(manifest.camera, camera_override)
     return TurtleBotObservation(
         sequence_number=sequence_number,
         image_rgb=image_rgb,
@@ -48,12 +50,31 @@ def build_observation(
         image_frame_id="offline_replay",
         image_stamp_seconds=frame.image_stamp_seconds,
         image_stamp_nanoseconds=frame.image_stamp_nanoseconds,
-        camera=manifest.camera,
+        camera=camera,
         odometry_pose=frame.odom_pose,
         map_pose=frame.pose,
         amcl_pose=None,
         resolved_tf_time=frame.resolved_tf_time,
         tf_error=frame.tf_error,
+    )
+
+
+def apply_camera_override(camera: CameraIntrinsics, camera_override: object | None = None) -> CameraIntrinsics:
+    """Applies the runtime camera override settings used by live ROS observations."""
+    override = camera_override
+    fx_scale = float(getattr(override, "fx_scale", 1.0))
+    fy_scale = float(getattr(override, "fy_scale", 1.0))
+    cx_offset = float(getattr(override, "cx_offset", 0.0))
+    cy_offset = float(getattr(override, "cy_offset", 0.0))
+    return CameraIntrinsics(
+        width=camera.width,
+        height=camera.height,
+        fx=camera.fx * fx_scale,
+        fy=camera.fy * fy_scale,
+        cx=camera.cx + cx_offset,
+        cy=camera.cy + cy_offset,
+        distortion_model=camera.distortion_model,
+        distortion_coefficients=camera.distortion_coefficients,
     )
 
 
@@ -154,7 +175,7 @@ def evaluate_manifest(
                         "frame_count": len(sampled_frames),
                     }
                 )
-            observation = build_observation(manifest, frame, sequence_number)
+            observation = build_observation(manifest, frame, sequence_number, settings.camera_override)
             last_step_result = step_engine.run_step(
                 particle_filter=particle_filter,
                 observation=observation,

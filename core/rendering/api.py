@@ -11,6 +11,14 @@ from fastapi import FastAPI, HTTPException, Response
 import torch
 
 from core.rendering.backends import RendererBackend, create_renderer_backend
+from core.rendering.config import (
+    DEFAULT_SPLAT_MAP_SCALE,
+    DEFAULT_SPLAT_MAP_SCALE_X,
+    DEFAULT_SPLAT_MAP_SCALE_Y,
+    DEFAULT_SPLAT_MAP_X,
+    DEFAULT_SPLAT_MAP_Y,
+    DEFAULT_SPLAT_MAP_YAW,
+)
 from core.rendering.lpips import lpips_error
 from core.rendering.contracts import (
     CameraModel,
@@ -132,6 +140,12 @@ def health() -> dict:
         "backend": renderer_backend.backend_name if renderer_backend is not None else None,
         "splat_path": str(renderer_backend.splat_path) if renderer_backend is not None else None,
         "gaussians": renderer_backend.gaussian_count if renderer_backend is not None else None,
+        "splat_map_x": DEFAULT_SPLAT_MAP_X,
+        "splat_map_y": DEFAULT_SPLAT_MAP_Y,
+        "splat_map_scale": DEFAULT_SPLAT_MAP_SCALE,
+        "splat_map_scale_x": DEFAULT_SPLAT_MAP_SCALE_X,
+        "splat_map_scale_y": DEFAULT_SPLAT_MAP_SCALE_Y,
+        "splat_map_yaw_degrees": DEFAULT_SPLAT_MAP_YAW * 180.0 / 3.141592653589793,
     }
 
 

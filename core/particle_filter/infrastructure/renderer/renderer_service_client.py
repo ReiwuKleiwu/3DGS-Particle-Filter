@@ -26,6 +26,12 @@ class RendererServiceSettings:
     poll_interval_seconds: float = 0.5
     score_batch_size: int = 16
     include_best_render_preview: bool = True
+    splat_map_x: float = 0.0
+    splat_map_y: float = 0.0
+    splat_map_scale: float = 1.0
+    splat_map_scale_x: float | None = None
+    splat_map_scale_y: float | None = None
+    splat_map_yaw_degrees: float = 0.0
 
 
 @dataclass(frozen=True)
