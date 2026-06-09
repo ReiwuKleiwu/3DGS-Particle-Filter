@@ -161,13 +161,13 @@ scenarios:
     splat_csv: evaluation/configs/default_small_house_splats.csv
     paths:
       - path_id: route_1
-        manifest: evaluation/artifacts/datasets/default_small_house_route_1/manifest.json
+        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_1/manifest.json
       - path_id: route_2
-        manifest: evaluation/artifacts/datasets/default_small_house_route_2/manifest.json
+        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_2/manifest.json
       - path_id: route_3
-        manifest: evaluation/artifacts/datasets/default_small_house_route_3/manifest.json
+        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_3/manifest.json
       - path_id: route_4
-        manifest: evaluation/artifacts/datasets/default_small_house_route_4/manifest.json
+        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_4/manifest.json
 ```
 
 ## 4. Experiment Ausführen
