@@ -7,6 +7,7 @@ Die Skripte verwenden die zentrale Lokalisierungs- und Renderer-Logik aus `core/
 ```text
 evaluation/
   record_replay_dataset_simulator.py  # Simulator-Replays mit Kamera, Odometrie und Referenzpose aufzeichnen
+  record_replay_dataset_turtlebot.py  # Labor-Replays mit Sensor-QoS, Pose-Historie und Nav2-Waypoints aufzeichnen
   generate_splat_csv.py         # explizite Splat-CSV aus einem Splat-Ordner erzeugen
   run_matrix_experiment.py      # Szenario/Pfad/Splat/Mode/Seed-Matrix ausführen
   analyze_matrix_results.py     # per_run_summary.csv aggregieren und Plots erzeugen
@@ -54,10 +55,10 @@ python3 evaluation/record_replay_dataset_simulator.py \
 
 `--goal-timeout` gilt pro Waypoint. Ohne `--waypoint` bleibt der alte Single-Goal-Aufruf mit `--goal-x`, `--goal-y` und `--goal-yaw` gültig.
 
-Für echte TurtleBots mit ROS-Namespace müssen Topics, Action und TF remapped werden. Beispiel für `robot_1`:
+Für echte TurtleBots mit ROS-Namespace sollte das physische Recorder-Skript verwendet werden. Es verwendet Sensor-QoS für Kamera/Odometrie, speichert eine Odometrie-Historie und matched AMCL/TF zeitlich zur Bildaufnahme. Weil wir im Labor keine echte Ground Truth haben, ist AMCL standardmäßig die Referenzpose.
 
 ```bash
-python3 evaluation/record_replay_dataset_simulator.py \
+python3 evaluation/record_replay_dataset_turtlebot.py \
   --name labor_default \
   --image-topic /robot_1/oakd/rgb/preview/image_raw \
   --camera-info-topic /robot_1/oakd/rgb/preview/camera_info \
@@ -67,17 +68,18 @@ python3 evaluation/record_replay_dataset_simulator.py \
   --navigate-to-pose-action /robot_1/navigate_to_pose \
   --map-frame map \
   --base-frame base_link \
-  --reference-pose-source tf \
-  --tf-time latest \
+  --reference-pose-source amcl \
   --waypoint 3.2171 -5.6471 0.0000003 \
   --waypoint 1.4609 -4.3213 -0.00005 \
   --waypoint 0.32951 0.12498 0.0 \
-  --record-rate-hz 2.0 \
+  --record-rate-hz 10.0 \
   --goal-timeout 600 \
   --ros-args -r /tf:=/robot_1/tf -r /tf_static:=/robot_1/tf_static
 ```
 
 Die Waypoints sind `map -> base_link` Posen, nicht OAK-D-Kameraposen. `--ros-args` wird vom Recorder an ROS weitergereicht und nicht als Recorder-Argument interpretiert.
+
+Wenn statt AMCL die transformierte RViz-Pose als Referenz genutzt werden soll, kann `--reference-pose-source tf --tf-time image` gesetzt werden. Das ist empfindlicher gegenüber TF-Timing, entspricht aber eher dem festen RViz-Frame `map`.
 
 Das Dataset landet unter:
 
@@ -199,6 +201,35 @@ python3 evaluation/run_matrix_experiment.py \
 
 Der Runner startet den Renderer bei jedem Splat-Wechsel neu, wenn `restart_renderer: true` in der Matrix steht. Matrizen mit mehreren Splats werden ohne diese Option abgelehnt, damit Splat-Vergleiche nicht versehentlich mit einem alten Renderer-Zustand laufen.
 
+Für Labor-Pilot-Runs ist der Renderer meist bereits manuell mit `sudo` gestartet. Die CPS-Labor-Pilot-Matrizen verwenden deshalb `restart_renderer: false`:
+
+```bash
+sudo BACKEND=vkdiff SPLAT_PATH=/home/student/Dokumente/3DGS-Particle-Filter/splat.ply ./start_renderer.sh
+
+python3 evaluation/run_matrix_experiment.py \
+  --matrix evaluation/configs/cps_labor_default_two/pilot_matrix.yaml \
+  --config turtlebot_localization.yaml \
+  --run-name cps_labor_default_two_pilot_001 \
+  --no-progress
+```
+
+Verfügbare Labor-Pilot-Konfigurationen:
+
+```text
+evaluation/configs/labor_default/pilot_matrix.yaml
+evaluation/configs/labor_default_full_second/pilot_matrix.yaml
+evaluation/configs/cps_labor_default_two/pilot_matrix.yaml
+evaluation/configs/cps_labor_moved_objects/pilot_matrix.yaml
+```
+
+Diese Pilot-Konfigurationen führen jeweils genau einen lokalen Run aus:
+
+```text
+seed = 1001
+particle_count = 512
+prior_offset = dx 0.0, dy 0.0, dyaw 0.0 deg
+```
+
 Während des Runs zeigt das Skript eine Zusammenfassung der Studie, einen Gesamtfortschrittsbalken und einen Frame-Fortschrittsbalken für den aktuellen Run. Falls die Terminal-Ausgabe in Logs zu unruhig ist:
 
 ```bash
@@ -299,6 +330,16 @@ Aus der PNG-Sequenz kann anschließend ein MP4 erzeugt werden:
 python3 evaluation/make_particle_video.py \
   --frames-dir evaluation/artifacts/results/<run_name>/particle_plots/small_house_default__route_3__default_small_house_30000__global__seed42 \
   --fps 8
+```
+
+Falls `ffmpeg` kein H.264/libx264 erzeugen kann oder das Video lokal nicht geöffnet wird, nutze den MPEG-4-Fallback:
+
+```bash
+python3 evaluation/make_particle_video.py \
+  --frames-dir evaluation/artifacts/results/<run_name>/particle_plots/<run_id> \
+  --output evaluation/artifacts/results/<run_name>/<run_id>.mp4 \
+  --fps 8 \
+  --codec mpeg4
 ```
 
 `per_run_summary.csv` ist die Grundlage für die wissenschaftliche Aggregation. Jeder Eintrag entspricht:

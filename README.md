@@ -285,21 +285,13 @@ docker rm -f 3dgsnav-renderer-vkdiff
 
 If you started `gsplat`, use `3dgsnav-renderer-gsplat` instead.
 
-## Replay Tuning
+## Evaluation And Replay Datasets
 
-Replay-tuning code lives under `core/replay_tuning`.
+Offline replay evaluation lives under `evaluation/`.
 
-Current structure:
+Use `evaluation/record_replay_dataset_turtlebot.py` for physical TurtleBot datasets. It records OAK-D images, camera info, odometry history, command velocity, Nav2 feedback, and an AMCL or TF reference pose. In the lab we do not have true ground truth, so AMCL is the practical reference pose for the CPS datasets.
 
-- code: `core/replay_tuning`
-- recorded datasets: `core/replay_tuning/artifacts/datasets`
-- generated results: `core/replay_tuning/artifacts/results`
-
-Example recorder command:
-
-```bash
-python3 -m core.replay_tuning.record_replay_dataset   --name hallway_run_01   --goal-x 2.7   --goal-y -3.45   --goal-yaw 1.57
-```
+Pilot matrices for lab datasets live under `evaluation/configs/<dataset_name>/`. The current lab pilots use one local run, one seed, 512 particles, and zero prior offset. See [evaluation/README.md](evaluation/README.md) for the full recorder, evaluation, plotting, and video commands.
 
 ## Repository Layout
 
