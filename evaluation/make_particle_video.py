@@ -13,6 +13,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=None, help="Output MP4 path.")
     parser.add_argument("--fps", type=int, default=8)
     parser.add_argument("--crf", type=int, default=20, help="x264 CRF quality value; lower is higher quality.")
+    parser.add_argument(
+        "--codec",
+        choices=["auto", "libx264", "mpeg4"],
+        default="auto",
+        help="Video codec. auto tries libx264 first, then falls back to mpeg4.",
+    )
     return parser.parse_args()
 
 
@@ -29,7 +35,7 @@ def main() -> None:
     output = args.output.resolve() if args.output else frames_dir.with_suffix(".mp4")
     output.parent.mkdir(parents=True, exist_ok=True)
     frame_pattern = str(frames_dir / "frame_*.png")
-    command = [
+    base_command = [
         "ffmpeg",
         "-y",
         "-framerate",
@@ -40,17 +46,42 @@ def main() -> None:
         frame_pattern,
         "-vf",
         "pad=ceil(iw/2)*2:ceil(ih/2)*2",
-        "-c:v",
-        "libx264",
-        "-pix_fmt",
-        "yuv420p",
-        "-crf",
-        str(args.crf),
-        "-movflags",
-        "+faststart",
-        str(output),
     ]
-    subprocess.run(command, check=True)
+
+    def encode(codec: str) -> None:
+        if codec == "libx264":
+            codec_args = [
+                "-c:v",
+                "libx264",
+                "-pix_fmt",
+                "yuv420p",
+                "-crf",
+                str(args.crf),
+                "-movflags",
+                "+faststart",
+            ]
+        else:
+            codec_args = [
+                "-c:v",
+                "mpeg4",
+                "-q:v",
+                "4",
+                "-pix_fmt",
+                "yuv420p",
+                "-movflags",
+                "+faststart",
+            ]
+        subprocess.run([*base_command, *codec_args, str(output)], check=True)
+
+    if args.codec == "auto":
+        try:
+            encode("libx264")
+        except subprocess.CalledProcessError:
+            print("libx264 encoding failed; retrying with mpeg4 fallback.")
+            encode("mpeg4")
+    else:
+        encode(args.codec)
+
     print(f"Wrote {output}")
 
 
