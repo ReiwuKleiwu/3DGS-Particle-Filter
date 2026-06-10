@@ -1,5 +1,5 @@
 experiment:
-  name: labor_default_pilot
+  name: cps_labor_moved_objects_pilot
   seeds: [1001]
   frame_stride: 1
   gpu_memory_poll_stride: 1
@@ -8,8 +8,8 @@ experiment:
     frame_stride: 1
     modes: [local]
     seeds: [1001]
-    path_ids: [labor_default]
-    splat_ids: [labor_default_30000]
+    path_ids: [cps_labor_moved_objects]
+    splat_ids: [cps_labor_moved_objects_30000]
   backend: vkdiff
   port: 8000
   restart_renderer: false
@@ -35,8 +35,8 @@ modes:
         dyaw_degrees: 0.0
 
 scenarios:
-  - scenario_id: labor_default
+  - scenario_id: cps_labor_moved_objects
     splat_csv: splats.csv
     paths:
-      - path_id: labor_default
-        manifest: ../../../evaluation/artifacts/datasets/labor_default/manifest.json
+      - path_id: cps_labor_moved_objects
+        manifest: ../../../evaluation/artifacts/datasets/cps_labor_moved_objects/manifest.json
