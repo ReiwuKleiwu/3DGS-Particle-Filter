@@ -9,12 +9,18 @@ renderer:
   include_best_render_preview: true
   #splat_map_x: 0.034 # small_house
   #splat_map_y: -0.028 # small_house
-  splat_map_x: -0.016483
-  splat_map_y: 0.025263
-  splat_map_scale: 0.956853
+  # splat_map_x: -0.016483
+  # splat_map_y: 0.025263
+  # splat_map_scale: 0.956853
+  # splat_map_scale_x: 1.0
+  # splat_map_scale_y: 1.0
+  # splat_map_yaw_degrees: 4.128334
+  splat_map_x: -0.040779
+  splat_map_y: -0.353903
+  splat_map_scale: 1.044419
   splat_map_scale_x: 1.0
   splat_map_scale_y: 1.0
-  splat_map_yaw_degrees: 4.128334
+  splat_map_yaw_degrees: 6.657394
 
 
 map:
@@ -28,10 +34,10 @@ camera_override:
 
 
 ros:
-  image_topic: /robot_1/oakd/rgb/preview/image_raw
-  camera_info_topic: /robot_1/oakd/rgb/preview/camera_info
-  odometry_topic: /robot_1/odom
-  amcl_pose_topic: /robot_1/amcl_pose
+  image_topic: /robot_2/oakd/rgb/preview/image_raw
+  camera_info_topic: /robot_2/oakd/rgb/preview/camera_info
+  odometry_topic: /robot_2/odom
+  amcl_pose_topic: /robot_2/amcl_pose
   map_frame: map
   base_frame: base_link
   tf_lookup_mode: latest
