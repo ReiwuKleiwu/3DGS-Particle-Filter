@@ -8,12 +8,12 @@ experiment:
     frame_stride: 1
     modes: [local, global]
     seeds: [42]
-    path_ids: [route_1, route_2, route_3, route_4]
+    path_ids: [route]
     splat_ids: [default_small_house_01000, default_small_house_30000]
   backend: vkdiff
   port: 8000
   restart_renderer: true
-  map_yaml: map.yaml
+  map_yaml: maps/map.yaml
   thresholds:
     failure_translation_m: 0.2
     failure_yaw_deg: 10.0
@@ -28,23 +28,23 @@ splats:
 
 modes:
   local:
-    particle_count: 512
+    particle_count: 500
     prior_offsets:
-      - dx: 1.00
-        dy: 0.50
-        dyaw_degrees: 10.0
+      - dx: 0.25
+        dy: 0.10
+        dyaw_degrees: 5.0
+      - dx: 0.75
+        dy: 0.40
+        dyaw_degrees: 15.0
+      - dx: 1.50
+        dy: 0.75
+        dyaw_degrees: 35.0
   global:
-    particle_count: 2000
+    particle_count: 1500
 
 scenarios:
   - scenario_id: small_house_default
     splat_csv: evaluation/configs/small_house_default/splats.csv
     paths:
-      - path_id: route_1
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_1/manifest.json
-      - path_id: route_2
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_2/manifest.json
-      - path_id: route_3
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_3/manifest.json
-      - path_id: route_4
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_4/manifest.json
+      - path_id: route
+        manifest: evaluation/artifacts/datasets/small_house/default/default_small_house_route/manifest.json

@@ -53,6 +53,9 @@ compile_commands.json
 
 # Project-specific generated data and bulky assets
 splat.ply
+splat_*.ply
+maps/*.ply
+old_splats_DO_NOT_USE!/
 core/renders/
 core/replay_tuning/artifacts/results/
 core/replay_tuning/artifacts/datasets/*/images/

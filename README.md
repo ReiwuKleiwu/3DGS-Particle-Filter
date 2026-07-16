@@ -289,9 +289,9 @@ If you started `gsplat`, use `3dgsnav-renderer-gsplat` instead.
 
 Offline replay evaluation lives under `evaluation/`.
 
-Use `evaluation/record_replay_dataset_turtlebot.py` for physical TurtleBot datasets. It records OAK-D images, camera info, odometry history, command velocity, Nav2 feedback, and an AMCL or TF reference pose. In the lab we do not have true ground truth, so AMCL is the practical reference pose for the CPS datasets.
+Use `evaluation/recording/record_replay_dataset_turtlebot.py` for physical TurtleBot datasets. It records OAK-D images, camera info, odometry history, command velocity, Nav2 feedback, and an AMCL or TF reference pose. In the lab we do not have true ground truth, so AMCL is the practical reference pose for the CPS datasets.
 
-Pilot matrices for lab datasets live under `evaluation/configs/<dataset_name>/`. The current lab pilots use one local run, one seed, 512 particles, and zero prior offset. See [evaluation/README.md](evaluation/README.md) for the full recorder, evaluation, plotting, and video commands.
+CPS lab matrices live under `evaluation/configs/cps_labor_default/`. The pilot uses the 30k splat, while `main_matrix.yaml` evaluates the standard main-study splat stages 1k, 3k, 8k, 18k, and 30k with local and global modes. See [evaluation/README.md](evaluation/README.md) for the full recorder, evaluation, plotting, and video commands.
 
 ## Repository Layout
 

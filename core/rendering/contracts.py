@@ -58,6 +58,9 @@ class ScoreBatchRequest(BaseModel):
     radius_clip: float | None = None
     sh_degree: int | None = None
     max_batch_size: int | None = None
+    splat_map_x: float | None = None
+    splat_map_y: float | None = None
+    splat_map_yaw: float | None = None
 
 
 class ScoreBatchResponse(BaseModel):

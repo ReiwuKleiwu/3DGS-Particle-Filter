@@ -11,14 +11,6 @@ from fastapi import FastAPI, HTTPException, Response
 import torch
 
 from core.rendering.backends import RendererBackend, create_renderer_backend
-from core.rendering.config import (
-    DEFAULT_SPLAT_MAP_SCALE,
-    DEFAULT_SPLAT_MAP_SCALE_X,
-    DEFAULT_SPLAT_MAP_SCALE_Y,
-    DEFAULT_SPLAT_MAP_X,
-    DEFAULT_SPLAT_MAP_Y,
-    DEFAULT_SPLAT_MAP_YAW,
-)
 from core.rendering.lpips import lpips_error
 from core.rendering.contracts import (
     CameraModel,
@@ -75,6 +67,7 @@ def _apply_lpips_rerank(
             radius_clip=request.radius_clip,
             sh_degree=request.sh_degree,
             max_batch_size=request.max_batch_size,
+            splat_map_xy_yaw=splat_map_override(request),
         )
         lpips_render_ms = (time.perf_counter() - render_start) * 1000.0
 
@@ -118,6 +111,12 @@ def to_camera(camera: CameraModel) -> CameraSpec:
     )
 
 
+def splat_map_override(request: ScoreBatchRequest) -> tuple[float, float, float] | None:
+    if request.splat_map_x is None or request.splat_map_y is None or request.splat_map_yaw is None:
+        return None
+    return (request.splat_map_x, request.splat_map_y, request.splat_map_yaw)
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     global renderer_backend
@@ -140,12 +139,6 @@ def health() -> dict:
         "backend": renderer_backend.backend_name if renderer_backend is not None else None,
         "splat_path": str(renderer_backend.splat_path) if renderer_backend is not None else None,
         "gaussians": renderer_backend.gaussian_count if renderer_backend is not None else None,
-        "splat_map_x": DEFAULT_SPLAT_MAP_X,
-        "splat_map_y": DEFAULT_SPLAT_MAP_Y,
-        "splat_map_scale": DEFAULT_SPLAT_MAP_SCALE,
-        "splat_map_scale_x": DEFAULT_SPLAT_MAP_SCALE_X,
-        "splat_map_scale_y": DEFAULT_SPLAT_MAP_SCALE_Y,
-        "splat_map_yaw_degrees": DEFAULT_SPLAT_MAP_YAW * 180.0 / 3.141592653589793,
     }
 
 
@@ -200,6 +193,7 @@ def score_batch(request: ScoreBatchRequest) -> ScoreBatchResponse:
 
     camera = to_camera(request.camera)
     poses = [to_pose(pose) for pose in request.poses]
+    splat_map_xy_yaw = splat_map_override(request)
     native_score = renderer_backend.score_batch_native(
         poses=poses,
         camera=camera,
@@ -215,6 +209,7 @@ def score_batch(request: ScoreBatchRequest) -> ScoreBatchResponse:
         radius_clip=request.radius_clip,
         sh_degree=request.sh_degree,
         max_batch_size=request.max_batch_size,
+        splat_map_xy_yaw=splat_map_xy_yaw,
     )
     if native_score is not None:
         diagnostics: dict[str, float | int | str | bool]
@@ -269,6 +264,7 @@ def score_batch(request: ScoreBatchRequest) -> ScoreBatchResponse:
         radius_clip=request.radius_clip,
         sh_degree=request.sh_degree,
         max_batch_size=request.max_batch_size,
+        splat_map_xy_yaw=splat_map_xy_yaw,
     )
     render_call_ms = (time.perf_counter() - render_start) * 1000.0
     obs_tensor_start = time.perf_counter()

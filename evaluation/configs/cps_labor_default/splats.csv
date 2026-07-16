@@ -1,0 +1,2 @@
+splat_id,ply_path,training_iteration,quality_label,notes
+cps_labor_default_30000,/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/cps_labor_eval/export_30000.ply,30000,cps_labor_default,cps labor default 30k export

@@ -1,15 +1,10 @@
 experiment:
-  name: small_house_default_pilot
-  seeds: [1001]
-  frame_stride: 10
+  name: small_house_default_global_particle_sweep
+  seeds: [42, 73, 1001]
+  frame_stride: 8
   gpu_memory_poll_stride: 1
   record_particles:
-    enabled: true
-    frame_stride: 1
-    modes: [local, global]
-    seeds: [1001]
-    path_ids: [route]
-    splat_ids: [default_small_house_30000]
+    enabled: false
   backend: vkdiff
   port: 8000
   restart_renderer: true
@@ -24,17 +19,11 @@ experiment:
     convergence_consecutive_frames: 5
 
 splats:
-  iterations: [1000, 30000]
+  iterations: [30000]
 
 modes:
-  #local:
-  #  particle_count: 500
-  #  prior_offsets:
-  #    - dx: 1.0
-  #      dy: 0.50
-  #      dyaw_degrees: 10.0
   global:
-    particle_count: 1000
+    particle_counts: [250, 500, 1000, 1250, 1500, 2000]
 
 scenarios:
   - scenario_id: small_house_default

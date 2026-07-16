@@ -1,27 +1,27 @@
 experiment:
-  name: small_house_smooth_wall_main
+  name: cps_labor_default_main
   seeds: [42, 73, 1001]
-  frame_stride: 8
+  frame_stride: 1
   gpu_memory_poll_stride: 1
   record_particles:
     enabled: true
     frame_stride: 1
     modes: [local, global]
     seeds: [42]
-    path_ids: [route]
-    splat_ids: [default_small_house_01000, default_small_house_30000]
+    path_ids: [default]
+    splat_ids: [iter_01000, iter_30000]
   backend: vkdiff
   port: 8000
   restart_renderer: true
-  map_yaml: maps/map.yaml
+  map_yaml: ../../../cps_labor_map.yaml
   thresholds:
-    failure_translation_m: 0.2
-    failure_yaw_deg: 10.0
-    lost_translation_m: 0.5
-    lost_yaw_deg: 20.0
+    failure_translation_m: 0.35
+    failure_yaw_deg: 15.0
+    lost_translation_m: 0.75
+    lost_yaw_deg: 30.0
     convergence_translation_m: 0.25
     convergence_yaw_deg: 10.0
-    convergence_consecutive_frames: 5
+    convergence_consecutive_frames: 3
 
 splats:
   iterations: [1000, 3000, 8000, 18000, 30000]
@@ -43,8 +43,8 @@ modes:
     particle_count: 1500
 
 scenarios:
-  - scenario_id: small_house_smooth_wall
-    splat_csv: evaluation/configs/small_house_smooth_wall/splats.csv
+  - scenario_id: cps_labor_default
+    splat_csv: splats_main.csv
     paths:
-      - path_id: route
-        manifest: evaluation/artifacts/datasets/small_house/smooth_wall/smooth_walls_small_house_route/manifest.json
+      - path_id: default
+        manifest: ../../../evaluation/artifacts/datasets/cps_labor/default/manifest.json

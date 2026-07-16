@@ -1,5 +1,5 @@
 experiment:
-  name: small_house_smooth_wall_main
+  name: small_house_moved_objects_dark_main
   seeds: [42, 73, 1001]
   frame_stride: 8
   gpu_memory_poll_stride: 1
@@ -43,8 +43,8 @@ modes:
     particle_count: 1500
 
 scenarios:
-  - scenario_id: small_house_smooth_wall
-    splat_csv: evaluation/configs/small_house_smooth_wall/splats.csv
+  - scenario_id: small_house_moved_objects_dark
+    splat_csv: ../small_house_default/splats.csv
     paths:
       - path_id: route
-        manifest: evaluation/artifacts/datasets/small_house/smooth_wall/smooth_walls_small_house_route/manifest.json
+        manifest: ../../../evaluation/artifacts/datasets/small_house/moved_objects_dark/manifest.json

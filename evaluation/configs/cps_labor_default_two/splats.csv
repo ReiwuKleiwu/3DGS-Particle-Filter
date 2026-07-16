@@ -1,2 +1,0 @@
-splat_id,ply_path,training_iteration,quality_label,notes
-cps_labor_default_two_30000,/home/student/Dokumente/3DGS-Particle-Filter/splat.ply,30000,cps_labor_default_two,repo default splat for CPS labor pilot run

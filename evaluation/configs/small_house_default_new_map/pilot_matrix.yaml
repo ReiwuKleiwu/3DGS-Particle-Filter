@@ -1,12 +1,12 @@
 experiment:
-  name: small_house_default_pilot
+  name: small_house_default_new_map_pilot
   seeds: [1001]
   frame_stride: 10
   gpu_memory_poll_stride: 1
   record_particles:
     enabled: true
     frame_stride: 1
-    modes: [local, global]
+    modes: [local]
     seeds: [1001]
     path_ids: [route]
     splat_ids: [default_small_house_30000]
@@ -24,21 +24,19 @@ experiment:
     convergence_consecutive_frames: 5
 
 splats:
-  iterations: [1000, 30000]
+  iterations: [30000]
 
 modes:
-  #local:
-  #  particle_count: 500
-  #  prior_offsets:
-  #    - dx: 1.0
-  #      dy: 0.50
-  #      dyaw_degrees: 10.0
-  global:
-    particle_count: 1000
+  local:
+    particle_count: 500
+    prior_offsets:
+      - dx: 0.0
+        dy: 0.0
+        dyaw_degrees: 0.0
 
 scenarios:
-  - scenario_id: small_house_default
-    splat_csv: evaluation/configs/small_house_default/splats.csv
+  - scenario_id: small_house_default_new_map
+    splat_csv: ../small_house_default/splats.csv
     paths:
       - path_id: route
-        manifest: evaluation/artifacts/datasets/small_house/default/default_small_house_route/manifest.json
+        manifest: evaluation/artifacts/datasets/small_house_default/manifest.json

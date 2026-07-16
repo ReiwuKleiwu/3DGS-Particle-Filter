@@ -40,6 +40,7 @@ class RendererBackend(ABC):
         radius_clip: float | None = None,
         sh_degree: int | None = None,
         max_batch_size: int | None = None,
+        splat_map_xy_yaw: tuple[float, float, float] | None = None,
     ) -> torch.Tensor:
         raise NotImplementedError
 
@@ -63,5 +64,6 @@ class RendererBackend(ABC):
         radius_clip: float | None = None,
         sh_degree: int | None = None,
         max_batch_size: int | None = None,
+        splat_map_xy_yaw: tuple[float, float, float] | None = None,
     ) -> dict | None:
         return None

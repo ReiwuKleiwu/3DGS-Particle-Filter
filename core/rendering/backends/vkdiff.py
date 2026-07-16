@@ -64,6 +64,7 @@ class VkdiffBackend(RendererBackend):
         radius_clip: float | None = None,
         sh_degree: int | None = None,
         max_batch_size: int | None = None,
+        splat_map_xy_yaw: tuple[float, float, float] | None = None,
     ) -> torch.Tensor:
         """Renders a batch of poses by delegating to the native VkDiff worker process."""
         if not poses:
@@ -75,7 +76,7 @@ class VkdiffBackend(RendererBackend):
         build_start = time.perf_counter()
         entries = []
         for index, pose in enumerate(poses):
-            dataset_entry = camera_entry(pose, camera, f"img_{index:04d}")
+            dataset_entry = camera_entry(pose, camera, f"img_{index:04d}", splat_map_xy_yaw=splat_map_xy_yaw)
             entries.append(
                 {
                     "image_name": dataset_entry["img_name"],
@@ -138,6 +139,7 @@ class VkdiffBackend(RendererBackend):
         radius_clip: float | None = None,
         sh_degree: int | None = None,
         max_batch_size: int | None = None,
+        splat_map_xy_yaw: tuple[float, float, float] | None = None,
     ) -> dict | None:
         """Renders and scores a pose batch through the native VkDiff scoring path."""
         if not poses:
@@ -153,7 +155,7 @@ class VkdiffBackend(RendererBackend):
         build_start = time.perf_counter()
         entries = []
         for index, pose in enumerate(poses):
-            dataset_entry = camera_entry(pose, camera, f"img_{index:04d}")
+            dataset_entry = camera_entry(pose, camera, f"img_{index:04d}", splat_map_xy_yaw=splat_map_xy_yaw)
             entries.append(
                 {
                     "image_name": dataset_entry["img_name"],

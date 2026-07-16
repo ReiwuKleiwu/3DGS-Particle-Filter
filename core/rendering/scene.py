@@ -13,9 +13,6 @@ from core.rendering.types import CameraSpec, Pose2D
 from core.rendering.config import (
     DEFAULT_SPLAT_MAP_X,
     DEFAULT_SPLAT_MAP_Y,
-    DEFAULT_SPLAT_MAP_SCALE,
-    DEFAULT_SPLAT_MAP_SCALE_X,
-    DEFAULT_SPLAT_MAP_SCALE_Y,
     DEFAULT_SPLAT_MAP_YAW,
     TURTLEBOT_RGB_CAMERA_QUAT_XYZW,
     TURTLEBOT_RGB_CAMERA_XYZ,
@@ -83,28 +80,25 @@ def pose2d_to_matrix(x: float, y: float, yaw: float) -> np.ndarray:
     return transform
 
 
-def scaled_pose2d_to_matrix(x: float, y: float, yaw: float, scale_x: float, scale_y: float) -> np.ndarray:
-    transform = pose2d_to_matrix(x, y, yaw)
-    transform[:2, 0] *= scale_x
-    transform[:2, 1] *= scale_y
-    return transform
-
-
-def camera_world_transform(pose: Pose2D) -> np.ndarray:
-    splat_t_map = scaled_pose2d_to_matrix(
-        DEFAULT_SPLAT_MAP_X,
-        DEFAULT_SPLAT_MAP_Y,
-        DEFAULT_SPLAT_MAP_YAW,
-        DEFAULT_SPLAT_MAP_SCALE_X,
-        DEFAULT_SPLAT_MAP_SCALE_Y,
-    )
+def camera_world_transform(
+    pose: Pose2D,
+    splat_map_xy_yaw: tuple[float, float, float] | None = None,
+) -> np.ndarray:
+    if splat_map_xy_yaw is None:
+        splat_map_xy_yaw = (DEFAULT_SPLAT_MAP_X, DEFAULT_SPLAT_MAP_Y, DEFAULT_SPLAT_MAP_YAW)
+    splat_t_map = pose2d_to_matrix(*splat_map_xy_yaw)
     world_t_base = pose2d_to_matrix(pose.x, pose.y, pose.yaw)
     base_t_camera = transform_from_xyz_quat(TURTLEBOT_RGB_CAMERA_XYZ, TURTLEBOT_RGB_CAMERA_QUAT_XYZW)
     return splat_t_map @ world_t_base @ base_t_camera
 
 
-def camera_entry(pose: Pose2D, camera: CameraSpec, img_name: str) -> dict:
-    world_t_camera = camera_world_transform(pose)
+def camera_entry(
+    pose: Pose2D,
+    camera: CameraSpec,
+    img_name: str,
+    splat_map_xy_yaw: tuple[float, float, float] | None = None,
+) -> dict:
+    world_t_camera = camera_world_transform(pose, splat_map_xy_yaw)
     return {
         "id": img_name,
         "img_name": img_name,

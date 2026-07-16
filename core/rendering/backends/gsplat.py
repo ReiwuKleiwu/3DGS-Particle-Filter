@@ -95,6 +95,7 @@ class GsplatBackend(RendererBackend):
         radius_clip: float | None = None,
         sh_degree: int | None = None,
         max_batch_size: int | None = None,
+        splat_map_xy_yaw: tuple[float, float, float] | None = None,
     ) -> torch.Tensor:
         """Renders a batch of poses with the in-process gsplat renderer."""
         start = time.perf_counter()
@@ -131,6 +132,7 @@ class GsplatBackend(RendererBackend):
         radius_clip: float | None = None,
         sh_degree: int | None = None,
         max_batch_size: int | None = None,
+        splat_map_xy_yaw: tuple[float, float, float] | None = None,
     ) -> dict | None:
         """Renders a pose batch and scores it against the observation using native tensor ops."""
         if not poses:

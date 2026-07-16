@@ -6,20 +6,27 @@ Die Skripte verwenden die zentrale Lokalisierungs- und Renderer-Logik aus `core/
 
 ```text
 evaluation/
-  record_replay_dataset_simulator.py  # Simulator-Replays mit Kamera, Odometrie und Referenzpose aufzeichnen
-  record_replay_dataset_turtlebot.py  # Labor-Replays mit Sensor-QoS, Pose-Historie und Nav2-Waypoints aufzeichnen
-  generate_splat_csv.py         # explizite Splat-CSV aus einem Splat-Ordner erzeugen
-  run_matrix_experiment.py      # Szenario/Pfad/Splat/Mode/Seed-Matrix ausführen
-  analyze_matrix_results.py     # per_run_summary.csv aggregieren und Plots erzeugen
-  plot_replay_paths.py          # GT-Pfad gegen PF-Schätzung auf der PGM Map plotten
-  plot_dataset_path.py          # aufgezeichneten Dataset-Pfad direkt aus manifest.json auf der Map plotten
-  plot_particle_snapshots.py    # aufgezeichnete Partikelwolken als PNG-Sequenz plotten
-  make_particle_video.py        # PNG-Sequenz zu MP4-Video konvertieren
-  plot_style.py                 # gemeinsame farbenblindenfreundliche Plot-Stile
+  recording/                    # Replay-Datasets aus Simulator oder TurtleBot aufzeichnen
+    record_replay_dataset_simulator.py
+    record_replay_dataset_turtlebot.py
+  experiments/                  # Matrix-Runs, Debugging und Resultataggregation
+    run_matrix_experiment.py
+    analyze_matrix_results.py
+    debug_matrix_run.py
+  plots/                        # Pfad-, Partikel-, Overlay- und Video-Ausgaben
+    plot_replay_paths.py
+    plot_dataset_path.py
+    plot_particle_snapshots.py
+    plot_splat_map_overlay.py
+    make_particle_video.py
+    plot_style.py
+  tools/                        # Setup- und Kalibrierhilfen
+    generate_splat_csv.py
+    interactive_splat_map_alignment.py
   models.py                     # Replay-Manifest- und Prior-Modelle
   evaluator.py                  # Offline-Observation-Helfer
   paths.py                      # evaluation/artifacts Pfade
-  configs/                      # Template-Dateien
+  configs/                      # Matrix- und Splat-CSV-Dateien
   artifacts/                    # Datasets und Results
 ```
 
@@ -28,7 +35,7 @@ evaluation/
 Beispiel für einen lokalen Nav2-Run mit TF-Referenzpose:
 
 ```bash
-python3 evaluation/record_replay_dataset_simulator.py \
+python3 evaluation/recording/record_replay_dataset_simulator.py \
   --name default_small_house_route_1 \
   --goal-x 5.24 \
   --goal-y -0.333 \
@@ -42,7 +49,7 @@ python3 evaluation/record_replay_dataset_simulator.py \
 Mehrere Nav2-Waypoints können als zusammenhängender Run aufgezeichnet werden:
 
 ```bash
-python3 evaluation/record_replay_dataset_simulator.py \
+python3 evaluation/recording/record_replay_dataset_simulator.py \
   --name default_small_house_route_multi \
   --waypoint 2.0 -1.0 0.0 \
   --waypoint 4.0 -1.0 1.57 \
@@ -58,7 +65,7 @@ python3 evaluation/record_replay_dataset_simulator.py \
 Für echte TurtleBots mit ROS-Namespace sollte das physische Recorder-Skript verwendet werden. Es verwendet Sensor-QoS für Kamera/Odometrie, speichert eine Odometrie-Historie und matched AMCL/TF zeitlich zur Bildaufnahme. Weil wir im Labor keine echte Ground Truth haben, ist AMCL standardmäßig die Referenzpose.
 
 ```bash
-python3 evaluation/record_replay_dataset_turtlebot.py \
+python3 evaluation/recording/record_replay_dataset_turtlebot.py \
   --name labor_default \
   --image-topic /robot_1/oakd/rgb/preview/image_raw \
   --camera-info-topic /robot_1/oakd/rgb/preview/camera_info \
@@ -96,8 +103,8 @@ Das Skript kann sowohl im Simulator als auch im Labor verwendet werden, solange 
 Direkt nach dem Recording kann der aufgezeichnete Pfad auf der Map geplottet werden:
 
 ```bash
-python3 evaluation/plot_dataset_path.py \
-  evaluation/artifacts/datasets/labor_default \
+python3 evaluation/plots/plot_dataset_path.py \
+  evaluation/artifacts/datasets/cps_labor/default \
   --map-yaml cps_labor_map.yaml \
   --show-waypoints
 ```
@@ -105,7 +112,7 @@ python3 evaluation/plot_dataset_path.py \
 Das erzeugt standardmäßig:
 
 ```text
-evaluation/artifacts/datasets/labor_default/dataset_path_overlay.png
+evaluation/artifacts/datasets/cps_labor/default/dataset_path_overlay.png
 ```
 
 Mit `--full-map` wird die komplette Map statt eines Pfad-Zooms angezeigt.
@@ -121,7 +128,7 @@ Empfohlene Splat-Stufen:
 Beispiel:
 
 ```bash
-python3 evaluation/generate_splat_csv.py \
+python3 evaluation/tools/generate_splat_csv.py \
   --splat-dir /home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/small_house \
   --id-prefix small_house \
   --iterations 1000 2000 3000 5000 8000 12000 18000 30000 \
@@ -163,13 +170,13 @@ scenarios:
     splat_csv: evaluation/configs/default_small_house_splats.csv
     paths:
       - path_id: route_1
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_1/manifest.json
+        manifest: evaluation/artifacts/datasets/small_house/default/default_small_house_route_1/manifest.json
       - path_id: route_2
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_2/manifest.json
+        manifest: evaluation/artifacts/datasets/small_house/default/default_small_house_route_2/manifest.json
       - path_id: route_3
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_3/manifest.json
+        manifest: evaluation/artifacts/datasets/small_house/default/default_small_house_route_3/manifest.json
       - path_id: route_4
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_4/manifest.json
+        manifest: evaluation/artifacts/datasets/small_house/default/default_small_house_route_4/manifest.json
 ```
 
 ## 4. Experiment Ausführen
@@ -177,7 +184,7 @@ scenarios:
 Pilot-Run mit kleiner Matrix:
 
 ```bash
-python3 evaluation/run_matrix_experiment.py \
+python3 evaluation/experiments/run_matrix_experiment.py \
   --matrix evaluation/configs/experiment_matrix.pilot.yaml \
   --run-name pilot_small_house
 ```
@@ -185,7 +192,7 @@ python3 evaluation/run_matrix_experiment.py \
 Hauptstudie:
 
 ```bash
-python3 evaluation/run_matrix_experiment.py \
+python3 evaluation/experiments/run_matrix_experiment.py \
   --matrix evaluation/configs/experiment_matrix.yaml \
   --run-name small_house_main_study
 ```
@@ -193,7 +200,7 @@ python3 evaluation/run_matrix_experiment.py \
 Wenn sich Renderer-Code oder Rendering-Offsets geändert haben:
 
 ```bash
-python3 evaluation/run_matrix_experiment.py \
+python3 evaluation/experiments/run_matrix_experiment.py \
   --matrix evaluation/configs/experiment_matrix.yaml \
   --run-name small_house_main_study \
   --build-image
@@ -201,39 +208,44 @@ python3 evaluation/run_matrix_experiment.py \
 
 Der Runner startet den Renderer bei jedem Splat-Wechsel neu, wenn `restart_renderer: true` in der Matrix steht. Matrizen mit mehreren Splats werden ohne diese Option abgelehnt, damit Splat-Vergleiche nicht versehentlich mit einem alten Renderer-Zustand laufen.
 
-Für Labor-Pilot-Runs ist der Renderer meist bereits manuell mit `sudo` gestartet. Die CPS-Labor-Pilot-Matrizen verwenden deshalb `restart_renderer: false`:
+Die CPS-Labor-Matrizen verwenden die Splats aus `/home/nick/Downloads/brush-app-x86_64-unknown-linux-gnu/cps_labor_eval`. Pilot- und Main-Runs setzen `restart_renderer: true`, damit der Renderer direkt aus dem jeweiligen CSV-Eintrag gestartet wird und nicht versehentlich ein manuell geladener `splat.ply` verwendet wird.
 
 ```bash
-sudo BACKEND=vkdiff SPLAT_PATH=/home/student/Dokumente/3DGS-Particle-Filter/splat.ply ./start_renderer.sh
-
-python3 evaluation/run_matrix_experiment.py \
-  --matrix evaluation/configs/cps_labor_default_two/pilot_matrix.yaml \
+python3 evaluation/experiments/run_matrix_experiment.py \
+  --matrix evaluation/configs/cps_labor_default/pilot_matrix.yaml \
   --config turtlebot_localization.yaml \
-  --run-name cps_labor_default_two_pilot_001 \
-  --no-progress
+  --run-name cps_labor_default_pilot
 ```
 
-Verfügbare Labor-Pilot-Konfigurationen:
+Verfügbare CPS-Labor-Konfigurationen:
 
 ```text
-evaluation/configs/labor_default/pilot_matrix.yaml
-evaluation/configs/labor_default_full_second/pilot_matrix.yaml
+evaluation/configs/cps_labor_default/pilot_matrix.yaml
+evaluation/configs/cps_labor_default/main_matrix.yaml
 evaluation/configs/cps_labor_default_two/pilot_matrix.yaml
-evaluation/configs/cps_labor_moved_objects/pilot_matrix.yaml
 ```
 
-Diese Pilot-Konfigurationen führen jeweils genau einen lokalen Run aus:
+`cps_labor_default/pilot_matrix.yaml` führt einen lokalen und einen globalen Run für den 30k-Splat aus. `cps_labor_default/main_matrix.yaml` folgt dem Main-Run-Design der Small-House-Studien: Seeds 42, 73 und 1001, `frame_stride: 8`, local und global, und die Splat-Stufen 1k, 3k, 8k, 18k und 30k. Der Renderer wird bei jedem Splat-Wechsel neu gestartet. Dafür muss der Experiment-Prozess Docker ohne interaktive Eingabe ausführen können.
+
+```bash
+python3 evaluation/experiments/run_matrix_experiment.py \
+  --matrix evaluation/configs/cps_labor_default/main_matrix.yaml \
+  --config turtlebot_localization.yaml \
+  --run-name cps_labor_default_main
+```
+
+Die CPS-Labor-Run-IDs sind im Main-Run kurz gehalten, z.B. `cps_labor__default__iter_30000__global__seed1001`.
 
 ```text
 seed = 1001
-particle_count = 512
-prior_offset = dx 0.0, dy 0.0, dyaw 0.0 deg
+local:  particle_count = 512, prior_offset = dx 0.0, dy 0.0, dyaw 0.0 deg
+global: particle_count = 2048
 ```
 
 Während des Runs zeigt das Skript eine Zusammenfassung der Studie, einen Gesamtfortschrittsbalken und einen Frame-Fortschrittsbalken für den aktuellen Run. Falls die Terminal-Ausgabe in Logs zu unruhig ist:
 
 ```bash
-python3 evaluation/run_matrix_experiment.py \
+python3 evaluation/experiments/run_matrix_experiment.py \
   --matrix evaluation/configs/small_house_default/main_matrix.yaml \
   --run-name small_house_default_main_old \
   --no-progress
@@ -285,6 +297,8 @@ yaw_error_rad, yaw_error_degrees
 combined_pose_error_m
 effective_particle_count
 resampled
+best_metric_value
+median_metric_value
 render_and_score_ms
 total_frame_ms
 total_hz
@@ -292,6 +306,8 @@ gpu_memory_used_mb
 gpu_memory_total_mb
 gpu_memory_free_mb
 ```
+
+`best_metric_value` ist der niedrigste Renderer-Messfehler der Partikel in diesem PF-Step. Bei `metric_name: lpips` entspricht das dem besten LPIPS-Wert dieses Frames. `median_metric_value` beschreibt den Median der Partikel-Messfehler und ist hilfreich, um zu sehen, ob nur ein einzelner Partikel gut matched oder die Partikelwolke insgesamt.
 
 Wenn `record_particles` aktiviert ist, schreibt der Runner pro ausgewähltem Run eine CSV unter `particles/<run_id>.csv`. Jede Zeile beschreibt einen Partikel nach einem vollständigen PF-Step:
 
@@ -318,7 +334,7 @@ experiment:
 Aufgezeichnete Partikelwolken können anschließend als PNG-Sequenz geplottet werden:
 
 ```bash
-python3 evaluation/plot_particle_snapshots.py \
+python3 evaluation/plots/plot_particle_snapshots.py \
   --input-dir evaluation/artifacts/results/<run_name> \
   --map-yaml map.yaml \
   --run-id small_house_default__route_3__default_small_house_30000__global__seed42
@@ -327,7 +343,7 @@ python3 evaluation/plot_particle_snapshots.py \
 Aus der PNG-Sequenz kann anschließend ein MP4 erzeugt werden:
 
 ```bash
-python3 evaluation/make_particle_video.py \
+python3 evaluation/plots/make_particle_video.py \
   --frames-dir evaluation/artifacts/results/<run_name>/particle_plots/small_house_default__route_3__default_small_house_30000__global__seed42 \
   --fps 8
 ```
@@ -335,7 +351,7 @@ python3 evaluation/make_particle_video.py \
 Falls `ffmpeg` kein H.264/libx264 erzeugen kann oder das Video lokal nicht geöffnet wird, nutze den MPEG-4-Fallback:
 
 ```bash
-python3 evaluation/make_particle_video.py \
+python3 evaluation/plots/make_particle_video.py \
   --frames-dir evaluation/artifacts/results/<run_name>/particle_plots/<run_id> \
   --output evaluation/artifacts/results/<run_name>/<run_id>.mp4 \
   --fps 8 \
@@ -374,6 +390,9 @@ mean_combined_pose_error_m
 p95_combined_pose_error_m
 failure_rate
 lost_tracking_rate
+mean_best_metric_value
+p95_best_metric_value
+final_best_metric_value
 mean_total_frame_ms
 mean_total_hz
 mean_gpu_memory_used_mb
@@ -406,7 +425,7 @@ converged:
 Nach einem Experiment:
 
 ```bash
-python3 evaluation/analyze_matrix_results.py \
+python3 evaluation/experiments/analyze_matrix_results.py \
   --input-dir evaluation/artifacts/results/small_house_main_study
 ```
 
@@ -426,6 +445,8 @@ plots/gpu_memory_by_splat.png
 plots/gpu_memory_by_splat.pdf
 plots/convergence_error_by_frame__*.png
 plots/convergence_error_by_frame__*.pdf
+plots/best_metric_by_frame__*.png
+plots/best_metric_by_frame__*.pdf
 ```
 
 Lokale Prior-Fälle werden in `summary_by_condition.csv` und in den Plots getrennt gehalten.
@@ -435,7 +456,7 @@ Lokale Prior-Fälle werden in `summary_by_condition.csv` und in den Plots getren
 Beispiel für GT-vs-PF auf der Map:
 
 ```bash
-python3 evaluation/plot_replay_paths.py \
+python3 evaluation/plots/plot_replay_paths.py \
   --input-dir evaluation/artifacts/results/small_house_main_study \
   --map-yaml map.yaml \
   --seed 1001 \

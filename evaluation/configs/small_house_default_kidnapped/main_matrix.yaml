@@ -1,7 +1,7 @@
 experiment:
-  name: small_house_smooth_wall_main
+  name: small_house_default_kidnapped_main
   seeds: [42, 73, 1001]
-  frame_stride: 8
+  frame_stride: 4
   gpu_memory_poll_stride: 1
   record_particles:
     enabled: true
@@ -30,21 +30,15 @@ modes:
   local:
     particle_count: 500
     prior_offsets:
-      - dx: 0.25
-        dy: 0.10
-        dyaw_degrees: 5.0
-      - dx: 0.75
-        dy: 0.40
-        dyaw_degrees: 15.0
-      - dx: 1.50
-        dy: 0.75
-        dyaw_degrees: 35.0
+      - dx: 0.00
+        dy: 0.00
+        dyaw_degrees: 0.0
   global:
     particle_count: 1500
 
 scenarios:
-  - scenario_id: small_house_smooth_wall
-    splat_csv: evaluation/configs/small_house_smooth_wall/splats.csv
+  - scenario_id: small_house_default_kidnapped
+    splat_csv: ../small_house_default/splats.csv
     paths:
       - path_id: route
-        manifest: evaluation/artifacts/datasets/small_house/smooth_wall/smooth_walls_small_house_route/manifest.json
+        manifest: ../../../evaluation/artifacts/datasets/small_house_default_kidnapped/manifest.json

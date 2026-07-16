@@ -8,12 +8,12 @@ experiment:
     frame_stride: 1
     modes: [global]
     seeds: [1001]
-    path_ids: [route_1]
+    path_ids: [route]
     splat_ids: [default_small_house_30000]
   backend: vkdiff
   port: 8000
   restart_renderer: true
-  map_yaml: map.yaml
+  map_yaml: maps/map.yaml
   thresholds:
     failure_translation_m: 0.5
     failure_yaw_deg: 20.0
@@ -44,9 +44,7 @@ modes:
 
 scenarios:
   - scenario_id: default_small_house
-    splat_csv: evaluation/configs/default_small_house_splats.csv
+    splat_csv: evaluation/configs/small_house_default/splats.csv
     paths:
-      - path_id: route_1
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_1/manifest.json
-      - path_id: route_2
-        manifest: evaluation/artifacts/datasets/default_small_house/default_small_house_route_2/manifest.json
+      - path_id: route
+        manifest: evaluation/artifacts/datasets/small_house/default/default_small_house_route/manifest.json

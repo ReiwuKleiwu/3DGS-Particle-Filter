@@ -1,2 +1,0 @@
-splat_id,ply_path,training_iteration,quality_label,notes
-labor_bright_outside_view_30000,/home/nick/PycharmProjects/3DGSNav/splat.ply,30000,labor_bright_outside_view,repo default splat for labor smoke test
